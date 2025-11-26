@@ -26,12 +26,15 @@ const PreRenderingTool = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<RenderResult | null>(null);
 
+
+    const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleTest = async () => {
     if (!url.trim()) {
         alert("Please enter a URL.");
         return;
     }
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -40,7 +43,7 @@ const PreRenderingTool = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

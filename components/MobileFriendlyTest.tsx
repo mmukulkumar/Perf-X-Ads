@@ -16,12 +16,15 @@ const MobileFriendlyTest = () => {
   const [results, setResults] = useState<TestResult[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
+    const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleTest = async () => {
     if (!input.trim()) {
         alert("Please enter at least one URL.");
         return;
     }
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -36,7 +39,7 @@ const MobileFriendlyTest = () => {
     setResults([]); // Clear previous results
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey});
         const model = 'gemini-2.5-flash';
         
         const prompt = `

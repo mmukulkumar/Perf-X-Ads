@@ -461,8 +461,10 @@ const SchemaMarkupGenerator = () => {
   }, [selectedType, articleData, breadcrumbItems, eventData, howToData, faqItems, localBusinessData, orgData, productData, videoData, websiteData, isAiMode]);
 
   // --- AI Generator Logic ---
+    const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleAiGenerate = async () => {
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         setAiError("API Key not configured.");
         return;
     }
@@ -471,7 +473,7 @@ const SchemaMarkupGenerator = () => {
     setAiError('');
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

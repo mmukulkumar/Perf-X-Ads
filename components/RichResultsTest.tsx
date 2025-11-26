@@ -25,12 +25,15 @@ const RichResultsTest = () => {
   const [result, setResult] = useState<TestResult | null>(null);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
 
+    const apiKey = import.meta.env.VITE_API_KEY;
+
+
   const handleAnalyze = async () => {
     if (!input.trim()) {
         alert(mode === 'url' ? "Please enter a URL" : "Please enter code");
         return;
     }
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -39,7 +42,7 @@ const RichResultsTest = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

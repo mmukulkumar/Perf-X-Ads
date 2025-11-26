@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Search, Globe, Star, RefreshCw, Smartphone, Monitor, Sparkles, Bot } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
+
+
 const GoogleSerpSimulator = () => {
   const [inputs, setInputs] = useState({
     url: 'www.example.com',
@@ -14,6 +16,8 @@ const GoogleSerpSimulator = () => {
     showRating: false,
     showFavicon: true,
   });
+
+  
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiContext, setAiContext] = useState('');
@@ -46,8 +50,10 @@ const GoogleSerpSimulator = () => {
     setShowAiInput(false);
   };
 
+  const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleAiGenerate = async () => {
-    if (!process.env.API_KEY) {
+    if (apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -55,7 +61,7 @@ const GoogleSerpSimulator = () => {
 
     setIsGenerating(true);
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

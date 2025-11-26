@@ -10,12 +10,14 @@ const MobileFirstIndexTool = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [report, setReport] = useState<string | null>(null);
 
+    const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleAnalyze = async () => {
     if (!url) {
         alert("Please enter a URL");
         return;
     }
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -24,7 +26,7 @@ const MobileFirstIndexTool = () => {
     setReport(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey});
         const model = 'gemini-2.5-flash';
         
         const prompt = `

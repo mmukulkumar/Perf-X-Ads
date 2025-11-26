@@ -41,12 +41,14 @@ const FetchRenderTool = () => {
     }));
   };
 
+     const apiKey = import.meta.env.VITE_API_KEY;
+
   const handleFetch = async () => {
     if (!inputs.url) {
         alert("Please enter a URL");
         return;
     }
-    if (!process.env.API_KEY) {
+    if (!apiKey) {
         alert("API Key not configured.");
         return;
     }
@@ -55,7 +57,7 @@ const FetchRenderTool = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
