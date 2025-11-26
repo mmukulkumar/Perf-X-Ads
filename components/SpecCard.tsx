@@ -62,9 +62,9 @@ Notes: ${spec.notes}
         </div>
       </div>
 
-      <div className="p-4 bg-brand-light/50 border-t border-brand-medium/20 grid grid-cols-3 gap-2">
+      <div className="p-4 bg-brand-light/50 border-t border-brand-medium/20 grid grid-cols-2 gap-3">
         {/* Magic Download Button */}
-        <button 
+        {/* <button 
           onClick={() => {}} // Placeholder for download functionality
           className="magic-btn group"
         >
@@ -72,18 +72,22 @@ Notes: ${spec.notes}
             <Download className="w-3.5 h-3.5" />
             Download
           </div>
-        </button>
+        </button> */}
 
         <button 
           onClick={handleCopy}
-          className={`flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
+          className={`flex items-center justify-center gap-1.5 px-0.5 py-0.5 text-xs font-medium rounded-lg transition-all duration-200 ${
             isCopied 
               ? 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800' 
-              : 'text-brand-dark bg-brand-surface border border-brand-medium/40 hover:bg-brand-light hover:text-brand-dark'
+              : 'text-brand-dark bg-brand-surface border border-brand-medium/40 hover:bg-brand-light hover:text-brand-dark magic-btn group'
           }`}
         >
-          {isCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+          <div className="magic-btn-content ">
+          
+            {isCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
           {isCopied ? 'Copied' : 'Copy'}
+          </div>
+          
         </button>
         <button 
           onClick={() => onPreview(spec)}

@@ -283,8 +283,6 @@ const App = () => {
         onToolSelect={handleToolSelect}
         toggleTheme={toggleTheme}
         theme={theme}
-        currency={currency}
-        setCurrency={setCurrency}
       />
 
       <main className="transition-opacity duration-300">
