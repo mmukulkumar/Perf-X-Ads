@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Code, Smartphone, Monitor, CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Play, RefreshCw, Globe, FileCode, ArrowRight } from 'lucide-react';
+import { Search, Code, Smartphone, Monitor, CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Play, RefreshCw, Globe, FileCode, ArrowRight, Copy, Check } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 interface SchemaItem {
@@ -24,16 +24,14 @@ const RichResultsTest = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
-
-    const apiKey = import.meta.env.VITE_API_KEY;
-
+  const [copied, setCopied] = useState(false);
 
   const handleAnalyze = async () => {
     if (!input.trim()) {
         alert(mode === 'url' ? "Please enter a URL" : "Please enter code");
         return;
     }
-    if (!apiKey) {
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -42,7 +40,7 @@ const RichResultsTest = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -97,6 +95,13 @@ const RichResultsTest = () => {
     } finally {
         setIsAnalyzing(false);
     }
+  };
+
+  const copyToClipboard = () => {
+    if (!result?.rawSource) return;
+    navigator.clipboard.writeText(result.rawSource);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -241,6 +246,17 @@ const RichResultsTest = () => {
                                 ? "Your page is eligible for rich results in Google Search." 
                                 : "Some rich results may not be eligible for Google Search."}
                         </p>
+                        {mode === 'code' && (
+                            <button 
+                                onClick={copyToClipboard} 
+                                className="magic-btn group/copy mt-4 inline-block w-auto"
+                            >
+                                <div className={`magic-btn-content px-3 py-1.5 text-xs transition-all duration-300 ${copied ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-[#333] text-gray-300 border-transparent hover:text-white hover:bg-[#444]'}`}>
+                                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5 opacity-70 group-hover/copy:opacity-100" />}
+                                    {copied ? 'Copied' : 'Copy Code'}
+                                </div>
+                            </button>
+                        )}
                     </div>
                 </div>
 

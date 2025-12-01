@@ -206,7 +206,7 @@ const EbitdaCalculator = () => {
                           name="netIncome"
                           value={inputs.netIncome}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                        />
                        <p className="text-xs text-brand-dark/40 mt-1">Bottom-line profit after all expenses</p>
                      </div>
@@ -219,7 +219,7 @@ const EbitdaCalculator = () => {
                                   name="interestExpense"
                                   value={inputs.interestExpense}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                  className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                               />
                           </div>
                           <div>
@@ -229,7 +229,7 @@ const EbitdaCalculator = () => {
                                   name="taxExpense"
                                   value={inputs.taxExpense}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                  className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                               />
                           </div>
                      </div>
@@ -242,7 +242,7 @@ const EbitdaCalculator = () => {
                                   name="depreciation"
                                   value={inputs.depreciation}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                  className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                               />
                           </div>
                           <div>
@@ -252,7 +252,7 @@ const EbitdaCalculator = () => {
                                   name="amortization"
                                   value={inputs.amortization}
                                   onChange={handleInputChange}
-                                  className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                  className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                               />
                           </div>
                      </div>
@@ -264,7 +264,7 @@ const EbitdaCalculator = () => {
                           name="totalRevenue"
                           value={inputs.totalRevenue}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2.5 bg-brand-light/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-brand-light/50 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                        />
                      </div>
                   </div>
@@ -281,7 +281,7 @@ const EbitdaCalculator = () => {
                               name="totalRevenue"
                               value={inputs.totalRevenue}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Total sales/revenue</p>
                         </div>
@@ -292,7 +292,7 @@ const EbitdaCalculator = () => {
                               name="cogs"
                               value={inputs.cogs}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Cost of goods sold</p>
                         </div>
@@ -306,7 +306,7 @@ const EbitdaCalculator = () => {
                               name="operatingExpenses"
                               value={inputs.operatingExpenses}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Salaries, rent, marketing, etc.</p>
                         </div>
@@ -317,7 +317,7 @@ const EbitdaCalculator = () => {
                               name="interestExpense"
                               value={inputs.interestExpense}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Interest on debt</p>
                         </div>
@@ -331,7 +331,7 @@ const EbitdaCalculator = () => {
                               name="taxExpense"
                               value={inputs.taxExpense}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Income taxes</p>
                         </div>
@@ -347,7 +347,7 @@ const EbitdaCalculator = () => {
                                   // For this specific input, we'll treat it as Depreciation in state, set Amortization to 0 for calc simplicity
                                   setInputs(prev => ({...prev, amortization: 0}));
                               }}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Combined D&A expenses</p>
                         </div>
@@ -368,7 +368,7 @@ const EbitdaCalculator = () => {
                               name="period1Ebitda"
                               value={inputs.period1Ebitda}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Oldest period</p>
                         </div>
@@ -379,7 +379,7 @@ const EbitdaCalculator = () => {
                               name="period2Ebitda"
                               value={inputs.period2Ebitda}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Second period</p>
                         </div>
@@ -393,7 +393,7 @@ const EbitdaCalculator = () => {
                               name="period3Ebitda"
                               value={inputs.period3Ebitda}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Most recent period</p>
                         </div>
@@ -404,7 +404,7 @@ const EbitdaCalculator = () => {
                               name="totalRevenue"
                               value={inputs.totalRevenue}
                               onChange={handleInputChange}
-                              className="w-full px-4 py-2.5 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                              className="w-full px-4 py-2.5 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                            />
                            <p className="text-xs text-brand-dark/40 mt-1">Revenue for most recent period</p>
                         </div>
@@ -435,7 +435,7 @@ const EbitdaCalculator = () => {
                     {activeTab === 'multi' ? (
                       <div className="space-y-6">
                          <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
+                            <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
                                 <p className="text-sm text-brand-dark font-medium mb-1">Average Growth</p>
                                 <div className={`text-3xl font-extrabold ${results.avgGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                   {results.avgGrowth > 0 ? '+' : ''}{results.avgGrowth.toFixed(1)}%
@@ -470,7 +470,7 @@ const EbitdaCalculator = () => {
                     ) : (
                       <>
                         {/* Standard Results for Basic & Revenue */}
-                        <div className="bg-blue-50/50 dark:bg-blue-900/20 rounded-xl p-6 mb-6 border border-blue-100 dark:border-blue-800 text-center md:text-left">
+                        <div className="bg-blue-50/50 dark:bg-blue-900/30 rounded-xl p-6 mb-6 border border-blue-100 dark:border-blue-800 text-center md:text-left">
                           <p className="text-sm text-brand-dark font-medium mb-1">EBITDA (Operating Cash Flow Proxy)</p>
                           <div className="text-4xl md:text-5xl font-extrabold text-blue-700 dark:text-blue-400">{formatCurrency(results.ebitda)}</div>
                           <p className="text-xs text-brand-dark/60 mt-2">Earnings Before Interest, Taxes, Depreciation, and Amortization</p>
@@ -478,9 +478,9 @@ const EbitdaCalculator = () => {
 
                         {inputs.totalRevenue > 0 && (
                             <div className={`rounded-lg border p-4 mb-6 flex items-center justify-between ${
-                                results.ebitdaMargin >= 20 ? 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800' : 
-                                results.ebitdaMargin >= 10 ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800' : 
-                                'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800'
+                                results.ebitdaMargin >= 20 ? 'bg-green-50 dark:bg-green-900/30 border-green-100 dark:border-green-800' : 
+                                results.ebitdaMargin >= 10 ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800' : 
+                                'bg-red-50 dark:bg-red-900/30 border-red-100 dark:border-red-800'
                             }`}>
                                 <div>
                                     <p className="text-xs font-bold opacity-70 mb-1 uppercase">EBITDA Margin</p>

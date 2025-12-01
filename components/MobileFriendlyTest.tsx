@@ -16,15 +16,12 @@ const MobileFriendlyTest = () => {
   const [results, setResults] = useState<TestResult[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-
-    const apiKey = import.meta.env.VITE_API_KEY;
-
   const handleTest = async () => {
     if (!input.trim()) {
         alert("Please enter at least one URL.");
         return;
     }
-    if (!apiKey) {
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -39,7 +36,7 @@ const MobileFriendlyTest = () => {
     setResults([]); // Clear previous results
 
     try {
-        const ai = new GoogleGenAI({ apiKey});
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -149,7 +146,7 @@ const MobileFriendlyTest = () => {
                     <button 
                         onClick={handleTest}
                         disabled={isAnalyzing}
-                        className={`px-8 py-4 bg-brand-dark text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 whitespace-nowrap ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 active:scale-95'}`}
+                        className={`px-8 py-4 bg-brand-dark dark:bg-blue-600 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 whitespace-nowrap ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 dark:hover:bg-blue-700 active:scale-95'}`}
                     >
                         {isAnalyzing ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
                         TEST

@@ -1,61 +1,57 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Trash2, Check } from 'lucide-react';
-import { platforms } from './data';
-import { AdSpec } from './types';
-import { TOOLS_CONFIG } from './tools';
-import PlatformSection from './components/PlatformSection';
-import PreviewModal from './components/PreviewModal';
-import ToolHeader from './components/ToolHeader';
-import MultiSelect from './components/MultiSelect';
-import Header from './components/Header';
-import RocketCursor from './components/RocketCursor';
-import AboutUs from './components/AboutUs';
-
-// Firebase
-import { db } from './lib/firebase';
-import { collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Check } from 'lucide-react';
+import { platforms } from '../data';
+import { AdSpec } from '../types';
+import { TOOLS_CONFIG } from '../tools';
+import PlatformSection from './PlatformSection';
+import PreviewModal from './PreviewModal';
+import ToolHeader from './ToolHeader';
+import MultiSelect from './MultiSelect';
+import Header from './Header';
+import RocketCursor from './RocketCursor';
+import AboutUs from './AboutUs';
 
 // Auth & Dashboard
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import LoginModal from './components/auth/LoginModal';
-import PricingModal from './components/pricing/PricingModal';
-import SubmitToolModal from './components/SubmitToolModal';
-import UserDashboard from './components/dashboard/UserDashboard';
-import AdminDashboard from './components/dashboard/AdminDashboard';
+import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import LoginModal from './auth/LoginModal';
+import PricingModal from './pricing/PricingModal';
+import SubmitToolModal from './SubmitToolModal';
+import UserDashboard from './dashboard/UserDashboard';
+import AdminDashboard from './dashboard/AdminDashboard';
 
 // Legal
-import CookieConsent from './components/legal/CookieConsent';
-import PrivacyPolicyModal from './components/legal/PrivacyPolicyModal';
+import CookieConsent from './legal/CookieConsent';
+import PrivacyPolicyModal from './legal/PrivacyPolicyModal';
 
 // Tool Components
-import UTMGenerator from './components/UTMGenerator';
-import AdBudgetPlanner from './components/AdBudgetPlanner';
-import ROICalculator from './components/ROICalculator';
-import SaasCalculator from './components/SaasCalculator';
-import ChurnCalculator from './components/ChurnCalculator';
-import SoftwareRoiCalculator from './components/SoftwareRoiCalculator';
-import ClvCalculator from './components/ClvCalculator';
-import LandingPageImpactCalculator from './components/LandingPageImpactCalculator';
-import EbitdaCalculator from './components/EbitdaCalculator';
-import EnterpriseSeoCalculator from './components/EnterpriseSeoCalculator';
-import GoogleAdMockup from './components/GoogleAdMockup';
-import FacebookAdMockup from './components/FacebookAdMockup';
-import TikTokAdMockup from './components/TikTokAdMockup';
-import SchemaMarkupGenerator from './components/SchemaMarkupGenerator';
-import GoogleSerpSimulator from './components/GoogleSerpSimulator';
-import MobileFirstIndexTool from './components/MobileFirstIndexTool';
-import MobileFriendlyTest from './components/MobileFriendlyTest';
-import AmpValidator from './components/AmpValidator';
-import FetchRenderTool from './components/FetchRenderTool';
-import PreRenderingTool from './components/PreRenderingTool';
-import RichResultsTest from './components/RichResultsTest';
-import VatCalculator from './components/VatCalculator';
-import CorporateTaxCalculator from './components/CorporateTaxCalculator';
-import AusCompanyTaxCalculator from './components/AusCompanyTaxCalculator';
-import AusSimpleTaxCalculator from './components/AusSimpleTaxCalculator';
-import AiKeywordResearch from './components/AiKeywordResearch';
-import AiSearchVisibility from './components/AiSearchVisibility';
+import UTMGenerator from './UTMGenerator';
+import AdBudgetPlanner from './AdBudgetPlanner';
+import ROICalculator from './ROICalculator';
+import SaasCalculator from './SaasCalculator';
+import ChurnCalculator from './ChurnCalculator';
+import SoftwareRoiCalculator from './SoftwareRoiCalculator';
+import ClvCalculator from './ClvCalculator';
+import LandingPageImpactCalculator from './LandingPageImpactCalculator';
+import EbitdaCalculator from './EbitdaCalculator';
+import EnterpriseSeoCalculator from './EnterpriseSeoCalculator';
+import GoogleAdMockup from './GoogleAdMockup';
+import FacebookAdMockup from './FacebookAdMockup';
+import TikTokAdMockup from './TikTokAdMockup';
+import SchemaMarkupGenerator from './SchemaMarkupGenerator';
+import GoogleSerpSimulator from './GoogleSerpSimulator';
+import MobileFirstIndexTool from './MobileFirstIndexTool';
+import MobileFriendlyTest from './MobileFriendlyTest';
+import AmpValidator from './AmpValidator';
+import FetchRenderTool from './FetchRenderTool';
+import PreRenderingTool from './PreRenderingTool';
+import RichResultsTest from './RichResultsTest';
+import VatCalculator from './VatCalculator';
+import CorporateTaxCalculator from './CorporateTaxCalculator';
+import AusCompanyTaxCalculator from './AusCompanyTaxCalculator';
+import AusSimpleTaxCalculator from './AusSimpleTaxCalculator';
+import AiKeywordResearch from './AiKeywordResearch';
+import AiSearchVisibility from './AiSearchVisibility';
 
 // Mapping IDs to Components
 const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
@@ -89,7 +85,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 };
 
 const AppContent = () => {
-  const { isPricingModalOpen, setPricingModalOpen, user } = useAuth(); 
+  const { isPricingModalOpen, setPricingModalOpen } = useAuth(); // Use Global State
   const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings'>('home');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [toolSearchQuery, setToolSearchQuery] = useState('');
@@ -97,31 +93,6 @@ const AppContent = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isSubmitToolOpen, setIsSubmitToolOpen] = useState(false);
   
-  // Real-time Tools State (Combined Static + Firestore)
-  const [tools, setTools] = useState<any[]>(TOOLS_CONFIG);
-
-  useEffect(() => {
-    // Only try to subscribe if DB is available (configured)
-    if (!db) return;
-
-    // Subscribe to Firestore tools
-    const q = query(collection(db, "tools"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const firestoreTools = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        isCustom: true,
-        icon: Sparkles, // Default icon for custom tools
-        color: 'blue' // Default color
-      }));
-      setTools([...TOOLS_CONFIG, ...firestoreTools]);
-    }, (error) => {
-        console.log("Firestore tools fetch error (likely no permissions yet):", error);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   // Global State
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -133,21 +104,53 @@ const AppContent = () => {
 
   // --- SECURITY FEATURES ---
   useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+    // 1. Prevent Right Click
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    // 2. Prevent DevTools Shortcuts & Copying
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'F12') e.preventDefault();
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) e.preventDefault();
-      if (e.ctrlKey && e.key === 'u') e.preventDefault();
+      // Prevent F12
+      if (e.key === 'F12') {
+        e.preventDefault();
+      }
+      // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+        e.preventDefault();
+      }
+      // Prevent Ctrl+U (View Source)
+      if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+      }
+      // Prevent Ctrl+C (Copy) - Optional, but requested for "no body can copy"
       if (e.ctrlKey && e.key === 'c') {
+        // Allow copy only if user is focused on an input/textarea
         const activeTag = document.activeElement?.tagName.toLowerCase();
-        if (activeTag !== 'input' && activeTag !== 'textarea') e.preventDefault();
+        if (activeTag !== 'input' && activeTag !== 'textarea') {
+           e.preventDefault();
+        }
       }
     };
-    
-    // Inject CSS
+
+    // 3. Inject CSS to prevent text selection (visually)
     const style = document.createElement('style');
     style.id = 'security-style';
-    style.innerHTML = `body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}input,textarea,[contenteditable="true"]{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}`;
+    style.innerHTML = `
+      body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      /* Allow selection in inputs so forms work */
+      input, textarea, [contenteditable="true"] {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+      }
+    `;
     document.head.appendChild(style);
 
     document.addEventListener('contextmenu', handleContextMenu);
@@ -291,84 +294,20 @@ const AppContent = () => {
   };
 
   const handleToolSelect = (toolId: string) => {
-    // If the tool doesn't have a component (newly added via CRUD), open its website if available
-    if (!TOOL_COMPONENTS[toolId]) {
-        const tool = tools.find(t => t.id === toolId);
-        if (tool && tool.websiteUrl) {
-            window.open(tool.websiteUrl, '_blank');
-        } else {
-            setActiveToolId(toolId);
-            setCurrentView('tools');
-        }
-    } else {
-        setActiveToolId(toolId);
-        setCurrentView('tools');
-    }
+    setActiveToolId(toolId);
+    setCurrentView('tools');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // CRUD OPERATIONS
-  const handleAddTool = async (toolData: any) => {
-      // Local fallback if no DB
-      if (!db) {
-          const newTool = {
-              id: `custom-tool-${Date.now()}`,
-              category: toolData.category,
-              title: toolData.name,
-              description: toolData.description,
-              features: toolData.highlights ? toolData.highlights.split(',').map((s: string) => s.trim()) : [],
-              websiteUrl: toolData.websiteUrl,
-              isCustom: true,
-              icon: Sparkles,
-              color: 'blue'
-          };
-          setTools(prev => [...prev, newTool]);
-          alert("Tool added locally (Offline Mode)");
-          return;
-      }
-
-      try {
-          await addDoc(collection(db, "tools"), {
-              category: toolData.category,
-              title: toolData.name,
-              description: toolData.description,
-              features: toolData.highlights ? toolData.highlights.split(',').map((s: string) => s.trim()) : [],
-              websiteUrl: toolData.websiteUrl,
-              createdAt: new Date()
-          });
-      } catch (e) {
-          console.error("Error adding tool: ", e);
-          alert("Failed to save tool. Please check your connection.");
-      }
-  };
-
-  const handleDeleteTool = async (e: React.MouseEvent, id: string) => {
-      e.stopPropagation();
-      
-      // Local fallback
-      if (!db) {
-          setTools(prev => prev.filter(t => t.id !== id));
-          return;
-      }
-
-      if (window.confirm("Are you sure you want to delete this tool?")) {
-          try {
-              await deleteDoc(doc(db, "tools", id));
-          } catch (e) {
-              console.error("Error deleting tool: ", e);
-          }
-      }
   };
 
   // Dynamic Group Tools
   const groupedTools = useMemo(() => {
-    const filtered = tools.filter(tool => 
+    const filtered = TOOLS_CONFIG.filter(tool => 
       tool.title.toLowerCase().includes(toolSearchQuery.toLowerCase()) ||
       tool.description.toLowerCase().includes(toolSearchQuery.toLowerCase())
     );
 
     const preferredOrder = ['AI & Trends', 'Ad Mockups', 'Technical SEO', 'Marketing Calculators', 'SaaS & Business', 'Tax & Finance'];
-    const allCategories = Array.from(new Set(tools.map(t => t.category))) as string[];
+    const allCategories = Array.from(new Set(TOOLS_CONFIG.map(t => t.category))) as string[];
     
     const sortedCategories = allCategories.sort((a, b) => {
         const indexA = preferredOrder.indexOf(a);
@@ -376,14 +315,14 @@ const AppContent = () => {
         return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
     });
 
-    const groups: Record<string, typeof tools> = {};
+    const groups: Record<string, typeof TOOLS_CONFIG[number][]> = {};
     sortedCategories.forEach(cat => {
-        const catTools = filtered.filter(t => t.category === cat);
-        if (catTools.length > 0) groups[cat] = catTools;
+        const tools = filtered.filter(t => t.category === cat);
+        if (tools.length > 0) groups[cat] = tools;
     });
     
     return groups;
-  }, [toolSearchQuery, tools]);
+  }, [toolSearchQuery]);
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string, text: string, border: string }> = {
@@ -412,7 +351,7 @@ const AppContent = () => {
       }
   };
 
-  const activeToolConfig = activeToolId ? tools.find(t => t.id === activeToolId) : null;
+  const activeToolConfig = activeToolId ? TOOLS_CONFIG.find(t => t.id === activeToolId) : null;
   const ActiveToolComponent = activeToolId ? TOOL_COMPONENTS[activeToolId] : null;
 
   // View Routing Logic
@@ -423,7 +362,7 @@ const AppContent = () => {
     if (currentView === 'about') return <AboutUs />;
     
     if (currentView === 'tools') {
-      if (activeToolConfig) {
+      if (activeToolConfig && ActiveToolComponent) {
         return (
            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
              <div className="bg-brand-surface border-b border-brand-border sticky top-20 z-30 shadow-sm transition-colors duration-300 backdrop-blur-md bg-opacity-95">
@@ -442,23 +381,7 @@ const AppContent = () => {
                 category={activeToolConfig.category}
                 features={activeToolConfig.features}
              />
-             {ActiveToolComponent ? <ActiveToolComponent currency={currency} /> : (
-                 <div className="max-w-7xl mx-auto px-4 py-12 text-center text-brand-dark/50">
-                     <p className="text-lg">This is a custom tool entry.</p>
-                     {/* @ts-ignore */}
-                     {activeToolConfig.websiteUrl && (
-                         <a 
-                            // @ts-ignore
-                            href={activeToolConfig.websiteUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="mt-4 inline-flex items-center gap-2 px-6 py-2 bg-brand-primary text-white rounded-lg hover:opacity-90"
-                         >
-                             Visit Website <Globe className="w-4 h-4" />
-                         </a>
-                     )}
-                 </div>
-             )}
+             <ActiveToolComponent currency={currency} />
            </div>
         );
       }
@@ -486,33 +409,21 @@ const AppContent = () => {
                 </div>
             </div>
 
-            {Object.entries(groupedTools).map(([category, categoryTools]) => {
+            {Object.entries(groupedTools).map(([category, tools]) => {
+                const categoryTools = tools as typeof TOOLS_CONFIG[number][];
                 const CategoryIcon = getCategoryIcon(category);
-                const catTools = categoryTools as any[];
-                return catTools.length > 0 && (
+                return categoryTools.length > 0 && (
                     <div key={category} className="mb-20 last:mb-0">
                         <h2 className="text-xl font-bold text-brand-dark mb-8 flex items-center gap-3 border-b border-brand-border pb-4">
                             <CategoryIcon className="w-6 h-6 text-brand-primary" />
                             {category}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {catTools.map((tool: any) => {
+                            {categoryTools.map((tool: any) => {
                                 const style = getColorClasses(tool.color);
                                 return (
-                                    <div key={tool.id} onClick={() => handleToolSelect(tool.id)} className={`glass-card group rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full relative overflow-hidden`}>
+                                    <div key={tool.id} onClick={() => setActiveToolId(tool.id)} className={`glass-card group rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full relative overflow-hidden`}>
                                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        
-                                        {/* Delete Button for Custom Tools - Only if Admin or User created it (simplified to check isCustom) */}
-                                        {tool.isCustom && (
-                                            <button 
-                                                onClick={(e) => handleDeleteTool(e, tool.id)}
-                                                className="absolute top-3 right-3 p-1.5 bg-red-50 text-red-500 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-100 transition-all z-10"
-                                                title="Delete Tool"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        )}
-
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${style.bg} ${style.text}`}>
                                             <tool.icon className="w-6 h-6" />
                                         </div>
@@ -654,7 +565,6 @@ const AppContent = () => {
         onOpenPricing={() => setPricingModalOpen(true)}
         onOpenPrivacy={() => setIsPrivacyOpen(true)}
         onOpenSubmitTool={() => setIsSubmitToolOpen(true)}
-        tools={tools}
       />
 
       <main className="transition-opacity duration-300">
@@ -684,7 +594,7 @@ const AppContent = () => {
       {selectedSpec && (<PreviewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} spec={selectedSpec} />)}
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <PricingModal isOpen={isPricingModalOpen} onClose={() => setPricingModalOpen(false)} />
-      <SubmitToolModal isOpen={isSubmitToolOpen} onClose={() => setIsSubmitToolOpen(false)} onSubmit={handleAddTool} />
+      <SubmitToolModal isOpen={isSubmitToolOpen} onClose={() => setIsSubmitToolOpen(false)} />
       
       {/* Legal & Consent */}
       <PrivacyPolicyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />

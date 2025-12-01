@@ -461,10 +461,8 @@ const SchemaMarkupGenerator = () => {
   }, [selectedType, articleData, breadcrumbItems, eventData, howToData, faqItems, localBusinessData, orgData, productData, videoData, websiteData, isAiMode]);
 
   // --- AI Generator Logic ---
-    const apiKey = import.meta.env.VITE_API_KEY;
-
   const handleAiGenerate = async () => {
-    if (!apiKey) {
+    if (!process.env.API_KEY) {
         setAiError("API Key not configured.");
         return;
     }
@@ -473,7 +471,7 @@ const SchemaMarkupGenerator = () => {
     setAiError('');
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -1896,10 +1894,12 @@ const SchemaMarkupGenerator = () => {
                             </button>
                             <button 
                                 onClick={copyToClipboard} 
-                                className={`text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-200 ${copied ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                className="magic-btn"
                             >
-                                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                                {copied ? 'Copied' : 'Copy'}
+                                <div className="magic-btn-content px-3 py-1.5 text-xs">
+                                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                    {copied ? 'Copied' : 'Copy'}
+                                </div>
                             </button>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Monitor, Play, Globe, Server, Code, Image as ImageIcon, Terminal, AlertCircle, CheckCircle, Clock, Shield } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
+import { useAuth } from '../contexts/AuthContext';
 
 interface FetchResult {
   status: number;
@@ -14,6 +15,7 @@ interface FetchResult {
 }
 
 const FetchRenderTool = () => {
+  const { consumeCredits } = useAuth();
   const [inputs, setInputs] = useState({
     url: '',
     userAgent: 'Googlebot Smartphone',
@@ -41,14 +43,16 @@ const FetchRenderTool = () => {
     }));
   };
 
-     const apiKey = import.meta.env.VITE_API_KEY;
-
   const handleFetch = async () => {
     if (!inputs.url) {
         alert("Please enter a URL");
         return;
     }
-    if (!apiKey) {
+    
+    // CREDIT CHECK: Medium Cost Tool (10 Credits)
+    if (!consumeCredits(10)) return;
+
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -57,7 +61,7 @@ const FetchRenderTool = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

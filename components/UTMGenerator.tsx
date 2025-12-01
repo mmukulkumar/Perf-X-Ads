@@ -53,40 +53,42 @@ const UTMGenerator = () => {
           <div className="space-y-8">
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">Website URL *</label>
-              <input type="text" name="url" value={formData.url} onChange={handleChange} placeholder="https://example.com" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="url" value={formData.url} onChange={handleChange} placeholder="https://example.com" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">UTM Source *</label>
-              <input type="text" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. newsletter, facebook, twitter" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. newsletter, facebook, twitter" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">UTM Medium</label>
-              <input type="text" name="medium" value={formData.medium} onChange={handleChange} placeholder="e.g. banner, email, social" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="medium" value={formData.medium} onChange={handleChange} placeholder="e.g. banner, email, social" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">UTM Campaign</label>
-              <input type="text" name="campaign" value={formData.campaign} onChange={handleChange} placeholder="e.g. promotion, sale" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="campaign" value={formData.campaign} onChange={handleChange} placeholder="e.g. promotion, sale" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">UTM Term</label>
-              <input type="text" name="term" value={formData.term} onChange={handleChange} placeholder="keywords for paid search" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="term" value={formData.term} onChange={handleChange} placeholder="keywords for paid search" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
             <div>
               <label className="block text-sm font-medium text-brand-dark mb-2">UTM Content</label>
-              <input type="text" name="content" value={formData.content} onChange={handleChange} placeholder="e.g. buy-now, v1" className="w-full px-4 py-3 bg-brand-light/50 rounded-lg border border-brand-medium/40 focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30 text-brand-dark" />
+              <input type="text" name="content" value={formData.content} onChange={handleChange} placeholder="e.g. buy-now, v1" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
             </div>
 
             <div className="pt-4">
-              <button onClick={generateUrl} className="px-6 py-2.5 bg-brand-dark border border-brand-dark text-white font-medium rounded-lg hover:bg-brand-dark/90 transition-all shadow-sm active:scale-95 text-sm">Generate URL</button>
+              <button onClick={generateUrl} className="px-6 py-2.5 bg-brand-dark dark:bg-brand-primary border border-brand-dark dark:border-brand-primary text-white font-medium rounded-lg hover:opacity-90 transition-all shadow-sm active:scale-95 text-sm">Generate URL</button>
             </div>
 
             {generatedUrl && (
               <div className="mt-8 pt-8 border-t border-brand-medium/20 animate-in fade-in slide-in-from-bottom-2">
                 <label className="block text-sm font-medium text-brand-dark mb-3">Generated URL</label>
                 <div className="flex gap-2">
-                  <div className="flex-1 p-3 bg-brand-light border border-brand-medium/30 rounded-lg text-brand-dark font-mono text-sm break-all">{generatedUrl}</div>
-                  <button onClick={copyToClipboard} className={`flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-lg transition-all shrink-0 border ${copied ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800' : 'bg-brand-surface text-brand-dark border-brand-medium/40 hover:bg-brand-light'}`}>
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  <div className="flex-1 p-3 bg-brand-light/30 border border-brand-medium/30 rounded-lg text-brand-dark font-mono text-sm break-all">{generatedUrl}</div>
+                  <button onClick={copyToClipboard} className="magic-btn h-[46px] w-[60px] shrink-0 group/copy">
+                    <div className={`magic-btn-content justify-center p-0 transition-all duration-300 ${copied ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500 text-emerald-600' : 'bg-brand-surface border-brand-border text-brand-dark hover:bg-brand-light'}`}>
+                        {copied ? <Check className="w-5 h-5 scale-110" /> : <Copy className="w-5 h-5 opacity-70 group-hover/copy:opacity-100" />}
+                    </div>
                   </button>
                 </div>
               </div>

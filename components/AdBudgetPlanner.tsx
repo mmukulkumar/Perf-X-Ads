@@ -74,7 +74,7 @@ const AdBudgetPlanner = () => {
              <div className="space-y-6">
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Budget Period</label>
-                   <select name="budgetPeriod" value={inputs.budgetPeriod} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all">
+                   <select name="budgetPeriod" value={inputs.budgetPeriod} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/50 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all">
                       <option value="Monthly">Monthly</option>
                       <option value="Yearly">Yearly</option>
                       <option value="Quarterly">Quarterly</option>
@@ -82,23 +82,23 @@ const AdBudgetPlanner = () => {
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">{inputs.budgetPeriod} Revenue Goal ($)</label>
-                   <input type="number" name="revenueGoal" value={inputs.revenueGoal} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="revenueGoal" value={inputs.revenueGoal} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Target ROAS</label>
-                   <input type="number" name="targetRoas" value={inputs.targetRoas} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="targetRoas" value={inputs.targetRoas} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Average Order Value ($)</label>
-                   <input type="number" name="averageOrderValue" value={inputs.averageOrderValue} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="averageOrderValue" value={inputs.averageOrderValue} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Conversion Rate (%)</label>
-                   <input type="number" name="conversionRate" value={inputs.conversionRate} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="conversionRate" value={inputs.conversionRate} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Average CPC ($)</label>
-                   <input type="number" name="averageCpc" value={inputs.averageCpc} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="averageCpc" value={inputs.averageCpc} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
              </div>
           </div>
@@ -116,25 +116,25 @@ const AdBudgetPlanner = () => {
                        <p className="text-xs text-brand-dark/70 mt-1">({formatCurrency(results.dailyBudget)}/day)</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                       <div className="p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+                       <div className="p-4 bg-blue-50/50 dark:bg-blue-900/30 rounded-lg border border-blue-100 dark:border-blue-800">
                           <p className="text-xs text-blue-800 dark:text-blue-300 font-semibold mb-1">Expected Clicks</p>
                           <p className="text-xl font-bold text-brand-dark">{formatNumber(results.expectedClicks)}</p>
                        </div>
-                       <div className="p-4 bg-purple-50/50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800">
+                       <div className="p-4 bg-purple-50/50 dark:bg-purple-900/30 rounded-lg border border-purple-100 dark:border-purple-800">
                           <p className="text-xs text-purple-800 dark:text-purple-300 font-semibold mb-1">Conversions</p>
                           <p className="text-xl font-bold text-brand-dark">{formatNumber(results.expectedConversions)}</p>
                        </div>
-                       <div className="p-4 bg-amber-50/50 dark:bg-amber-900/20 rounded-lg border border-amber-100 dark:border-amber-800">
+                       <div className="p-4 bg-amber-50/50 dark:bg-amber-900/30 rounded-lg border border-amber-100 dark:border-amber-800">
                           <p className="text-xs text-amber-800 dark:text-amber-300 font-semibold mb-1">Revenue</p>
                           <p className="text-xl font-bold text-brand-dark">{formatCurrency(results.expectedRevenue)}</p>
                        </div>
-                       <div className="p-4 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-lg border border-emerald-100 dark:border-emerald-800">
+                       <div className="p-4 bg-emerald-50/50 dark:bg-emerald-900/30 rounded-lg border border-emerald-100 dark:border-emerald-800">
                           <p className="text-xs text-emerald-800 dark:text-emerald-300 font-semibold mb-1">Projected ROAS</p>
                           <p className="text-xl font-bold text-brand-dark">{results.projectedRoas.toFixed(2)}:1</p>
                        </div>
                     </div>
                     {results.isRoasLow && (
-                       <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-lg flex gap-3">
+                       <div className="p-4 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800 rounded-lg flex gap-3">
                           <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
                           <div>
                              <p className="text-xs font-bold text-red-800 dark:text-red-300 mb-1">Recommendation:</p>

@@ -206,7 +206,7 @@ const CorporateTaxCalculator = () => {
                         <button 
                             key={k} 
                             onClick={() => setLang(k as keyof typeof TRANSLATIONS)}
-                            className={`w-full text-left px-3 py-2 text-xs rounded-md hover:bg-brand-light transition-colors ${lang === k ? 'font-bold text-blue-600 bg-blue-50' : 'text-brand-dark'}`}
+                            className={`w-full text-left px-3 py-2 text-xs rounded-md hover:bg-brand-light transition-colors ${lang === k ? 'font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30' : 'text-brand-dark'}`}
                         >
                             {k === 'en' ? 'English' : k === 'es' ? 'Español' : k === 'fr' ? 'Français' : 'Deutsch'}
                         </button>
@@ -224,7 +224,7 @@ const CorporateTaxCalculator = () => {
                         <button 
                             key={c} 
                             onClick={() => setCurrency(c as keyof typeof CURRENCIES)}
-                            className={`w-full text-left px-3 py-2 text-xs rounded-md hover:bg-brand-light transition-colors ${currency === c ? 'font-bold text-green-600 bg-green-50' : 'text-brand-dark'}`}
+                            className={`w-full text-left px-3 py-2 text-xs rounded-md hover:bg-brand-light transition-colors ${currency === c ? 'font-bold text-green-600 bg-green-50 dark:bg-green-900/30' : 'text-brand-dark'}`}
                         >
                             {c}
                         </button>
@@ -253,7 +253,7 @@ const CorporateTaxCalculator = () => {
                           value={income}
                           onChange={(e) => setIncome(e.target.value)}
                           placeholder="500000" 
-                          className="w-full pl-9 pr-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark font-bold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                          className="w-full pl-9 pr-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark font-bold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
                        />
                    </div>
                 </div>
@@ -262,7 +262,7 @@ const CorporateTaxCalculator = () => {
                    <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-2">{t.stateLabel}</label>
                    <button 
                       onClick={() => setShowStateList(!showStateList)}
-                      className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark text-left flex justify-between items-center hover:border-blue-500/50 transition-all"
+                      className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark text-left flex justify-between items-center hover:border-blue-500/50 transition-all"
                    >
                       <span>{selectedState} ({STATE_RATES[selectedState].toFixed(3)}%)</span>
                       <Search className="w-4 h-4 text-brand-dark/40" />
@@ -276,7 +276,7 @@ const CorporateTaxCalculator = () => {
                                   placeholder={t.searchPlaceholder}
                                   value={searchTerm}
                                   onChange={(e) => setSearchTerm(e.target.value)}
-                                  className="w-full px-3 py-2 bg-brand-light/50 rounded-md text-sm outline-none border border-transparent focus:border-blue-500/30"
+                                  className="w-full px-3 py-2 bg-brand-light/50 rounded-md text-sm outline-none border border-transparent focus:border-blue-500/30 text-brand-dark"
                                   autoFocus
                                />
                            </div>
@@ -288,7 +288,7 @@ const CorporateTaxCalculator = () => {
                                       setShowStateList(false);
                                       setSearchTerm('');
                                   }}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-brand-light/50 flex justify-between items-center"
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-brand-light/50 flex justify-between items-center text-brand-dark"
                                >
                                    <span>{state}</span>
                                    <span className="text-brand-dark/50 font-mono text-xs">{STATE_RATES[state].toFixed(3)}%</span>
@@ -298,7 +298,7 @@ const CorporateTaxCalculator = () => {
                    )}
                 </div>
 
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
                     <div className="flex justify-between items-center text-sm mb-2">
                         <span className="text-brand-dark/70">{t.fedRateLabel}</span>
                         <span className="font-bold text-brand-dark">21.00%</span>
@@ -331,14 +331,14 @@ const CorporateTaxCalculator = () => {
                             <p className="text-lg font-bold text-brand-dark">{formatCurrency(results.stateTax)}</p>
                             <p className="text-[10px] text-brand-dark/40">Rate: {STATE_RATES[selectedState].toFixed(3)}%</p>
                         </div>
-                        <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800">
+                        <div className="p-4 bg-red-50 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800">
                             <p className="text-xs font-bold text-red-800 dark:text-red-300 uppercase mb-1">{t.totalLiability}</p>
                             <p className="text-lg font-bold text-red-700 dark:text-red-400">{formatCurrency(results.totalTax)}</p>
                             <p className="text-[10px] text-red-800/60 dark:text-red-300/60">{t.combined}</p>
                         </div>
                     </div>
 
-                    <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-100 dark:border-green-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="bg-green-50 dark:bg-green-900/30 rounded-xl p-6 border border-green-100 dark:border-green-800 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <p className="text-sm font-medium text-green-900 dark:text-green-300 mb-1">{t.netIncome}</p>
                             <div className="text-3xl font-extrabold text-green-700 dark:text-green-400">{formatCurrency(results.netIncome)}</div>
@@ -369,7 +369,7 @@ const CorporateTaxCalculator = () => {
                                 {Object.entries(STATE_RATES).map(([state, rate]) => (
                                     <tr 
                                         key={state} 
-                                        className={`hover:bg-brand-light/30 transition-colors cursor-pointer ${selectedState === state ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+                                        className={`hover:bg-brand-light/30 transition-colors cursor-pointer ${selectedState === state ? 'bg-blue-50 dark:bg-blue-900/30' : ''}`}
                                         onClick={() => setSelectedState(state)}
                                     >
                                         <td className="px-4 py-2 text-brand-dark/80">{state}</td>

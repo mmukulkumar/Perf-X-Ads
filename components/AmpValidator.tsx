@@ -16,15 +16,12 @@ const AmpValidator = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<TestResult[]>([]);
 
-      const apiKey = import.meta.env.VITE_API_KEY;
-
-
   const handleTest = async () => {
     if (!input.trim()) {
         alert("Please enter at least one URL.");
         return;
     }
-    if (!apiKey) {
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -39,7 +36,7 @@ const AmpValidator = () => {
     setResults([]); 
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -144,7 +141,7 @@ const AmpValidator = () => {
                         <button 
                             onClick={handleTest}
                             disabled={isAnalyzing}
-                            className={`w-full px-6 py-3.5 bg-brand-dark text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 active:scale-95'}`}
+                            className={`w-full px-6 py-3.5 bg-brand-dark dark:bg-orange-600 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 dark:hover:bg-orange-700 active:scale-95'}`}
                         >
                             {isAnalyzing ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
                             TEST

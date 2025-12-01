@@ -2,22 +2,25 @@
 import React, { useState } from 'react';
 import { Smartphone, Monitor, Search, RefreshCw, AlertTriangle, CheckCircle, FileText, Settings, ArrowRight, Globe, Info } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
-import ReactMarkdown from 'react-markdown'; // Assuming you might want markdown rendering, but if not installed, we'll display plain text or simple formatting. I'll stick to standard React for safety unless ReactMarkdown is known to be available. I'll use a simple whitespace-pre-wrap div.
+import { useAuth } from '../contexts/AuthContext';
 
 const MobileFirstIndexTool = () => {
+  const { consumeCredits } = useAuth();
   const [url, setUrl] = useState('');
   const [userAgent, setUserAgent] = useState('Googlebot Smartphone');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [report, setReport] = useState<string | null>(null);
-
-    const apiKey = import.meta.env.VITE_API_KEY;
 
   const handleAnalyze = async () => {
     if (!url) {
         alert("Please enter a URL");
         return;
     }
-    if (!apiKey) {
+    
+    // CREDIT CHECK: Medium Cost Tool (10 Credits)
+    if (!consumeCredits(10)) return;
+
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -26,7 +29,7 @@ const MobileFirstIndexTool = () => {
     setReport(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey});
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -134,7 +137,7 @@ const MobileFirstIndexTool = () => {
                                     type="url" 
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
-                                    placeholder="https://www.example.com" 
+                                    placeholder="https://example.com" 
                                     className="w-full pl-9 pr-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
                                 />
                                 <Globe className="absolute left-3 top-3 w-4 h-4 text-brand-medium" />
@@ -161,7 +164,7 @@ const MobileFirstIndexTool = () => {
                         <button 
                             onClick={handleAnalyze}
                             disabled={isAnalyzing || !url}
-                            className={`w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 transition-all shadow-md ${isAnalyzing ? 'bg-brand-medium cursor-wait' : 'bg-brand-dark hover:bg-brand-dark/90 active:scale-95'}`}
+                            className={`w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 transition-all shadow-md ${isAnalyzing ? 'bg-brand-medium cursor-wait' : 'bg-brand-dark dark:bg-blue-600 hover:bg-brand-dark/90 dark:hover:bg-blue-700 active:scale-95'}`}
                         >
                             {isAnalyzing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                             {isAnalyzing ? 'Analyzing...' : 'TEST URL'}

@@ -18,7 +18,7 @@ const ROICalculator = () => {
     cpa: 0,
     cpl: 0,
     performance: 'Excellent',
-    performanceColor: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800',
+    performanceColor: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/30 border-green-100 dark:border-green-800',
     performanceMessage: 'Outstanding performance: Campaign is highly profitable.'
   });
 
@@ -48,15 +48,15 @@ const ROICalculator = () => {
     if (cost > 0) {
         if (roiPercentage < 0) {
             performance = 'Loss (Negative ROI)';
-            performanceColor = 'text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800';
+            performanceColor = 'text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/30 border-red-100 dark:border-red-800';
             performanceMessage = 'Negative ROI indicates the campaign is losing money.';
         } else if (roiPercentage < 200) {
             performance = 'Good';
-            performanceColor = 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800';
+            performanceColor = 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800';
             performanceMessage = 'Solid performance. The campaign is generating good returns.';
         } else {
             performance = 'Excellent';
-            performanceColor = 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800';
+            performanceColor = 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 border-emerald-100 dark:border-emerald-800';
             performanceMessage = 'Outstanding performance: Campaign is highly profitable.';
         }
     }
@@ -78,7 +78,7 @@ const ROICalculator = () => {
              <div className="space-y-6">
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Campaign Type</label>
-                   <select name="campaignType" value={inputs.campaignType} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all">
+                   <select name="campaignType" value={inputs.campaignType} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all">
                       <option value="PPC / Paid Search">PPC / Paid Search</option>
                       <option value="Social Media Ads">Social Media Ads</option>
                       <option value="Email Marketing">Email Marketing</option>
@@ -86,11 +86,11 @@ const ROICalculator = () => {
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Total Campaign Cost ($)</label>
-                   <input type="number" name="cost" value={inputs.cost} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="cost" value={inputs.cost} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
                 <div>
                    <label className="block text-sm font-semibold text-brand-dark mb-2">Revenue Generated ($)</label>
-                   <input type="number" name="revenue" value={inputs.revenue} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
+                   <input type="number" name="revenue" value={inputs.revenue} onChange={handleInputChange} className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary outline-none transition-all" />
                 </div>
              </div>
           </div>
@@ -108,11 +108,11 @@ const ROICalculator = () => {
                        <p className="text-xs opacity-70 font-medium">({(results.roiPercentage / 100).toFixed(1)}:1 ratio)</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                       <div className="p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+                       <div className="p-4 bg-blue-50/50 dark:bg-blue-900/30 rounded-lg border border-blue-100 dark:border-blue-800">
                           <p className="text-xs text-blue-800 dark:text-blue-300 font-semibold mb-1">Profit</p>
                           <p className="text-xl font-bold text-brand-dark">{formatCurrency(results.profit)}</p>
                        </div>
-                       <div className="p-4 bg-purple-50/50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800">
+                       <div className="p-4 bg-purple-50/50 dark:bg-purple-900/30 rounded-lg border border-purple-100 dark:border-purple-800">
                           <p className="text-xs text-purple-800 dark:text-purple-300 font-semibold mb-1">Revenue per $1</p>
                           <p className="text-xl font-bold text-brand-dark">${results.revenuePerDollar.toFixed(2)}</p>
                        </div>

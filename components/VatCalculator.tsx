@@ -126,10 +126,11 @@ const VatCalculator = () => {
                                 value={customRate}
                                 onChange={(e) => setCustomRate(e.target.value)}
                                 onClick={() => setRate(0)} // Reset standard selection visually
+                                placeholder="Custom"
                                 className={`w-full h-full px-2 py-3 text-center bg-brand-surface border rounded-lg text-sm font-bold outline-none transition-all ${customRate ? 'border-blue-600 ring-1 ring-blue-600' : 'border-brand-medium/30 focus:border-blue-500'}`}
                             />
                             {!customRate && <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-brand-dark/40 text-xs font-bold">Custom</span>}
-                            {customRate && <span className="absolute right-12 top-1/2 -translate-y-1/2 text-xs text-brand-dark/40">%</span>}
+                            {customRate && <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-brand-dark/40">%</span>}
                         </div>
                     </div>
                 </div>

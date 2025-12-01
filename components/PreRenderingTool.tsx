@@ -26,15 +26,12 @@ const PreRenderingTool = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<RenderResult | null>(null);
 
-
-    const apiKey = import.meta.env.VITE_API_KEY;
-
   const handleTest = async () => {
     if (!url.trim()) {
         alert("Please enter a URL.");
         return;
     }
-    if (!apiKey) {
+    if (!process.env.API_KEY) {
         alert("API Key not configured.");
         return;
     }
@@ -43,7 +40,7 @@ const PreRenderingTool = () => {
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         const model = 'gemini-2.5-flash';
         
         const prompt = `
@@ -147,7 +144,7 @@ const PreRenderingTool = () => {
                     <button 
                         onClick={handleTest}
                         disabled={isAnalyzing}
-                        className={`px-8 py-3 bg-brand-dark text-white font-bold rounded-lg shadow-md transition-all flex items-center gap-2 h-[48px] whitespace-nowrap ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 active:scale-95'}`}
+                        className={`px-8 py-3 bg-brand-dark dark:bg-purple-600 text-white font-bold rounded-lg shadow-md transition-all flex items-center gap-2 h-[48px] whitespace-nowrap ${isAnalyzing ? 'opacity-70 cursor-wait' : 'hover:bg-brand-dark/90 dark:hover:bg-purple-700 active:scale-95'}`}
                     >
                         {isAnalyzing ? <ArrowRightLeft className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
                         TEST
