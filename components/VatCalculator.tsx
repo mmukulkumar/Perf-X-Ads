@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calculator, RefreshCw, Percent, TrendingUp, Minus, Plus } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const VatCalculator = () => {
   const [amount, setAmount] = useState<string>('');
@@ -148,45 +148,24 @@ const VatCalculator = () => {
                         <div className={`p-5 rounded-xl border flex justify-between items-center transition-all ${operation === 'add' ? 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 scale-[1.02] shadow-sm' : 'bg-brand-surface border-brand-medium/20 opacity-70'}`}>
                             <div>
                                 <p className="text-xs font-bold text-brand-dark/60 uppercase mb-1">Net Amount</p>
-                                <p className="text-sm text-brand-dark/40">Excluding VAT</p>
+                                <p className="text-xl font-bold text-brand-dark">{formatCurrency(results.net)}</p>
                             </div>
-                            <p className="text-2xl font-mono font-bold text-brand-dark">{formatCurrency(results.net)}</p>
                         </div>
 
                         {/* VAT */}
-                        <div className="p-5 rounded-xl bg-brand-surface border border-brand-medium/20 flex justify-between items-center relative overflow-hidden">
-                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-orange-500"></div>
+                        <div className="p-5 rounded-xl border bg-brand-surface border-brand-medium/20 flex justify-between items-center">
                             <div>
-                                <p className="text-xs font-bold text-brand-dark/60 uppercase mb-1">VAT Amount</p>
-                                <p className="text-sm text-brand-dark/40">At {customRate || rate}%</p>
+                                <p className="text-xs font-bold text-brand-dark/60 uppercase mb-1">VAT Amount ({rate}%)</p>
+                                <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{formatCurrency(results.vat)}</p>
                             </div>
-                            <p className="text-2xl font-mono font-bold text-orange-600 dark:text-orange-400">{formatCurrency(results.vat)}</p>
                         </div>
 
                         {/* Gross */}
-                        <div className={`p-5 rounded-xl border flex justify-between items-center transition-all ${operation === 'remove' ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800 scale-[1.02] shadow-sm' : 'bg-brand-surface border-brand-medium/20 opacity-70'}`}>
+                        <div className={`p-5 rounded-xl border flex justify-between items-center transition-all ${operation === 'remove' ? 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 scale-[1.02] shadow-sm' : 'bg-brand-surface border-brand-medium/20 opacity-70'}`}>
                             <div>
                                 <p className="text-xs font-bold text-brand-dark/60 uppercase mb-1">Gross Amount</p>
-                                <p className="text-sm text-brand-dark/40">Including VAT</p>
+                                <p className="text-xl font-bold text-brand-dark">{formatCurrency(results.gross)}</p>
                             </div>
-                            <p className="text-2xl font-mono font-bold text-brand-dark">{formatCurrency(results.gross)}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="px-8 py-6 bg-brand-light/30 border-t border-brand-medium/10">
-                    <div className="flex gap-3 text-xs text-brand-dark/60 justify-center">
-                        <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                            <span>Standard Rate (20%)</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                            <span>Reduced Rate (5%)</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-brand-dark"></div>
-                            <span>Zero Rate (0%)</span>
                         </div>
                     </div>
                 </div>
@@ -194,6 +173,8 @@ const VatCalculator = () => {
           </div>
 
         </div>
+        
+        <ShareTool title="VAT Calculator" />
       </div>
     </div>
   );

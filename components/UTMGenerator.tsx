@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const UTMGenerator = () => {
   const [formData, setFormData] = useState({
@@ -95,6 +96,8 @@ const UTMGenerator = () => {
             )}
           </div>
         </div>
+        
+        <ShareTool title="UTM Generator" />
       </div>
     </div>
   );

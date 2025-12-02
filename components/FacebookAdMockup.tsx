@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Smartphone, Monitor, ThumbsUp, MessageCircle, Share2, MoreHorizontal, Globe, Info, Upload, Image as ImageIcon, RefreshCw } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const FacebookAdMockup = () => {
   const [inputs, setInputs] = useState({
@@ -165,6 +166,8 @@ const FacebookAdMockup = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Facebook Ad Mockup Generator" />
       </div>
     </div>
   );

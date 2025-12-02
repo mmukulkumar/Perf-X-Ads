@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Activity, TrendingDown, Users, DollarSign, ArrowRight, BarChart3, AlertCircle, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle, HelpCircle } from 'lucide-react';
+import { Activity, TrendingDown, Users, DollarSign, ArrowRight, BarChart3, AlertCircle, HelpCircle } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const ChurnCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -22,16 +23,8 @@ const ChurnCalculator = () => {
     arpu: 0
   });
 
-  const [shareUrl, setShareUrl] = useState('');
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-
   useEffect(() => {
-    const currentUrl = window.location.href;
-    if (currentUrl.startsWith('blob:') || currentUrl.startsWith('about:')) {
-        setShareUrl('https://perfxads.com/tools/churn-calculator');
-    } else {
-        setShareUrl(currentUrl);
-    }
+    // Current URL handling if needed for analytics, now handled by ShareTool
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -40,12 +33,6 @@ const ChurnCalculator = () => {
       ...prev,
       [name]: parseFloat(value) || 0
     }));
-  };
-
-  const handleShareCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setIsSharedCopied(true);
-    setTimeout(() => setIsSharedCopied(false), 2000);
   };
 
   const formatCurrency = (val: number) => {
@@ -291,6 +278,8 @@ const ChurnCalculator = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Churn Impact Calculator" />
 
       </div>
     </div>

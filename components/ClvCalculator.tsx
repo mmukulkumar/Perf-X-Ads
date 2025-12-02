@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, DollarSign, Users, BarChart2, CheckCircle, Info, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle, ArrowRight, Target, HelpCircle } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Users, BarChart2, CheckCircle, Info, ArrowRight, Target, HelpCircle } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const ClvCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -20,30 +21,12 @@ const ClvCalculator = () => {
     isHighValue: true
   });
 
-  const [shareUrl, setShareUrl] = useState('');
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-
-  useEffect(() => {
-    const currentUrl = window.location.href;
-    if (currentUrl.startsWith('blob:') || currentUrl.startsWith('about:')) {
-        setShareUrl('https://perfxads.com/tools/clv-calculator');
-    } else {
-        setShareUrl(currentUrl);
-    }
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInputs(prev => ({
       ...prev,
       [name]: name === 'calculationMethod' ? value : parseFloat(value) || 0
     }));
-  };
-
-  const handleShareCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setIsSharedCopied(true);
-    setTimeout(() => setIsSharedCopied(false), 2000);
   };
 
   const formatCurrency = (val: number) => {
@@ -235,6 +218,8 @@ const ClvCalculator = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="CLV Calculator" />
 
       </div>
     </div>

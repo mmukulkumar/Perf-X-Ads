@@ -1,7 +1,7 @@
 
-
 import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, DollarSign, Search, BarChart3, Info, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle, ArrowRight, Globe, LineChart, Target } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Search, LineChart, Info } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const EnterpriseSeoCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -26,11 +26,8 @@ const EnterpriseSeoCalculator = () => {
     isPositive: true
   });
 
-  const [shareUrl, setShareUrl] = useState('');
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-
   useEffect(() => {
-    setShareUrl(window.location.href);
+    // Current URL handled by ShareTool
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -39,12 +36,6 @@ const EnterpriseSeoCalculator = () => {
       ...prev,
       [name]: name === 'industry' ? value : parseFloat(value) || 0
     }));
-  };
-
-  const handleShareCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setIsSharedCopied(true);
-    setTimeout(() => setIsSharedCopied(false), 2000);
   };
 
   const formatCurrency = (val: number) => {
@@ -122,21 +113,6 @@ const EnterpriseSeoCalculator = () => {
                 <p className="text-lg text-brand-dark/70 leading-relaxed mb-6">
                   Free enterprise SEO ROI calculator & SEO return on investment calculator. Calculate SEO ROI, payback period, organic revenue & traffic growth. Our calculator uses proven <span className="font-semibold text-indigo-600 dark:text-indigo-400">SEO ROI formulas</span> to analyze enterprise search engine optimization investments and provide actionable recommendations for maximizing organic search performance.
                 </p>
-                
-                <div className="flex flex-wrap gap-4 text-sm text-brand-dark/60">
-                   <div className="flex items-center gap-1.5">
-                     <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                     Comprehensive ROI and payback analysis
-                   </div>
-                   <div className="flex items-center gap-1.5">
-                     <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                     SEO vs PPC comparison
-                   </div>
-                   <div className="flex items-center gap-1.5">
-                     <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                     Multiple scenario projections
-                   </div>
-                </div>
              </div>
           </div>
         </div>
@@ -345,6 +321,8 @@ const EnterpriseSeoCalculator = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Enterprise SEO ROI Calculator" />
 
       </div>
     </div>

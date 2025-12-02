@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, DollarSign, Clock, Zap, BarChart2, CheckCircle, Info, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle, ArrowRight } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Clock, Zap, BarChart2, CheckCircle, Info, ArrowRight, PieChart } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const SaasCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -24,19 +25,6 @@ const SaasCalculator = () => {
     paybackPeriod: 0,
     isPositive: true
   });
-
-  const [shareUrl, setShareUrl] = useState('');
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-
-  useEffect(() => {
-    // Handle blob/preview URLs which fail in navigator.share
-    const currentUrl = window.location.href;
-    if (currentUrl.startsWith('blob:') || currentUrl.startsWith('about:')) {
-        setShareUrl('https://perfxads.com/tools/saas-roi-calculator');
-    } else {
-        setShareUrl(currentUrl);
-    }
-  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -86,12 +74,6 @@ const SaasCalculator = () => {
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
-  };
-
-  const handleShareCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setIsSharedCopied(true);
-    setTimeout(() => setIsSharedCopied(false), 2000);
   };
 
   return (
@@ -362,6 +344,8 @@ const SaasCalculator = () => {
               ))}
            </div>
         </div>
+        
+        <ShareTool title="SaaS Pricing ROI Tool" />
 
       </div>
     </div>

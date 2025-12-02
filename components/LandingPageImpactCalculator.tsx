@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, DollarSign, MousePointer, BarChart2, CheckCircle, Info, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle, ArrowRight, Layout, Monitor, Target } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, MousePointer, BarChart2, CheckCircle, Info, ArrowRight, Layout, Monitor, Target } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const LandingPageImpactCalculator = () => {
   const [inputs, setInputs] = useState({
@@ -23,30 +24,12 @@ const LandingPageImpactCalculator = () => {
     isPositive: true
   });
 
-  const [shareUrl, setShareUrl] = useState('');
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-
-  useEffect(() => {
-    const currentUrl = window.location.href;
-    if (currentUrl.startsWith('blob:') || currentUrl.startsWith('about:')) {
-        setShareUrl('https://perfxads.com/tools/landing-page-calculator');
-    } else {
-        setShareUrl(currentUrl);
-    }
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInputs(prev => ({
       ...prev,
       [name]: name === 'pageType' ? value : parseFloat(value) || 0
     }));
-  };
-
-  const handleShareCopy = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setIsSharedCopied(true);
-    setTimeout(() => setIsSharedCopied(false), 2000);
   };
 
   const formatCurrency = (val: number) => {
@@ -274,6 +257,8 @@ const LandingPageImpactCalculator = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Landing Page Impact Calculator" />
 
       </div>
     </div>

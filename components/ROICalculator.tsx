@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, BarChart2, CheckCircle, AlertCircle, Info, Share2, Copy, Check, Facebook, Linkedin, Twitter, Mail, MessageCircle } from 'lucide-react';
+import { TrendingUp, BarChart2 } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const ROICalculator = () => {
   const [inputs, setInputs] = useState({
@@ -21,11 +22,6 @@ const ROICalculator = () => {
     performanceColor: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/30 border-green-100 dark:border-green-800',
     performanceMessage: 'Outstanding performance: Campaign is highly profitable.'
   });
-
-  const [isSharedCopied, setIsSharedCopied] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-
-  useEffect(() => { setShareUrl(window.location.href); }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -121,6 +117,8 @@ const ROICalculator = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="ROI Calculator" />
       </div>
     </div>
   );

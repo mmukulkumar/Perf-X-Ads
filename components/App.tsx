@@ -11,6 +11,7 @@ import MultiSelect from './MultiSelect';
 import Header from './Header';
 import RocketCursor from './RocketCursor';
 import AboutUs from './AboutUs';
+import SEO from './SEO';
 
 // Auth & Dashboard
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
@@ -361,10 +362,54 @@ const AppContent = () => {
 
   // View Routing Logic
   const renderView = () => {
-    if (currentView === 'dashboard') return <UserDashboard onShowPricing={() => setPricingModalOpen(true)} theme={theme} toggleTheme={toggleTheme} initialTab="overview" />;
-    if (currentView === 'settings') return <UserDashboard onShowPricing={() => setPricingModalOpen(true)} theme={theme} toggleTheme={toggleTheme} initialTab="settings" />;
-    if (currentView === 'admin') return <AdminDashboard />;
-    if (currentView === 'about') return <AboutUs />;
+    if (currentView === 'dashboard') {
+        return (
+            <>
+                <SEO 
+                    title="User Dashboard" 
+                    description="Manage your Perf X Ads subscription, view usage credits, and update your profile settings."
+                    type="website"
+                />
+                <UserDashboard onShowPricing={() => setPricingModalOpen(true)} theme={theme} toggleTheme={toggleTheme} initialTab="overview" />
+            </>
+        );
+    }
+    if (currentView === 'settings') {
+        return (
+            <>
+                <SEO 
+                    title="Settings" 
+                    description="Configure your Perf X Ads account preferences and security settings."
+                    type="website"
+                />
+                <UserDashboard onShowPricing={() => setPricingModalOpen(true)} theme={theme} toggleTheme={toggleTheme} initialTab="settings" />
+            </>
+        );
+    }
+    if (currentView === 'admin') {
+        return (
+            <>
+                <SEO 
+                    title="Admin Portal" 
+                    description="Perf X Ads Administrative Control Panel."
+                    type="website"
+                />
+                <AdminDashboard />
+            </>
+        );
+    }
+    if (currentView === 'about') {
+        return (
+            <>
+                <SEO 
+                    title="About Us" 
+                    description="Learn about the mission behind Perf X Ads and our technology partner DMSPrism."
+                    type="article"
+                />
+                <AboutUs />
+            </>
+        );
+    }
     
     if (currentView === 'tools') {
         const Sidebar = () => (
@@ -429,6 +474,34 @@ const AppContent = () => {
 
         return (
             <div className="min-h-screen bg-brand-light/20 flex flex-col">
+                {/* Dynamic SEO for Tools Page or Specific Tool */}
+                {activeToolId && activeToolConfig ? (
+                    <SEO 
+                        title={activeToolConfig.title} 
+                        description={activeToolConfig.description}
+                        keywords={activeToolConfig.features}
+                        type="website"
+                        schema={{
+                            "@type": "SoftwareApplication",
+                            "name": activeToolConfig.title,
+                            "applicationCategory": "BusinessApplication",
+                            "operatingSystem": "Web",
+                            "description": activeToolConfig.description,
+                            "offers": {
+                                "@type": "Offer",
+                                "price": "0",
+                                "priceCurrency": "USD"
+                            }
+                        }}
+                    />
+                ) : (
+                    <SEO 
+                        title="Marketing Tools Suite" 
+                        description="Access free calculators, SEO validators, and ad mockups to optimize your digital marketing campaigns."
+                        type="website"
+                    />
+                )}
+
                 {/* Conditional Hero: Only show on main listing */}
                 {!activeToolId && (
                     <div className="bg-brand-surface border-b border-brand-medium/20 pt-12 pb-10">
@@ -532,6 +605,12 @@ const AppContent = () => {
     // Default Home View
     return (
       <>
+        <SEO 
+            title="Perf X Ads - Social Media Ad Specs & Marketing Tools" 
+            description="The ultimate resource for digital marketers. Up-to-date social media ad specs, ROI calculators, mockups, and AI-powered SEO tools."
+            keywords={['ad specs', 'marketing tools', 'roi calculator', 'social media guide', 'utm generator']}
+            type="website"
+        />
         <RocketCursor />
         <div className="relative bg-brand-light border-b border-brand-border transition-colors duration-300 overflow-hidden">
           {/* Subtle Grid Background */}

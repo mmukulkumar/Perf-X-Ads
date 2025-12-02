@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Calculator, AlertCircle, TrendingUp, Info } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const AdBudgetPlanner = () => {
   const [inputs, setInputs] = useState({
@@ -146,6 +147,8 @@ const AdBudgetPlanner = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Ad Budget Planner" />
       </div>
     </div>
   );

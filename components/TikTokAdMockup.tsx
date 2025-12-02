@@ -1,6 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Upload, Smartphone, Info, Image as ImageIcon, FileVideo, Music, Heart, MessageCircle, Share2, User } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const TikTokAdMockup = () => {
   const [adType, setAdType] = useState<'takeover' | 'in-feed'>('takeover');
@@ -136,6 +137,8 @@ const TikTokAdMockup = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="TikTok Ad Preview Tool" />
       </div>
     </div>
   );

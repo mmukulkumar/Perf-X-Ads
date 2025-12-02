@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Layout, Download, RefreshCw, Smartphone, Monitor, Info, MoreVertical } from 'lucide-react';
+import ShareTool from './ShareTool';
 
 const GoogleAdMockup = () => {
   const [inputs, setInputs] = useState({
@@ -131,6 +132,8 @@ const GoogleAdMockup = () => {
              </div>
           </div>
         </div>
+        
+        <ShareTool title="Google Ad Mockup Generator" />
       </div>
     </div>
   );
