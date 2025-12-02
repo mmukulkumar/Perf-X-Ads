@@ -240,7 +240,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
       <div className="bg-brand-surface rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl border border-brand-medium/20 flex flex-col md:flex-row">
          
          {/* Left Panel - Value Prop */}
-         <div className="w-full md:w-1/3 bg-brand-dark p-8 text-white flex flex-col justify-between relative overflow-hidden">
+         <div className="w-full md:w-1/3 bg-slate-900 p-8 text-white flex flex-col justify-between relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
             <div className="relative z-10">
                 <div className="mb-8">

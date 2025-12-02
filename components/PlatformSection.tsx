@@ -11,7 +11,7 @@ interface PlatformSectionProps {
 }
 
 const PlatformSection: React.FC<PlatformSectionProps> = ({ platform, onPreview, forceExpand = false }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Automatically expand if the user is searching/filtering (forceExpand prop)
   useEffect(() => {

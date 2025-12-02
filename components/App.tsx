@@ -299,7 +299,23 @@ const AppContent = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Dynamic Group Tools
+  // Static Grouping for Sidebar (Persistent Order)
+  const allToolsByCategory = useMemo(() => {
+    const groups: Record<string, typeof TOOLS_CONFIG[number][]> = {};
+    const preferredOrder = ['AI & Trends', 'Ad Mockups', 'Technical SEO', 'Marketing Calculators', 'SaaS & Business', 'Tax & Finance'];
+    
+    // Initialize with preferred order
+    preferredOrder.forEach(cat => groups[cat] = []);
+    
+    TOOLS_CONFIG.forEach(tool => {
+        if (!groups[tool.category]) groups[tool.category] = [];
+        groups[tool.category].push(tool);
+    });
+    
+    return groups;
+  }, []);
+
+  // Filtered Tools for Grid View
   const groupedTools = useMemo(() => {
     const filtered = TOOLS_CONFIG.filter(tool => 
       tool.title.toLowerCase().includes(toolSearchQuery.toLowerCase()) ||
@@ -307,18 +323,19 @@ const AppContent = () => {
     );
 
     const preferredOrder = ['AI & Trends', 'Ad Mockups', 'Technical SEO', 'Marketing Calculators', 'SaaS & Business', 'Tax & Finance'];
-    const allCategories = Array.from(new Set(TOOLS_CONFIG.map(t => t.category))) as string[];
-    
-    const sortedCategories = allCategories.sort((a, b) => {
-        const indexA = preferredOrder.indexOf(a);
-        const indexB = preferredOrder.indexOf(b);
-        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
-    });
-
     const groups: Record<string, typeof TOOLS_CONFIG[number][]> = {};
-    sortedCategories.forEach(cat => {
+    
+    preferredOrder.forEach(cat => {
         const tools = filtered.filter(t => t.category === cat);
         if (tools.length > 0) groups[cat] = tools;
+    });
+    
+    // Add remaining categories that might not be in preferredOrder
+    filtered.forEach(tool => {
+        if (!preferredOrder.includes(tool.category)) {
+            if (!groups[tool.category]) groups[tool.category] = [];
+            if (!groups[tool.category].includes(tool)) groups[tool.category].push(tool);
+        }
     });
     
     return groups;
@@ -339,18 +356,6 @@ const AppContent = () => {
     return colors[color] || colors.blue;
   };
 
-  const getCategoryIcon = (category: string) => {
-      switch(category) {
-          case 'AI & Trends': return Sparkles;
-          case 'Technical SEO': return Globe;
-          case 'Marketing Calculators': return TrendingUp;
-          case 'Ad Mockups': return Monitor;
-          case 'SaaS & Business': return Briefcase;
-          case 'Tax & Finance': return Landmark;
-          default: return Grid;
-      }
-  };
-
   const activeToolConfig = activeToolId ? TOOLS_CONFIG.find(t => t.id === activeToolId) : null;
   const ActiveToolComponent = activeToolId ? TOOL_COMPONENTS[activeToolId] : null;
 
@@ -362,85 +367,166 @@ const AppContent = () => {
     if (currentView === 'about') return <AboutUs />;
     
     if (currentView === 'tools') {
-      if (activeToolConfig && ActiveToolComponent) {
-        return (
-           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-             <div className="bg-brand-surface border-b border-brand-border sticky top-20 z-30 shadow-sm transition-colors duration-300 backdrop-blur-md bg-opacity-95">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="flex items-center justify-between py-4">
-                    <button onClick={() => setActiveToolId(null)} className="flex items-center gap-2 text-sm font-bold text-brand-dark/60 hover:text-brand-primary transition-colors group">
-                      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Tools
+        const Sidebar = () => (
+            <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="mb-6">
+                    <button 
+                        onClick={() => setActiveToolId(null)}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold transition-all text-left mb-4 ${!activeToolId ? 'bg-brand-dark text-brand-light shadow-md' : 'bg-brand-surface border border-brand-medium/20 text-brand-dark hover:bg-brand-light'}`}
+                    >
+                        <Grid className="w-4 h-4" /> All Tools
                     </button>
-                  </div>
+                    
+                    {activeToolId && (
+                        <div className="relative mb-4">
+                            <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-brand-medium" />
+                            <input 
+                                type="text" 
+                                placeholder="Find tool..." 
+                                className="w-full pl-9 pr-3 py-2 bg-brand-surface border border-brand-medium/20 rounded-lg text-xs focus:ring-2 focus:ring-brand-primary/20 outline-none transition-all text-brand-dark placeholder-brand-dark/40"
+                                value={toolSearchQuery}
+                                onChange={(e) => {
+                                    setToolSearchQuery(e.target.value);
+                                    if(e.target.value) setActiveToolId(null); // Switch to grid view on search
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
-             </div>
-             <ToolHeader 
-                title={activeToolConfig.title}
-                description={activeToolConfig.description}
-                icon={activeToolConfig.icon}
-                category={activeToolConfig.category}
-                features={activeToolConfig.features}
-             />
-             <ActiveToolComponent currency={currency} />
-           </div>
-        );
-      }
-      return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center max-w-2xl mx-auto mb-12">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-brand-dark rounded-2xl text-brand-light mb-6 transition-colors duration-300 shadow-xl shadow-brand-dark/20">
-                    <Grid className="w-7 h-7" />
-                </div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6 tracking-tight">Marketing Tools Suite</h1>
-                <p className="text-lg text-brand-dark/70 leading-relaxed mb-10">
-                    Powerful calculators and generators designed for performance marketers.
-                </p>
-                <div className="relative max-w-lg mx-auto">
-                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-brand-medium" />
-                    </div>
-                    <input 
-                      type="text" 
-                      className="glossy-input block w-full pl-12 pr-4 py-4 rounded-2xl text-brand-dark placeholder-brand-dark/30 focus:outline-none focus:ring-4 focus:ring-brand-primary/10 transition-all duration-200" 
-                      placeholder="Find a tool (e.g. ROI, UTM, Tax)..." 
-                      value={toolSearchQuery} 
-                      onChange={(e) => setToolSearchQuery(e.target.value)} 
-                    />
-                </div>
-            </div>
 
-            {Object.entries(groupedTools).map(([category, tools]) => {
-                const categoryTools = tools as typeof TOOLS_CONFIG[number][];
-                const CategoryIcon = getCategoryIcon(category);
-                return categoryTools.length > 0 && (
-                    <div key={category} className="mb-20 last:mb-0">
-                        <h2 className="text-xl font-bold text-brand-dark mb-8 flex items-center gap-3 border-b border-brand-border pb-4">
-                            <CategoryIcon className="w-6 h-6 text-brand-primary" />
-                            {category}
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {categoryTools.map((tool: any) => {
-                                const style = getColorClasses(tool.color);
-                                return (
-                                    <div key={tool.id} onClick={() => setActiveToolId(tool.id)} className={`glass-card group rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full relative overflow-hidden`}>
-                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${style.bg} ${style.text}`}>
-                                            <tool.icon className="w-6 h-6" />
+                {Object.entries(allToolsByCategory).map(([category, tools]) => {
+                    const toolsList = tools as typeof TOOLS_CONFIG[number][];
+                    const visibleTools = toolSearchQuery 
+                        ? toolsList.filter(t => t.title.toLowerCase().includes(toolSearchQuery.toLowerCase()))
+                        : toolsList;
+                    
+                    if (visibleTools.length === 0) return null;
+
+                    return (
+                        <div key={category} className="mb-6 animate-in fade-in slide-in-from-left-2 duration-300">
+                            <h4 className="px-3 mb-2 text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2">
+                                {category}
+                            </h4>
+                            <div className="space-y-0.5">
+                                {visibleTools.map((tool: any) => (
+                                    <button
+                                        key={tool.id}
+                                        onClick={() => handleToolSelect(tool.id)}
+                                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all text-left group ${activeToolId === tool.id ? 'bg-brand-primary/10 text-brand-primary' : 'text-brand-dark/70 hover:bg-brand-surface hover:text-brand-dark'}`}
+                                    >
+                                        <div className={`p-1 rounded-md ${activeToolId === tool.id ? 'bg-brand-primary/20' : 'bg-brand-light group-hover:bg-white'} transition-colors`}>
+                                            <tool.icon className={`w-3.5 h-3.5 ${activeToolId === tool.id ? 'text-brand-primary' : 'text-brand-medium group-hover:text-brand-dark'}`} />
                                         </div>
-                                        <h3 className={`text-lg font-bold text-brand-dark mb-2 transition-colors group-hover:text-brand-primary`}>{tool.title}</h3>
-                                        <p className="text-sm text-brand-dark/60 mb-6 flex-grow leading-relaxed line-clamp-2">{tool.description}</p>
-                                        <div className={`flex items-center font-bold text-xs uppercase tracking-wide text-brand-dark/40 group-hover:text-brand-primary transition-colors`}>
-                                            Launch Tool <ArrowLeft className="w-3.5 h-3.5 ml-2 rotate-180 group-hover:translate-x-1 transition-transform" />
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        <span className="truncate">{tool.title}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </aside>
+        );
+
+        return (
+            <div className="min-h-screen bg-brand-light/20 flex flex-col">
+                {/* Conditional Hero: Only show on main listing */}
+                {!activeToolId && (
+                    <div className="bg-brand-surface border-b border-brand-medium/20 pt-12 pb-10">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h1 className="text-3xl font-extrabold text-brand-dark mb-4 tracking-tight">Tools Suite</h1>
+                            <p className="text-brand-dark/60 max-w-2xl mx-auto mb-8">
+                                Professional calculators, generators, and validators.
+                            </p>
+                            <div className="relative max-w-lg mx-auto">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Search className="h-5 w-5 text-brand-medium" />
+                                </div>
+                                <input 
+                                  type="text" 
+                                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-brand-light border border-brand-medium/20 text-brand-dark placeholder-brand-dark/40 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all shadow-sm" 
+                                  placeholder="Search tools (e.g. ROI, UTM, Tax)..." 
+                                  value={toolSearchQuery} 
+                                  onChange={(e) => setToolSearchQuery(e.target.value)} 
+                                />
+                            </div>
                         </div>
                     </div>
-                );
-            })}
-        </div>
-      );
+                )}
+
+                <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1">
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                        <Sidebar />
+                        
+                        <div className="flex-1 min-w-0 w-full">
+                            {activeToolId && activeToolConfig && ActiveToolComponent ? (
+                                <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                    <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px]">
+                                        <ToolHeader 
+                                            title={activeToolConfig.title}
+                                            description={activeToolConfig.description}
+                                            icon={activeToolConfig.icon}
+                                            category={activeToolConfig.category}
+                                            features={activeToolConfig.features}
+                                        />
+                                        <div className="p-0">
+                                            <ActiveToolComponent currency={currency} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-12">
+                                    {Object.entries(groupedTools).map(([category, tools]) => {
+                                        const categoryTools = tools as typeof TOOLS_CONFIG[number][];
+                                        if (categoryTools.length === 0) return null;
+                                        
+                                        return (
+                                            <div key={category} className="scroll-mt-24">
+                                                <h2 className="text-lg font-bold text-brand-dark mb-4 flex items-center gap-2">
+                                                    {category} <span className="text-xs font-normal text-brand-dark/40 bg-brand-surface px-2 py-0.5 rounded-full border border-brand-medium/20">{categoryTools.length}</span>
+                                                </h2>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                                                    {categoryTools.map((tool: any) => {
+                                                        const style = getColorClasses(tool.color);
+                                                        return (
+                                                            <div 
+                                                                key={tool.id} 
+                                                                onClick={() => setActiveToolId(tool.id)} 
+                                                                className="bg-brand-surface border border-brand-medium/20 rounded-xl p-5 hover:shadow-lg hover:border-brand-primary/30 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
+                                                            >
+                                                                <div className={`absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
+                                                                    <tool.icon className={`w-24 h-24 ${style.text}`} />
+                                                                </div>
+                                                                <div className="relative z-10">
+                                                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${style.bg} ${style.text} mb-4 group-hover:scale-110 transition-transform`}>
+                                                                        <tool.icon className="w-5 h-5" />
+                                                                    </div>
+                                                                    <h3 className="font-bold text-brand-dark mb-1 group-hover:text-brand-primary transition-colors">
+                                                                        {tool.title}
+                                                                    </h3>
+                                                                    <p className="text-sm text-brand-dark/60 line-clamp-2">
+                                                                        {tool.description}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                    {Object.keys(groupedTools).length === 0 && (
+                                        <div className="text-center py-20">
+                                            <Search className="w-12 h-12 text-brand-medium/40 mx-auto mb-4" />
+                                            <h3 className="text-lg font-bold text-brand-dark">No tools found</h3>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     // Default Home View
@@ -489,7 +575,7 @@ const AppContent = () => {
                   <button 
                     key={filter} 
                     onClick={() => setQuickFilter(quickFilter === filter ? null : filter)} 
-                    className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200 ${quickFilter === filter ? 'bg-brand-dark text-white border-brand-dark shadow-md transform scale-105' : 'bg-brand-surface text-brand-dark/70 border-brand-border hover:bg-brand-light hover:border-brand-medium hover:text-brand-dark'}`}
+                    className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-200 ${quickFilter === filter ? 'bg-brand-dark text-brand-light border-brand-dark shadow-md transform scale-105' : 'bg-brand-surface text-brand-dark/70 border-brand-border hover:bg-brand-light hover:border-brand-medium hover:text-brand-dark'}`}
                   >
                     {filter}
                   </button>
@@ -521,7 +607,7 @@ const AppContent = () => {
                 <div className="flex items-center gap-3">
                   <button onClick={resetFilters} className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-brand-dark/70 bg-brand-surface border border-brand-border rounded-xl hover:bg-brand-light hover:text-brand-dark transition-all duration-200"><RotateCcw className="w-4 h-4" /> Reset Filters</button>
                   <button onClick={copyUrl} className="magic-btn group/copy">
-                      <div className={`magic-btn-content px-6 border transition-all duration-300 ${isCopied ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-brand-dark border-brand-dark text-white hover:bg-brand-dark/90'}`}>
+                      <div className={`magic-btn-content px-6 border transition-all duration-300 ${isCopied ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-brand-dark border-brand-dark text-brand-light hover:bg-brand-dark/90'}`}>
                         {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4 opacity-70 group-hover/copy:opacity-100" />}
                         {isCopied ? 'Copied!' : 'Copy URL'}
                       </div>
@@ -574,9 +660,10 @@ const AppContent = () => {
       <footer className="bg-brand-surface border-t border-brand-border py-12 mt-12 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col md:flex-row items-center gap-4">
-            <div className="flex items-center">
-              <img src="https://i.ibb.co/7jRB122/Perf-X-Ads-3.png" alt="Perf X Ads" className="h-8 w-auto dark:hidden opacity-80 hover:opacity-100 transition-opacity" />
-              <img src="https://i.ibb.co/3ykJF5h/Perf-X-Ads-2.png" alt="Perf X Ads" className="h-8 w-auto hidden dark:block opacity-80 hover:opacity-100 transition-opacity" />
+            <div className="flex items-center gap-2">
+              <span className="font-serif text-xl font-black tracking-tighter text-brand-dark">
+                Perfxads
+              </span>
             </div>
             <span className="hidden md:inline text-brand-medium/50">|</span>
             <span className="text-xs font-bold text-brand-dark/40 uppercase tracking-wider">Powered by DMSPrism</span>
