@@ -734,17 +734,30 @@ const Header: React.FC<HeaderProps> = ({
                                     >
                                         <Grid className="w-4 h-4" /> All Tools Library
                                     </button>
-                                    {/* Featured Tools Quick Access */}
-                                    {TOOLS_CONFIG.slice(0, 5).map(tool => (
-                                        <button
-                                            key={tool.id}
-                                            onClick={() => handleMobileNavigate(() => onToolSelect(tool.id))}
-                                            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-brand-dark/80 hover:text-brand-primary hover:bg-brand-light flex items-center gap-3 transition-colors"
-                                        >
-                                            <tool.icon className="w-4 h-4 opacity-70" />
-                                            <span className="truncate">{tool.title}</span>
-                                        </button>
-                                    ))}
+                                    
+                                    {/* Categories and Tools */}
+                                    {toolCategories.map((category) => {
+                                        const categoryTools = TOOLS_CONFIG.filter(t => t.category === category);
+                                        return (
+                                            <div key={category} className="mb-2">
+                                                <div className="px-4 py-1.5 text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2">
+                                                    {category}
+                                                </div>
+                                                <div className="space-y-0.5">
+                                                    {categoryTools.map(tool => (
+                                                        <button
+                                                            key={tool.id}
+                                                            onClick={() => handleMobileNavigate(() => onToolSelect(tool.id))}
+                                                            className="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-brand-dark/80 hover:text-brand-primary hover:bg-brand-light flex items-center gap-3 transition-colors pl-6"
+                                                        >
+                                                            <tool.icon className="w-3.5 h-3.5 opacity-70 shrink-0" />
+                                                            <span className="truncate">{tool.title}</span>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>
