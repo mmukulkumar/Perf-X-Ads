@@ -531,6 +531,16 @@ const AppContent = () => {
                         <Sidebar />
                         
                         <div className="flex-1 min-w-0 w-full">
+                            {/* Mobile Back Button */}
+                            {activeToolId && (
+                                <button 
+                                    onClick={() => setActiveToolId(null)}
+                                    className="lg:hidden mb-6 flex items-center gap-2 text-sm font-bold text-brand-dark/70 hover:text-brand-dark"
+                                >
+                                    <ArrowLeft className="w-4 h-4" /> Back to Tool Library
+                                </button>
+                            )}
+
                             {activeToolId && activeToolConfig && ActiveToolComponent ? (
                                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
                                     <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px]">
