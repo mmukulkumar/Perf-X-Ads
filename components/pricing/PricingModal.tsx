@@ -2,145 +2,104 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Zap, Star, Shield, Loader2, Users, Minus, Plus, Tag, ArrowLeft, CreditCard, Lock, AlertCircle, Server, Info } from 'lucide-react';
 import { useAuth, SubscriptionTier } from '../../contexts/AuthContext';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
-// Initialize Stripe with Test Key
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Standard Stripe Test Key
 
 interface PricingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// Inner Form Component to use Stripe Hooks
-const StripePaymentForm: React.FC<{
+// Simulated Payment Component (Replaces Stripe)
+const SimulatedPaymentForm: React.FC<{
     currentTotal: number;
     planName: string;
     onSuccess: () => void;
     isProcessing: boolean;
     setIsProcessing: (val: boolean) => void;
 }> = ({ currentTotal, planName, onSuccess, isProcessing, setIsProcessing }) => {
-    const stripe = useStripe();
-    const elements = useElements();
-    const [paymentError, setPaymentError] = useState<string | null>(null);
     const [cardholderName, setCardholderName] = useState('');
-    const [zipCode, setZipCode] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [expiry, setExpiry] = useState('');
+    const [cvc, setCvc] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
     const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (!stripe || !elements) {
-            return;
-        }
+        setError(null);
 
         if (!cardholderName.trim()) {
-            setPaymentError("Cardholder name is required.");
+            setError("Cardholder name is required.");
+            return;
+        }
+        if (cardNumber.length < 16) {
+            setError("Please enter a valid card number.");
             return;
         }
 
         setIsProcessing(true);
-        setPaymentError(null);
 
-        const cardElement = elements.getElement(CardElement);
-
-        if (!cardElement) {
+        // Simulate Network Request
+        setTimeout(() => {
+            console.log('Transaction approved (Simulated)');
             setIsProcessing(false);
-            return;
-        }
-
-        // 1. Create Payment Method (Client-side tokenization)
-        // In Test Mode, this validates the card format and generates a test token (pm_...)
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-            billing_details: {
-                name: cardholderName,
-                address: {
-                    postal_code: zipCode
-                }
-            },
-        });
-
-        if (error) {
-            console.error('[Stripe Error]', error);
-            setPaymentError(error.message || 'Payment failed');
-            setIsProcessing(false);
-        } else {
-            console.log('[Test PaymentMethod Created]', paymentMethod);
-            
-            // 2. Simulate Backend Processing
-            // In a real environment, you would POST to your backend:
-            // await fetch('/api/create-subscription', { paymentMethodId: paymentMethod.id, ... })
-            
-            // SIMULATION: 
-            setTimeout(() => {
-                console.log('Transaction approved (Test Environment)');
-                setIsProcessing(false);
-                onSuccess();
-            }, 2000);
-        }
-    };
-
-    // Styling for the Stripe Element to match app theme
-    const cardElementOptions = {
-        style: {
-            base: {
-                fontSize: '14px',
-                color: '#0F172A', // brand-dark
-                fontFamily: '"Source Sans 3", sans-serif',
-                '::placeholder': {
-                    color: '#94A3B8', // brand-medium
-                },
-                iconColor: '#2563EB', // brand-primary
-            },
-            invalid: {
-                color: '#DC2626',
-                iconColor: '#DC2626',
-            },
-        },
-        hidePostalCode: true, // We collect ZIP separately for style consistency
+            onSuccess();
+        }, 1500);
     };
 
     return (
         <form onSubmit={handlePayment} className="space-y-5">
-            {/* Test Mode Indicator */}
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 text-xs text-amber-800 dark:text-amber-200">
+            {/* Simulation Indicator */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-xs text-blue-800 dark:text-blue-200">
                 <div className="flex items-center gap-2 font-bold mb-1">
                     <Info className="w-4 h-4" />
-                    <span>Test Transaction Environment</span>
+                    <span>Secure Checkout</span>
                 </div>
-                <p className="opacity-90 mb-1">Payments are in test mode. No real charges will be made.</p>
-                <div className="flex gap-4 mt-2 font-mono bg-white/50 dark:bg-black/20 p-2 rounded">
-                    <div>
-                        <span className="block text-[10px] opacity-70 uppercase">Card Number</span>
-                        <span className="font-bold">4242 4242 4242 4242</span>
-                    </div>
-                    <div>
-                        <span className="block text-[10px] opacity-70 uppercase">Expiry</span>
-                        <span className="font-bold">Any Future</span>
-                    </div>
-                    <div>
-                        <span className="block text-[10px] opacity-70 uppercase">CVC</span>
-                        <span className="font-bold">Any</span>
-                    </div>
-                </div>
+                <p className="opacity-90">Enter your payment details to upgrade.</p>
             </div>
 
-            {paymentError && (
-                <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2 border border-red-100 animate-in fade-in slide-in-from-top-1">
-                    <AlertCircle className="w-4 h-4" /> {paymentError}
+            {error && (
+                <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2 border border-red-100 animate-in fade-in">
+                    <AlertCircle className="w-4 h-4" /> {error}
                 </div>
             )}
             
             <div className="space-y-4">
                 <div>
-                    <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">Card Information</label>
-                    <div className="bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg p-3 shadow-sm transition-shadow focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
-                        <CardElement options={cardElementOptions} />
+                    <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">Card Number</label>
+                    <div className="relative">
+                        <input 
+                            type="text" 
+                            value={cardNumber}
+                            onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
+                            placeholder="0000 0000 0000 0000" 
+                            className="w-full pl-10 pr-4 py-3 bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg outline-none text-brand-dark text-sm placeholder-brand-dark/30 focus:border-indigo-500 transition-colors shadow-sm font-mono"
+                        />
+                        <CreditCard className="absolute left-3 top-3 w-4 h-4 text-brand-dark/40" />
                     </div>
                 </div>
                 
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">Expiry</label>
+                        <input 
+                            type="text" 
+                            value={expiry}
+                            onChange={(e) => setExpiry(e.target.value)}
+                            placeholder="MM/YY" 
+                            className="w-full p-3 bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg outline-none text-brand-dark text-sm placeholder-brand-dark/30 focus:border-indigo-500 transition-colors shadow-sm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">CVC</label>
+                        <input 
+                            type="text" 
+                            value={cvc}
+                            onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0, 3))}
+                            placeholder="123" 
+                            className="w-full p-3 bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg outline-none text-brand-dark text-sm placeholder-brand-dark/30 focus:border-indigo-500 transition-colors shadow-sm"
+                        />
+                    </div>
+                </div>
+
                 <div>
                     <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">Cardholder Name</label>
                     <input 
@@ -151,28 +110,17 @@ const StripePaymentForm: React.FC<{
                         className="w-full p-3 bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg outline-none text-brand-dark text-sm placeholder-brand-dark/30 focus:border-indigo-500 transition-colors shadow-sm"
                     />
                 </div>
-
-                <div>
-                    <label className="block text-xs font-bold text-brand-dark/70 uppercase mb-1.5">Billing ZIP / Postal Code</label>
-                    <input 
-                        type="text" 
-                        value={zipCode}
-                        onChange={(e) => setZipCode(e.target.value)}
-                        placeholder="12345" 
-                        className="w-full p-3 bg-white dark:bg-brand-surface border border-brand-medium/30 rounded-lg outline-none text-brand-dark text-sm placeholder-brand-dark/30 focus:border-indigo-500 transition-colors shadow-sm"
-                    />
-                </div>
             </div>
 
             <button 
                 type="submit" 
-                disabled={!stripe || isProcessing}
+                disabled={isProcessing}
                 className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isProcessing ? (
                     <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Processing Test Payment...</span>
+                        <span>Processing Payment...</span>
                     </>
                 ) : (
                     <>Pay ${currentTotal.toFixed(2)}</>
@@ -182,7 +130,7 @@ const StripePaymentForm: React.FC<{
             <div className="flex flex-col items-center justify-center gap-2 text-xs text-brand-dark/40 mt-4">
                 <div className="flex items-center gap-2">
                     <Lock className="w-3 h-3" />
-                    <span>Payments processed securely by Stripe</span>
+                    <span>Payments processed securely</span>
                 </div>
                 <div className="flex gap-1 items-center">
                     <Server className="w-3 h-3" />
@@ -480,16 +428,14 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                             <div className="relative flex justify-center text-sm"><span className="px-2 bg-brand-light/20 text-brand-dark/40 font-medium">Or pay with card</span></div>
                         </div>
 
-                        {/* Secure Stripe Elements Payment Form */}
-                        <Elements stripe={stripePromise}>
-                            <StripePaymentForm 
-                                currentTotal={currentTotal} 
-                                planName={planName} 
-                                onSuccess={handlePaymentSuccess} 
-                                isProcessing={isProcessing} 
-                                setIsProcessing={setIsProcessing} 
-                            />
-                        </Elements>
+                        {/* Simulated Payment Form */}
+                        <SimulatedPaymentForm 
+                            currentTotal={currentTotal} 
+                            planName={planName} 
+                            onSuccess={handlePaymentSuccess} 
+                            isProcessing={isProcessing} 
+                            setIsProcessing={setIsProcessing} 
+                        />
                      </div>
                  </div>
              )}
