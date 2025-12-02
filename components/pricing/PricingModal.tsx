@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, Check, Zap, Star, Shield, Loader2, Users, Minus, Plus, Tag, ArrowLeft, CreditCard, Lock, AlertCircle, Server } from 'lucide-react';
+import { X, Check, Zap, Star, Shield, Loader2, Users, Minus, Plus, Tag, ArrowLeft, CreditCard, Lock, AlertCircle, Server, Info } from 'lucide-react';
 import { useAuth, SubscriptionTier } from '../../contexts/AuthContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-// Initialize Stripe outside of component to avoid recreating the object
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Public Test Key
+// Initialize Stripe with Test Key
+const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Standard Stripe Test Key
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -50,6 +50,7 @@ const StripePaymentForm: React.FC<{
         }
 
         // 1. Create Payment Method (Client-side tokenization)
+        // In Test Mode, this validates the card format and generates a test token (pm_...)
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
@@ -66,14 +67,18 @@ const StripePaymentForm: React.FC<{
             setPaymentError(error.message || 'Payment failed');
             setIsProcessing(false);
         } else {
-            console.log('[PaymentMethod]', paymentMethod);
-            // 2. In a real app, you would send paymentMethod.id to your backend here
-            // await fetch('/api/charge', { method: 'POST', body: JSON.stringify({ payment_method_id: paymentMethod.id }) })
+            console.log('[Test PaymentMethod Created]', paymentMethod);
             
-            // Simulating backend processing delay
+            // 2. Simulate Backend Processing
+            // In a real environment, you would POST to your backend:
+            // await fetch('/api/create-subscription', { paymentMethodId: paymentMethod.id, ... })
+            
+            // SIMULATION: 
             setTimeout(() => {
+                console.log('Transaction approved (Test Environment)');
+                setIsProcessing(false);
                 onSuccess();
-            }, 1500);
+            }, 2000);
         }
     };
 
@@ -99,6 +104,29 @@ const StripePaymentForm: React.FC<{
 
     return (
         <form onSubmit={handlePayment} className="space-y-5">
+            {/* Test Mode Indicator */}
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 text-xs text-amber-800 dark:text-amber-200">
+                <div className="flex items-center gap-2 font-bold mb-1">
+                    <Info className="w-4 h-4" />
+                    <span>Test Transaction Environment</span>
+                </div>
+                <p className="opacity-90 mb-1">Payments are in test mode. No real charges will be made.</p>
+                <div className="flex gap-4 mt-2 font-mono bg-white/50 dark:bg-black/20 p-2 rounded">
+                    <div>
+                        <span className="block text-[10px] opacity-70 uppercase">Card Number</span>
+                        <span className="font-bold">4242 4242 4242 4242</span>
+                    </div>
+                    <div>
+                        <span className="block text-[10px] opacity-70 uppercase">Expiry</span>
+                        <span className="font-bold">Any Future</span>
+                    </div>
+                    <div>
+                        <span className="block text-[10px] opacity-70 uppercase">CVC</span>
+                        <span className="font-bold">Any</span>
+                    </div>
+                </div>
+            </div>
+
             {paymentError && (
                 <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2 border border-red-100 animate-in fade-in slide-in-from-top-1">
                     <AlertCircle className="w-4 h-4" /> {paymentError}
@@ -144,7 +172,7 @@ const StripePaymentForm: React.FC<{
                 {isProcessing ? (
                     <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Processing Payment...</span>
+                        <span>Processing Test Payment...</span>
                     </>
                 ) : (
                     <>Pay ${currentTotal.toFixed(2)}</>

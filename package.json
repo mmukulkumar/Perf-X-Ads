@@ -1,5 +1,5 @@
 {
-  "name": "perf-x-ads-v0.02",
+  "name": "perf-x-ads-v0.03",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,8 +16,7 @@
     "react-markdown": "^10.1.0",
     "@stripe/stripe-js": "2.1.0",
     "@stripe/react-stripe-js": "2.3.0",
-    "@supabase/supabase-js": "2.39.3",
-    "firebase": "^12.6.0"
+    "@supabase/supabase-js": "2.39.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
