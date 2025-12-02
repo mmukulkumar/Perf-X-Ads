@@ -16,6 +16,7 @@
     "react-markdown": "^10.1.0",
     "@stripe/stripe-js": "2.1.0",
     "@stripe/react-stripe-js": "2.3.0",
+    "@supabase/supabase-js": "2.39.3",
     "firebase": "^12.6.0"
   },
   "devDependencies": {

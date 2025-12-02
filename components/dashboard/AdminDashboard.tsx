@@ -1,12 +1,37 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth, User, SubscriptionTier } from '../../contexts/AuthContext';
-import { Users, DollarSign, TrendingUp, Search, MoreVertical, Shield, CheckCircle, XCircle, Edit, Save, X, Plus, Trash2 } from 'lucide-react';
+import { Users, DollarSign, TrendingUp, Search, MoreVertical, Shield, CheckCircle, XCircle, Edit, Save, X, Plus, Trash2, Loader2 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, admin } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  
+  // Data State
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [stats, setStats] = useState({ totalUsers: 0, revenue: 0, activeSubs: 0 });
+  const [loading, setLoading] = useState(true);
+
+  // Load Data Effect
+  useEffect(() => {
+      const loadData = async () => {
+          if (user?.role === 'admin') {
+              setLoading(true);
+              try {
+                  const usersData = await admin.getAllUsers();
+                  const statsData = await admin.getStats();
+                  setAllUsers(usersData);
+                  setStats(statsData);
+              } catch (error) {
+                  console.error("Failed to load admin data", error);
+              } finally {
+                  setLoading(false);
+              }
+          }
+      };
+      loadData();
+  }, [user, admin]);
   
   if (user?.role !== 'admin') {
       return (
@@ -18,9 +43,6 @@ const AdminDashboard = () => {
       );
   }
 
-  const allUsers = admin.getAllUsers();
-  const stats = admin.getStats();
-
   // Filter users
   const filteredUsers = allUsers.filter(u => 
     u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -28,22 +50,34 @@ const AdminDashboard = () => {
     u.id.includes(searchTerm)
   );
 
-  const handleUpdateUser = (e: React.FormEvent) => {
+  const handleUpdateUser = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!editingUser) return;
-      admin.updateUser(editingUser.id, {
+      await admin.updateUser(editingUser.id, {
           name: editingUser.name,
           subscription: editingUser.subscription,
           credits: editingUser.credits
       });
+      // Refresh local state
+      setAllUsers(prev => prev.map(u => u.id === editingUser.id ? editingUser : u));
       setEditingUser(null);
   };
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
       if (window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-          admin.deleteUser(userId);
+          await admin.deleteUser(userId);
+          setAllUsers(prev => prev.filter(u => u.id !== userId));
       }
   };
+
+  if (loading) {
+      return (
+          <div className="flex flex-col items-center justify-center min-h-[60vh]">
+              <Loader2 className="w-10 h-10 text-brand-primary animate-spin mb-4" />
+              <p className="text-brand-dark/60 font-medium">Loading Dashboard...</p>
+          </div>
+      );
+  }
 
   return (
     <div className="w-full font-inter animate-in fade-in duration-500 relative">

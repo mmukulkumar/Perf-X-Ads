@@ -1,8 +1,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Trash2, Check } from 'lucide-react';
-import { platforms } from './data';
-import { AdSpec } from './types';
+import { platforms as STATIC_PLATFORMS } from './data'; // Renamed import
+import { AdSpec, PlatformData } from './types';
 import { TOOLS_CONFIG } from './tools';
 import PlatformSection from './components/PlatformSection';
 import PreviewModal from './components/PreviewModal';
@@ -12,9 +12,10 @@ import Header from './components/Header';
 import RocketCursor from './components/RocketCursor';
 import AboutUs from './components/AboutUs';
 
-// Firebase
-import { db } from './lib/firebase';
-import { collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
+// Supabase & Services
+import { supabase } from './lib/supabase';
+import { ToolsService, ToolDB } from './services/toolsService';
+import { PlatformService } from './services/platformService';
 
 // Auth & Dashboard
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -90,36 +91,79 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 
 const AppContent = () => {
   const { isPricingModalOpen, setPricingModalOpen, user } = useAuth(); 
-  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings'>('home');
+  
+  // Initialize view based on URL to support hidden admin path
+  const getInitialView = () => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path === '/perfxadsvault') {
+        return 'admin';
+      }
+    }
+    return 'dashboard'; // Default to dashboard as requested
+  };
+
+  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings'>('dashboard');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [toolSearchQuery, setToolSearchQuery] = useState('');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isSubmitToolOpen, setIsSubmitToolOpen] = useState(false);
   
-  // Real-time Tools State (Combined Static + Firestore)
+  // Real-time State
   const [tools, setTools] = useState<any[]>(TOOLS_CONFIG);
+  const [platformsData, setPlatformsData] = useState<PlatformData[]>(STATIC_PLATFORMS);
 
+  // Initialize correct view on mount
   useEffect(() => {
-    // Only try to subscribe if DB is available (configured)
-    if (!db) return;
+    setCurrentView(getInitialView());
+  }, []);
 
-    // Subscribe to Firestore tools
-    const q = query(collection(db, "tools"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const firestoreTools = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        isCustom: true,
-        icon: Sparkles, // Default icon for custom tools
-        color: 'blue' // Default color
+  // Sync URL for Admin Vault safety/obscurity
+  useEffect(() => {
+    if (currentView === 'admin') {
+      window.history.pushState(null, '', '/perfxadsvault');
+    } else {
+      // Revert to root if leaving admin, but only if we were on the vault path
+      if (window.location.pathname === '/perfxadsvault') {
+        window.history.pushState(null, '', '/');
+      }
+    }
+  }, [currentView]);
+
+  // Load Data
+  useEffect(() => {
+    const loadData = async () => {
+      // 1. Load Tools
+      const dbTools = await ToolsService.getAll();
+      const formattedDbTools = dbTools.map((t: ToolDB) => ({
+          id: t.id,
+          category: t.category,
+          title: t.title,
+          description: t.description,
+          features: t.features,
+          websiteUrl: t.website_url,
+          isCustom: true,
+          icon: Sparkles,
+          color: t.color || 'blue'
       }));
-      setTools([...TOOLS_CONFIG, ...firestoreTools]);
-    }, (error) => {
-        console.log("Firestore tools fetch error (likely no permissions yet):", error);
-    });
+      setTools([...TOOLS_CONFIG, ...formattedDbTools]);
 
-    return () => unsubscribe();
+      // 2. Load Platforms & Specs
+      const dbPlatforms = await PlatformService.getAll();
+      setPlatformsData(dbPlatforms);
+    };
+
+    loadData();
+
+    // Subscriptions
+    const unsubTools = ToolsService.subscribe(loadData);
+    const unsubPlatforms = PlatformService.subscribe(loadData);
+
+    return () => {
+        unsubTools();
+        unsubPlatforms();
+    };
   }, []);
 
   // Global State
@@ -188,26 +232,26 @@ const AppContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
-  // Derived unique values (Memoized)
-  const uniquePlatforms = useMemo(() => platforms.map(p => p.name).sort(), []);
+  // Derived unique values (Memoized from dynamic state)
+  const uniquePlatforms = useMemo(() => platformsData.map(p => p.name).sort(), [platformsData]);
   const uniqueAspectRatios = useMemo(() => {
     const ratios = new Set<string>();
-    platforms.forEach(p => p.specs.forEach(s => ratios.add(s.aspectRatio)));
+    platformsData.forEach(p => p.specs.forEach(s => ratios.add(s.aspectRatio)));
     return Array.from(ratios).sort();
-  }, []);
+  }, [platformsData]);
   const uniqueFileTypes = useMemo(() => {
     const types = new Set<string>();
-    platforms.forEach(p => p.specs.forEach(s => s.fileType.forEach(t => types.add(t))));
+    platformsData.forEach(p => p.specs.forEach(s => s.fileType.forEach(t => types.add(t))));
     return Array.from(types).sort();
-  }, []);
+  }, [platformsData]);
   const uniqueContentTypes = useMemo(() => {
     const types = new Set<string>();
-    platforms.forEach(p => p.specs.forEach(s => types.add(s.format)));
+    platformsData.forEach(p => p.specs.forEach(s => types.add(s.format)));
     return Array.from(types).sort();
-  }, []);
+  }, [platformsData]);
 
   const filteredPlatforms = useMemo(() => {
-    return platforms.map(platform => {
+    return platformsData.map(platform => {
       const matchingSpecs = platform.specs.filter(spec => {
         const matchesSearch = 
           searchQuery === '' ||
@@ -239,7 +283,7 @@ const AppContent = () => {
 
       return { ...platform, specs: matchingSpecs };
     }).filter(p => p.specs.length > 0); 
-  }, [searchQuery, quickFilter, filters]);
+  }, [searchQuery, quickFilter, filters, platformsData]);
 
   const isFiltering = useMemo(() => {
     return searchQuery !== '' || quickFilter !== null || filters.platform.length > 0 || 
@@ -309,53 +353,47 @@ const AppContent = () => {
 
   // CRUD OPERATIONS
   const handleAddTool = async (toolData: any) => {
-      // Local fallback if no DB
-      if (!db) {
-          const newTool = {
-              id: `custom-tool-${Date.now()}`,
-              category: toolData.category,
-              title: toolData.name,
-              description: toolData.description,
-              features: toolData.highlights ? toolData.highlights.split(',').map((s: string) => s.trim()) : [],
-              websiteUrl: toolData.websiteUrl,
-              isCustom: true,
-              icon: Sparkles,
-              color: 'blue'
-          };
-          setTools(prev => [...prev, newTool]);
-          alert("Tool added locally (Offline Mode)");
-          return;
-      }
+      const newToolPayload = {
+          category: toolData.category,
+          title: toolData.name,
+          description: toolData.description,
+          features: toolData.highlights ? toolData.highlights.split(',').map((s: string) => s.trim()) : [],
+          website_url: toolData.websiteUrl,
+          color: 'blue' // Default color
+      };
 
       try {
-          await addDoc(collection(db, "tools"), {
-              category: toolData.category,
-              title: toolData.name,
-              description: toolData.description,
-              features: toolData.highlights ? toolData.highlights.split(',').map((s: string) => s.trim()) : [],
-              websiteUrl: toolData.websiteUrl,
-              createdAt: new Date()
-          });
+          await ToolsService.add(newToolPayload);
       } catch (e) {
-          console.error("Error adding tool: ", e);
-          alert("Failed to save tool. Please check your connection.");
+          console.error("Error adding tool via service: ", e);
+          // Local fallback if no Supabase connection
+          if (!supabase) {
+              const newLocalTool = {
+                  id: `custom-tool-${Date.now()}`,
+                  ...newToolPayload,
+                  isCustom: true,
+                  icon: Sparkles
+              };
+              setTools(prev => [newLocalTool, ...prev]); // Prepend locally
+              alert("Tool added locally (Offline Mode)");
+          } else {
+              alert("Failed to save tool. Please check your connection.");
+          }
       }
   };
 
   const handleDeleteTool = async (e: React.MouseEvent, id: string) => {
       e.stopPropagation();
       
-      // Local fallback
-      if (!db) {
-          setTools(prev => prev.filter(t => t.id !== id));
-          return;
-      }
-
       if (window.confirm("Are you sure you want to delete this tool?")) {
           try {
-              await deleteDoc(doc(db, "tools", id));
+              await ToolsService.delete(id);
           } catch (e) {
               console.error("Error deleting tool: ", e);
+              // Local fallback
+              if (!supabase) {
+                  setTools(prev => prev.filter(t => t.id !== id));
+              }
           }
       }
   };
@@ -444,7 +482,7 @@ const AppContent = () => {
              />
              {ActiveToolComponent ? <ActiveToolComponent currency={currency} /> : (
                  <div className="max-w-7xl mx-auto px-4 py-12 text-center text-brand-dark/50">
-                     <p className="text-lg">This is a custom tool entry.</p>
+                     <p className="text-lg mb-6">This is a custom tool entry.</p>
                      {/* @ts-ignore */}
                      {activeToolConfig.websiteUrl && (
                          <a 
@@ -452,7 +490,7 @@ const AppContent = () => {
                             href={activeToolConfig.websiteUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="mt-4 inline-flex items-center gap-2 px-6 py-2 bg-brand-primary text-white rounded-lg hover:opacity-90"
+                            className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 bg-brand-primary text-white rounded-xl hover:opacity-90 transition-shadow shadow-md"
                          >
                              Visit Website <Globe className="w-4 h-4" />
                          </a>

@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { X, Mail, Lock, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface LoginModalProps {
@@ -8,63 +8,16 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
-
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const { login, loginWithSocial, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const captchaRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      setCaptchaVerified(false);
-      
-      const renderCaptcha = () => {
-        if (window.grecaptcha && window.grecaptcha.render && captchaRef.current) {
-          try {
-            // Check if captcha is already rendered in this container to avoid error
-            if (captchaRef.current.innerHTML === '') {
-              widgetIdRef.current = window.grecaptcha.render(captchaRef.current, {
-                'sitekey': '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // Google Test Key
-                'callback': () => setCaptchaVerified(true),
-                'expired-callback': () => setCaptchaVerified(false),
-                'theme': 'light'
-              });
-            }
-          } catch (e) {
-            console.error('reCAPTCHA render error:', e);
-          }
-        } else {
-          // Retry if script hasn't loaded yet
-          setTimeout(renderCaptcha, 100);
-        }
-      };
-
-      // Slight delay to ensure DOM is ready
-      setTimeout(renderCaptcha, 100);
-    } else {
-        // Reset state on close
-        setCaptchaVerified(false);
-        widgetIdRef.current = null;
-    }
-  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    if (!captchaVerified) {
-        alert("Please complete the CAPTCHA check.");
-        return;
-    }
     await login(email);
     onClose();
   };
@@ -139,27 +92,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   type="password" 
                   placeholder="Password" 
                   className="w-full pl-12 pr-4 py-3 bg-brand-light/30 border border-brand-medium/30 rounded-xl text-brand-dark placeholder-brand-dark/30 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
-                  required={!isForgotPassword} // Not required if simulated forgot pass
+                  required={!isForgotPassword}
                 />
               </div>
             </div>
 
-            {/* Google reCAPTCHA Container */}
-            <div className="flex justify-center py-2">
-                <div ref={captchaRef}></div>
-            </div>
-
             <button 
               type="submit"
-              disabled={isLoading || !captchaVerified}
-              className={`w-full py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 ${
-                  !captchaVerified 
-                  ? 'bg-brand-medium/50 text-white/80 cursor-not-allowed' 
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95'
-              }`}
+              disabled={isLoading}
+              className="w-full py-3.5 rounded-xl font-bold shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 
-               !captchaVerified ? <><ShieldCheck className="w-4 h-4" /> Verify Captcha</> : 
                <>Sign In <ArrowRight className="w-4 h-4" /></>}
             </button>
           </form>
@@ -178,3 +121,4 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 };
 
 export default LoginModal;
+    
