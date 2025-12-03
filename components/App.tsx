@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Check } from 'lucide-react';
+import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Check, AlertCircle, X } from 'lucide-react';
 import { platforms } from '../data';
 import { AdSpec } from '../types';
 import { TOOLS_CONFIG } from '../tools';
@@ -86,7 +86,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 };
 
 const AppContent = () => {
-  const { isPricingModalOpen, setPricingModalOpen } = useAuth(); // Use Global State
+  const { isPricingModalOpen, setPricingModalOpen, authError, clearError } = useAuth(); // Use Global State
   const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings'>('home');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [toolSearchQuery, setToolSearchQuery] = useState('');
@@ -531,16 +531,6 @@ const AppContent = () => {
                         <Sidebar />
                         
                         <div className="flex-1 min-w-0 w-full">
-                            {/* Mobile Back Button */}
-                            {activeToolId && (
-                                <button 
-                                    onClick={() => setActiveToolId(null)}
-                                    className="lg:hidden mb-6 flex items-center gap-2 text-sm font-bold text-brand-dark/70 hover:text-brand-dark"
-                                >
-                                    <ArrowLeft className="w-4 h-4" /> Back to Tool Library
-                                </button>
-                            )}
-
                             {activeToolId && activeToolConfig && ActiveToolComponent ? (
                                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
                                     <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px]">
@@ -727,6 +717,17 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-brand-light text-brand-dark font-inter transition-colors duration-300 select-none">
+      {authError && (
+        <div className="fixed top-24 right-8 z-[300] px-6 py-4 bg-red-600 text-white rounded-xl shadow-2xl flex items-start gap-3 animate-in slide-in-from-right-4 fade-in duration-300 max-w-sm border border-red-500">
+            <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+            <div className="flex-1">
+                <h4 className="font-bold text-sm mb-1">Authentication Error</h4>
+                <p className="text-xs opacity-90 leading-relaxed">{authError}</p>
+            </div>
+            <button onClick={clearError} className="p-1 hover:bg-white/20 rounded-lg transition-colors"><X className="w-4 h-4" /></button>
+        </div>
+      )}
+
       <Header 
         currentView={currentView}
         onNavigate={navigateTo}

@@ -5,7 +5,7 @@ import {
   Building2, Cookie, Search, Instagram, Facebook, Twitter, Linkedin, Youtube, 
   Twitch, Ghost, ShoppingBag, Music, Cloud, Gamepad2, Server, Pin, Video, 
   MessageSquare, AtSign, Globe, Smartphone, BarChart3, PieChart, Sparkles,
-  Command, X, ArrowRight, FileText, Menu, ChevronRight, Grid
+  Command, X, ArrowRight, FileText
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { platforms } from '../data';
@@ -69,11 +69,9 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const { user, isPro } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Mega Menu State
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null);
   const timeoutRef = useRef<any>(null);
 
   // Advanced Search State
@@ -144,16 +142,6 @@ const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isMobileMenuOpen]);
-
   const handleMouseEnter = (menu: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
@@ -163,125 +151,21 @@ const Header: React.FC<HeaderProps> = ({
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 200);
   };
 
-  const toggleMobileSection = (section: string) => {
-    setMobileExpandedSection(mobileExpandedSection === section ? null : section);
-  };
-
-  const handleMobileNavigate = (action: () => void) => {
-    action();
-    setIsMobileMenuOpen(false);
-  };
-
   // Group tools for menu display
   const toolCategories = Array.from(new Set(TOOLS_CONFIG.map(t => t.category)));
 
-  // Reusable Search Results Component
-  const SearchResultsList = ({ onItemClick }: { onItemClick: () => void }) => (
-    <>
-        {searchResults.tools.length > 0 && (
-            <div className="mb-2">
-                <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2">
-                    <Monitor className="w-3 h-3" /> Tools
-                </h4>
-                {searchResults.tools.map(tool => (
-                    <button 
-                        key={tool.id}
-                        onClick={() => { onToolSelect(tool.id); onItemClick(); }}
-                        className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
-                    >
-                        <div className={`p-1.5 rounded-md bg-brand-light group-hover:bg-white transition-colors text-brand-primary`}>
-                            <tool.icon className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm text-brand-dark">{tool.title}</div>
-                            <div className="text-xs text-brand-dark/50 truncate">{tool.description}</div>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-brand-dark/30 group-hover:text-brand-dark opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                    </button>
-                ))}
-            </div>
-        )}
-
-        {searchResults.platforms.length > 0 && (
-            <div className="mb-2">
-                <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2 border-t border-brand-medium/10 mt-2 pt-3">
-                    <Globe className="w-3 h-3" /> Platforms
-                </h4>
-                {searchResults.platforms.map(platform => {
-                    const Icon = platformIcons[platform.id] || Globe;
-                    return (
-                        <button 
-                            key={platform.id}
-                            onClick={() => { onPlatformSelect(platform.id); onItemClick(); }}
-                            className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
-                        >
-                            <div className={`p-1.5 rounded-md bg-brand-light group-hover:bg-white transition-colors text-brand-medium group-hover:text-brand-primary`}>
-                                <Icon className="w-4 h-4" />
-                            </div>
-                            <span className="font-bold text-sm text-brand-dark">{platform.name}</span>
-                        </button>
-                    );
-                })}
-            </div>
-        )}
-
-        {searchResults.specs.length > 0 && (
-            <div>
-                <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2 border-t border-brand-medium/10 mt-2 pt-3">
-                    <FileText className="w-3 h-3" /> Ad Specs
-                </h4>
-                {searchResults.specs.map((spec: any) => (
-                    <button 
-                        key={spec.id}
-                        onClick={() => { 
-                            onPlatformSelect(spec.platformId);
-                            setTimeout(() => {
-                                const el = document.getElementById(spec.platformId);
-                                if(el) el.scrollIntoView({ behavior: 'smooth' });
-                            }, 100);
-                            onItemClick();
-                        }}
-                        className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
-                    >
-                        <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm text-brand-dark flex items-center gap-2">
-                                {spec.title}
-                                <span className="text-[10px] font-normal px-1.5 py-0.5 rounded bg-brand-light text-brand-dark/60 border border-brand-medium/20">
-                                    {spec.platformName}
-                                </span>
-                            </div>
-                            <div className="text-xs text-brand-dark/50 font-mono mt-0.5">{spec.dimensions} • {spec.aspectRatio}</div>
-                        </div>
-                    </button>
-                ))}
-            </div>
-        )}
-    </>
-  );
-
   return (
-    <>
     <header className="sticky top-0 z-40 w-full backdrop-blur-lg bg-brand-surface/80 border-b border-brand-border transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
         
         {/* Left: Logo & Nav */}
-        <div className="flex items-center gap-4 lg:gap-8">
-            {/* Mobile Menu Button */}
-            <button 
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 -ml-2 text-brand-dark/60 hover:text-brand-dark hover:bg-brand-light rounded-lg transition-colors"
-                aria-label="Open menu"
-            >
-                <Menu className="w-6 h-6" />
-            </button>
-
+        <div className="flex items-center gap-8">
             <div className="flex items-center cursor-pointer group shrink-0 select-none" onClick={() => onNavigate('home')}>
-              <span className="font-serif text-xl lg:text-2xl font-black tracking-tighter text-brand-dark group-hover:text-brand-primary transition-colors">
+              <span className="font-serif text-2xl font-black tracking-tighter text-brand-dark group-hover:text-brand-primary transition-colors">
                 Perfxads
               </span>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1 h-16">
                 
                 {/* Social Specs Mega Menu */}
@@ -475,7 +359,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Advanced Search (Desktop) */}
-        <div ref={searchContainerRef} className="hidden lg:flex flex-1 max-w-md mx-4 relative">
+        <div ref={searchContainerRef} className="hidden md:flex flex-1 max-w-md mx-4 relative">
             <div className="relative w-full group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Search className={`h-4 w-4 transition-colors ${isSearchActive ? 'text-brand-primary' : 'text-brand-dark/40'}`} />
@@ -509,7 +393,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
             </div>
 
-            {/* Search Dropdown (Desktop) */}
+            {/* Search Dropdown */}
             {isSearchActive && searchQuery && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-brand-surface rounded-xl shadow-2xl border border-brand-medium/20 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto">
                     {!hasResults ? (
@@ -519,7 +403,88 @@ const Header: React.FC<HeaderProps> = ({
                         </div>
                     ) : (
                         <div className="py-2">
-                            <SearchResultsList onItemClick={() => setIsSearchActive(false)} />
+                            {/* Tools Section */}
+                            {searchResults.tools.length > 0 && (
+                                <div className="mb-2">
+                                    <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2">
+                                        <Monitor className="w-3 h-3" /> Tools
+                                    </h4>
+                                    {searchResults.tools.map(tool => (
+                                        <button 
+                                            key={tool.id}
+                                            onClick={() => { onToolSelect(tool.id); setIsSearchActive(false); }}
+                                            className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
+                                        >
+                                            <div className={`p-1.5 rounded-md bg-brand-light group-hover:bg-white transition-colors text-brand-primary`}>
+                                                <tool.icon className="w-4 h-4" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="font-bold text-sm text-brand-dark">{tool.title}</div>
+                                                <div className="text-xs text-brand-dark/50 truncate">{tool.description}</div>
+                                            </div>
+                                            <ArrowRight className="w-4 h-4 text-brand-dark/30 group-hover:text-brand-dark opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Platforms Section */}
+                            {searchResults.platforms.length > 0 && (
+                                <div className="mb-2">
+                                    <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2 border-t border-brand-medium/10 mt-2 pt-3">
+                                        <Globe className="w-3 h-3" /> Platforms
+                                    </h4>
+                                    {searchResults.platforms.map(platform => {
+                                        const Icon = platformIcons[platform.id] || Globe;
+                                        return (
+                                            <button 
+                                                key={platform.id}
+                                                onClick={() => { onPlatformSelect(platform.id); setIsSearchActive(false); }}
+                                                className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
+                                            >
+                                                <div className={`p-1.5 rounded-md bg-brand-light group-hover:bg-white transition-colors text-brand-medium group-hover:text-brand-primary`}>
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <span className="font-bold text-sm text-brand-dark">{platform.name}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {/* Specs Section */}
+                            {searchResults.specs.length > 0 && (
+                                <div>
+                                    <h4 className="px-4 py-2 text-xs font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2 border-t border-brand-medium/10 mt-2 pt-3">
+                                        <FileText className="w-3 h-3" /> Ad Specs
+                                    </h4>
+                                    {searchResults.specs.map((spec: any) => (
+                                        <button 
+                                            key={spec.id}
+                                            onClick={() => { 
+                                                onPlatformSelect(spec.platformId);
+                                                // Small timeout to allow platform page to load and scroll to anchor
+                                                setTimeout(() => {
+                                                    const el = document.getElementById(spec.platformId);
+                                                    if(el) el.scrollIntoView({ behavior: 'smooth' });
+                                                }, 100);
+                                                setIsSearchActive(false); 
+                                            }}
+                                            className="w-full text-left px-4 py-2.5 hover:bg-brand-light flex items-center gap-3 group transition-colors"
+                                        >
+                                            <div className="flex-1 min-w-0">
+                                                <div className="font-bold text-sm text-brand-dark flex items-center gap-2">
+                                                    {spec.title}
+                                                    <span className="text-[10px] font-normal px-1.5 py-0.5 rounded bg-brand-light text-brand-dark/60 border border-brand-medium/20">
+                                                        {spec.platformName}
+                                                    </span>
+                                                </div>
+                                                <div className="text-xs text-brand-dark/50 font-mono mt-0.5">{spec.dimensions} • {spec.aspectRatio}</div>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -529,24 +494,36 @@ const Header: React.FC<HeaderProps> = ({
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
             
-            {/* Theme Toggle (Desktop Only to save space) */}
+            {/* Mobile Search Toggle */}
+            <button 
+                className="md:hidden p-2 text-brand-dark/60 hover:text-brand-dark"
+                onClick={() => {
+                    // For mobile, maybe scroll top or show a mobile search modal
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    searchInputRef.current?.focus();
+                }}
+            >
+                <Search className="w-5 h-5" />
+            </button>
+
+            {/* Theme Toggle */}
             <button 
                 onClick={toggleTheme}
-                className="hidden lg:block p-2 rounded-lg text-brand-dark/60 hover:text-brand-dark hover:bg-brand-light transition-colors"
+                className="p-2 rounded-lg text-brand-dark/60 hover:text-brand-dark hover:bg-brand-light transition-colors"
             >
                 {theme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
 
-            <div className="h-6 w-px bg-brand-border mx-1 hidden lg:block"></div>
+            <div className="h-6 w-px bg-brand-border mx-1 hidden sm:block"></div>
 
-            {/* Auth / Profile (Desktop) */}
+            {/* Auth / Profile */}
             {user ? (
-                <div className="relative hidden lg:block">
+                <div className="relative">
                     <button 
                         onClick={() => setIsProfileOpen(!isProfileOpen)}
                         className="flex items-center gap-2 p-1 pl-2 rounded-full border border-brand-border hover:border-brand-medium/50 hover:bg-brand-light transition-all"
                     >
-                        <span className="text-xs font-bold text-brand-dark max-w-[100px] truncate">{user.name}</span>
+                        <span className="text-xs font-bold text-brand-dark hidden sm:block max-w-[100px] truncate">{user.name}</span>
                         <div className="w-7 h-7 rounded-full bg-brand-primary text-white flex items-center justify-center overflow-hidden border border-brand-surface">
                             {user.avatar ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" /> : <User className="w-4 h-4" />}
                         </div>
@@ -596,7 +573,7 @@ const Header: React.FC<HeaderProps> = ({
                     </button>
                     <button 
                         onClick={onOpenPricing}
-                        className="px-4 py-2 bg-brand-dark text-brand-light text-sm font-bold rounded-lg shadow-md hover:bg-brand-dark/90 transition-all active:scale-95 flex items-center gap-2 whitespace-nowrap"
+                        className="px-4 py-2 bg-brand-dark text-brand-light text-sm font-bold rounded-lg shadow-md hover:bg-brand-dark/90 transition-all active:scale-95 flex items-center gap-2"
                     >
                         Get Pro <Zap className="w-3 h-3" />
                     </button>
@@ -605,249 +582,6 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
     </header>
-
-    {/* MOBILE MENU OVERLAY */}
-    {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden">
-            {/* Backdrop */}
-            <div 
-                className="absolute inset-0 bg-brand-dark/60 backdrop-blur-sm animate-in fade-in duration-300"
-                onClick={() => setIsMobileMenuOpen(false)}
-            />
-            
-            {/* Menu Panel */}
-            <div className="absolute top-0 bottom-0 left-0 w-[85%] max-w-[320px] bg-brand-surface border-r border-brand-border shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
-                <div className="p-5 border-b border-brand-border flex items-center justify-between">
-                    <button 
-                        onClick={() => handleMobileNavigate(() => onNavigate('home'))}
-                        className="flex items-center gap-2"
-                    >
-                        <span className="font-serif text-2xl font-black tracking-tighter text-brand-dark">
-                            Perfxads
-                        </span>
-                    </button>
-                    <button 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="p-2 text-brand-dark/60 hover:text-brand-dark hover:bg-brand-light rounded-xl transition-colors"
-                    >
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar">
-                    
-                    {/* Mobile Advanced Search */}
-                    <div className="mb-6 relative">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-3 w-4 h-4 text-brand-medium" />
-                            <input 
-                                type="text" 
-                                placeholder="Search tools, platforms..." 
-                                className="w-full pl-10 pr-10 py-3 bg-brand-light border border-brand-medium/20 rounded-xl text-sm font-medium text-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all placeholder-brand-dark/40"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            {searchQuery && (
-                                <button 
-                                    onClick={() => setSearchQuery('')}
-                                    className="absolute right-3 top-3 text-brand-dark/40 hover:text-brand-dark"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                            )}
-                        </div>
-
-                        {/* Mobile Search Results */}
-                        {searchQuery && (
-                            <div className="mt-3 bg-brand-surface rounded-xl border border-brand-medium/20 shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                                {hasResults ? (
-                                    <div className="py-2 max-h-[60vh] overflow-y-auto">
-                                        <SearchResultsList onItemClick={() => setIsMobileMenuOpen(false)} />
-                                    </div>
-                                ) : (
-                                    <div className="p-6 text-center text-brand-dark/50">
-                                        <p className="text-xs">No results found</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Navigation Group */}
-                    <div className="space-y-1 mb-6">
-                        <p className="px-4 text-xs font-bold text-brand-dark/40 uppercase tracking-wider mb-2">Menu</p>
-
-                        {/* Platforms Accordion */}
-                        <div className="overflow-hidden rounded-xl">
-                            <button 
-                                onClick={() => toggleMobileSection('platforms')}
-                                className={`w-full text-left px-4 py-3 font-bold flex items-center justify-between transition-colors ${mobileExpandedSection === 'platforms' ? 'bg-brand-light text-brand-dark' : 'text-brand-dark/70 hover:bg-brand-light'}`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Globe className="w-5 h-5" /> Platforms
-                                </div>
-                                <ChevronRight className={`w-4 h-4 transition-transform ${mobileExpandedSection === 'platforms' ? 'rotate-90' : ''}`} />
-                            </button>
-                            
-                            {mobileExpandedSection === 'platforms' && (
-                                <div className="bg-brand-light/30 space-y-1 p-2">
-                                    {platforms.slice(0, 10).map(p => {
-                                        const Icon = platformIcons[p.id] || Globe;
-                                        return (
-                                            <button 
-                                                key={p.id}
-                                                onClick={() => handleMobileNavigate(() => onPlatformSelect(p.id))}
-                                                className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-brand-dark/80 hover:text-brand-primary hover:bg-brand-light flex items-center gap-3 transition-colors"
-                                            >
-                                                <Icon className="w-4 h-4 opacity-70" />
-                                                {p.name}
-                                            </button>
-                                        );
-                                    })}
-                                    <button 
-                                        onClick={() => handleMobileNavigate(() => onNavigate('home'))}
-                                        className="w-full text-left px-4 py-2.5 text-xs font-bold text-brand-primary uppercase tracking-wide hover:bg-brand-light rounded-lg flex items-center gap-2"
-                                    >
-                                        <ArrowRight className="w-3 h-3" /> View All Platforms
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Tools Accordion */}
-                        <div className="overflow-hidden rounded-xl">
-                            <button 
-                                onClick={() => toggleMobileSection('tools')}
-                                className={`w-full text-left px-4 py-3 font-bold flex items-center justify-between transition-colors ${mobileExpandedSection === 'tools' || currentView === 'tools' ? 'bg-brand-light text-brand-dark' : 'text-brand-dark/70 hover:bg-brand-light'}`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Monitor className="w-5 h-5" /> Tools
-                                </div>
-                                <ChevronRight className={`w-4 h-4 transition-transform ${mobileExpandedSection === 'tools' ? 'rotate-90' : ''}`} />
-                            </button>
-                            
-                            {mobileExpandedSection === 'tools' && (
-                                <div className="bg-brand-light/30 space-y-1 p-2">
-                                    <button 
-                                        onClick={() => handleMobileNavigate(() => onNavigate('tools'))}
-                                        className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold text-brand-primary bg-brand-primary/5 hover:bg-brand-primary/10 flex items-center gap-3 mb-2"
-                                    >
-                                        <Grid className="w-4 h-4" /> All Tools Library
-                                    </button>
-                                    
-                                    {/* Categories and Tools */}
-                                    {toolCategories.map((category) => {
-                                        const categoryTools = TOOLS_CONFIG.filter(t => t.category === category);
-                                        return (
-                                            <div key={category} className="mb-2">
-                                                <div className="px-4 py-1.5 text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider flex items-center gap-2">
-                                                    {category}
-                                                </div>
-                                                <div className="space-y-0.5">
-                                                    {categoryTools.map(tool => (
-                                                        <button
-                                                            key={tool.id}
-                                                            onClick={() => handleMobileNavigate(() => onToolSelect(tool.id))}
-                                                            className="w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-brand-dark/80 hover:text-brand-primary hover:bg-brand-light flex items-center gap-3 transition-colors pl-6"
-                                                        >
-                                                            <tool.icon className="w-3.5 h-3.5 opacity-70 shrink-0" />
-                                                            <span className="truncate">{tool.title}</span>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-
-                        {user && (
-                            <button 
-                                onClick={() => handleMobileNavigate(() => onNavigate('dashboard'))}
-                                className={`w-full text-left px-4 py-3 rounded-xl font-bold flex items-center gap-3 transition-colors ${currentView === 'dashboard' ? 'bg-brand-primary/10 text-brand-primary' : 'text-brand-dark/70 hover:bg-brand-light'}`}
-                            >
-                                <User className="w-5 h-5" /> Dashboard
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Resources Group */}
-                    <div className="space-y-1">
-                        <p className="px-4 text-xs font-bold text-brand-dark/40 uppercase tracking-wider mb-2 mt-6">Resources</p>
-                        
-                        <button 
-                            onClick={() => handleMobileNavigate(() => onNavigate('about'))} 
-                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-brand-dark/70 hover:text-brand-dark hover:bg-brand-light flex items-center gap-3"
-                        >
-                            <Building2 className="w-5 h-5" /> About Us
-                        </button>
-                        <button 
-                            onClick={() => handleMobileNavigate(onOpenPrivacy)} 
-                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-brand-dark/70 hover:text-brand-dark hover:bg-brand-light flex items-center gap-3"
-                        >
-                            <Shield className="w-5 h-5" /> Privacy Policy
-                        </button>
-                        <button 
-                            onClick={() => handleMobileNavigate(onOpenSubmitTool)} 
-                            className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-brand-dark/70 hover:text-brand-dark hover:bg-brand-light flex items-center gap-3"
-                        >
-                            <Plus className="w-5 h-5" /> Submit Tool
-                        </button>
-                    </div>
-                </div>
-
-                {/* Footer Actions */}
-                <div className="p-5 border-t border-brand-border bg-brand-light/30">
-                    {/* Theme Toggle */}
-                    <div className="flex items-center justify-between mb-5 bg-brand-surface p-1 rounded-xl border border-brand-border shadow-sm">
-                        <button 
-                            onClick={() => theme === 'dark' && toggleTheme()}
-                            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${theme !== 'dark' ? 'bg-brand-light text-brand-dark shadow-sm' : 'text-brand-dark/50'}`}
-                        >
-                            <Sun className="w-4 h-4" /> Light
-                        </button>
-                        <button 
-                            onClick={() => theme !== 'dark' && toggleTheme()}
-                            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${theme === 'dark' ? 'bg-brand-light text-brand-dark shadow-sm' : 'text-brand-dark/50'}`}
-                        >
-                            <Moon className="w-4 h-4" /> Dark
-                        </button>
-                    </div>
-                    
-                    {!user ? (
-                        <div className="grid grid-cols-2 gap-3">
-                            <button 
-                                onClick={() => handleMobileNavigate(onOpenLogin)}
-                                className="py-3 bg-brand-surface border border-brand-border text-brand-dark font-bold rounded-xl shadow-sm flex items-center justify-center gap-2 hover:bg-brand-light transition-colors"
-                            >
-                                Sign In
-                            </button>
-                            <button 
-                                onClick={() => handleMobileNavigate(onOpenPricing)}
-                                className="py-3 bg-brand-dark text-brand-light font-bold rounded-xl shadow-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-                            >
-                                <Zap className="w-4 h-4" /> Get Pro
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="flex items-center gap-3 p-3 bg-brand-surface border border-brand-border rounded-xl shadow-sm">
-                            <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full border border-brand-border object-cover" />
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-brand-dark truncate">{user.name}</p>
-                                <div className="flex items-center gap-1.5">
-                                    <span className={`w-2 h-2 rounded-full ${isPro ? 'bg-indigo-500' : 'bg-green-500'}`}></span>
-                                    <p className="text-xs text-brand-dark/50 truncate capitalize">{user.subscription.tier} Plan</p>
-                                </div>
-                            </div>
-                            {isPro && <Shield className="w-5 h-5 text-indigo-500" />}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    )}
-    </>
   );
 };
 
