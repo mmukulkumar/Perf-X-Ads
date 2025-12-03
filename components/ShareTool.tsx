@@ -41,8 +41,8 @@ const ShareTool: React.FC<ShareToolProps> = ({ title, url }) => {
   const shareText = `Check out this ${title} on Perf X Ads`;
 
   return (
-    <div className="max-w-3xl mx-auto mt-20 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-       <div className="bg-brand-surface p-8 md:p-10 rounded-3xl border border-brand-medium/20 shadow-xl shadow-brand-primary/5 relative overflow-hidden group">
+    <div className="max-w-3xl mx-auto mt-20 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700 px-4 md:px-0">
+       <div className="bg-brand-surface p-6 md:p-10 rounded-3xl border border-brand-medium/20 shadow-xl shadow-brand-primary/5 relative overflow-hidden group">
           {/* Decorative background gradient */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-brand-primary/5 to-transparent rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
           
@@ -51,16 +51,16 @@ const ShareTool: React.FC<ShareToolProps> = ({ title, url }) => {
                 <div className="inline-flex items-center justify-center p-3 bg-brand-light rounded-full mb-4 ring-4 ring-brand-surface">
                     <Share2 className="w-6 h-6 text-brand-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-brand-dark mb-2">Share this Tool</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-brand-dark mb-2">Share this Tool</h2>
                 <p className="text-brand-dark/60 text-sm max-w-md mx-auto">Found {title} helpful? Share it with your network to help them optimize their campaigns.</p>
             </div>
 
             {/* Copy Link Section */}
             <div className="mb-8 relative group/input">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <div className="absolute inset-y-0 left-0 pl-4 top-3.5 sm:top-0 flex items-start sm:items-center pointer-events-none">
                     <LinkIcon className="h-4 w-4 text-brand-medium group-focus-within/input:text-brand-primary transition-colors" />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-3">
                     <input 
                         type="text" 
                         readOnly 
@@ -70,7 +70,7 @@ const ShareTool: React.FC<ShareToolProps> = ({ title, url }) => {
                     />
                     <button 
                         onClick={handleShareCopy}
-                        className={`flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95 border ${isSharedCopied ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800' : 'bg-brand-dark text-brand-light border-brand-dark hover:bg-brand-dark/90'}`}
+                        className={`flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95 border w-full sm:w-auto ${isSharedCopied ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800' : 'bg-brand-dark text-brand-light border-brand-dark hover:bg-brand-dark/90'}`}
                         aria-label="Copy link to clipboard"
                     >
                         {isSharedCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -80,7 +80,7 @@ const ShareTool: React.FC<ShareToolProps> = ({ title, url }) => {
             </div>
 
             {/* Social Grid */}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 mb-6">
                 {/* X (Twitter) */}
                 <a 
                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`}
