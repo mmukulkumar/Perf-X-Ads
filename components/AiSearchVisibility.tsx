@@ -56,7 +56,8 @@ const AiSearchVisibility = () => {
     // CREDIT CHECK: High Cost Tool (20 Credits)
     if (!consumeCredits(20)) return;
 
-    if (!process.env.API_KEY) {
+    const apiKey = import.meta.env.VITE_API_KEY as string;
+    if (!apiKey) {
       setError("API Key not configured.");
       return;
     }
@@ -66,8 +67,8 @@ const AiSearchVisibility = () => {
     setData(null);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const model = 'gemini-2.5-flash';
+      const ai = new GoogleGenAI({ apiKey });
+      const model = "gemini-2.5-flash";
       
       const prompt = `
         You are an AI Search Visibility Analyst simulating data for a dashboard similar to Ubersuggest or Semrush, but for LLM visibility.
@@ -78,14 +79,20 @@ const AiSearchVisibility = () => {
 
         Task: Simulate an analysis of how visible this brand is in Generative AI responses for transactional and informational queries in their niche.
         
+        IMPORTANT: Generate UNIQUE and REALISTIC data specifically for the brand "${brandName}". The data should vary based on:
+        - The brand's actual market position and recognition
+        - The industry/niche provided
+        - Real competitors in that space
+        - Realistic prompts users would actually search for
+        
         Generate realistic simulated data for:
-        1. Overall Visibility Score (0-100%).
-        2. Industry Rank (e.g. 3rd out of 15).
-        3. Top 5 Competitors in this space (names and estimated visibility %).
-        4. Top 10 Prompts/Questions users might ask where this brand *should* appear, and whether it does.
-        5. Trend data for the last 6 time points.
+        1. Overall Visibility Score (0-100%) - should reflect the brand's actual market presence
+        2. Industry Rank - realistic position among actual competitors
+        3. Top 5 REAL Competitors in this space (use actual company names, not placeholders)
+        4. Top 10 Prompts/Questions users might ask where this brand should appear
+        5. Trend data for the last 6 time points (should show realistic variation)
 
-        Return ONLY valid raw JSON with this exact structure (no markdown, no comments, no placeholders like "integer"):
+        Return ONLY valid raw JSON (no markdown, no code blocks) with this exact structure:
         {
           "visibilityScore": 72,
           "industryRank": 3,
@@ -93,8 +100,8 @@ const AiSearchVisibility = () => {
           "analyzedPromptsCount": 120,
           "mentionsCount": 86,
           "competitors": [
-            { "name": "Competitor A", "visibility": 85, "logoColor": "#EF4444" },
-            { "name": "Competitor B", "visibility": 60, "logoColor": "#3B82F6" }
+            { "name": "Competitor Name", "visibility": 85, "logoColor": "#EF4444" },
+            { "name": "Another Competitor", "visibility": 60, "logoColor": "#3B82F6" }
           ],
           "topPrompts": [
             { "query": "Best tool for X", "rank": 1, "mentioned": true },
@@ -111,15 +118,17 @@ const AiSearchVisibility = () => {
       const response = await ai.models.generateContent({
         model: model,
         contents: prompt,
-        config: { responseMimeType: "application/json" }
+        config: {
+          responseMimeType: "application/json",
+        },
       });
 
-      let text = response.text;
+      const text = response.text;
       if (text) {
-        // Clean up markdown if present, although responseMimeType usually handles it
-        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         const parsedData = JSON.parse(text);
         setData(parsedData);
+      } else {
+        throw new Error("No response received from AI");
       }
     } catch (err) {
       console.error("Analysis failed:", err);

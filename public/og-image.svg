@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F1F5F9"/>
+      <stop offset="100%" style="stop-color:#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2563EB"/>
+      <stop offset="100%" style="stop-color:#3B82F6"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#CBD5E1" stroke-width="0.5" opacity="0.5"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Logo -->
+  <text x="100" y="100" font-family="Georgia, serif" font-size="36" font-weight="bold" fill="#0F172A">Perfxads</text>
+  
+  <!-- Badge -->
+  <rect x="480" y="140" width="240" height="40" rx="20" fill="white" stroke="#E2E8F0"/>
+  <text x="520" y="167" font-family="Arial, sans-serif" font-size="14" fill="#0F172A">✨ Updated for 2025</text>
+  
+  <!-- Main Title -->
+  <text x="600" y="280" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#0F172A" text-anchor="middle">The Ultimate</text>
+  <text x="600" y="370" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#2563EB" text-anchor="middle">Ad Specs Library</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="440" font-family="Arial, sans-serif" font-size="24" fill="#64748B" text-anchor="middle">Instantly find the latest social media specifications.</text>
+  <text x="600" y="475" font-family="Arial, sans-serif" font-size="24" fill="#64748B" text-anchor="middle">No more outdated spreadsheets or endless searching.</text>
+  
+  <!-- Stats Bar -->
+  <rect x="300" y="520" width="600" height="60" rx="12" fill="white" stroke="#E2E8F0"/>
+  <text x="420" y="558" font-family="Arial, sans-serif" font-size="18" fill="#0F172A" text-anchor="middle" font-weight="bold">177+ Specs</text>
+  <line x1="520" y1="535" x2="520" y2="575" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="600" y="558" font-family="Arial, sans-serif" font-size="18" fill="#0F172A" text-anchor="middle" font-weight="bold">17+ Platforms</text>
+  <line x1="680" y1="535" x2="680" y2="575" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="780" y="558" font-family="Arial, sans-serif" font-size="18" fill="#0F172A" text-anchor="middle" font-weight="bold">Free Tools</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="1050" cy="150" r="80" fill="#2563EB" opacity="0.1"/>
+  <circle cx="150" cy="500" r="60" fill="#2563EB" opacity="0.1"/>
+</svg>

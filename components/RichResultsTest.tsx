@@ -31,16 +31,17 @@ const RichResultsTest = () => {
         alert(mode === 'url' ? "Please enter a URL" : "Please enter code");
         return;
     }
-    if (!process.env.API_KEY) {
-        alert("API Key not configured.");
-        return;
+     const apiKey = import.meta.env.VITE_API_KEY as string;
+    if (!apiKey) {
+      alert("API Key not configured.");
+      return;
     }
 
     setIsAnalyzing(true);
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

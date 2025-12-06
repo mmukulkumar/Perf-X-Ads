@@ -462,16 +462,17 @@ const SchemaMarkupGenerator = () => {
 
   // --- AI Generator Logic ---
   const handleAiGenerate = async () => {
-    if (!process.env.API_KEY) {
-        setAiError("API Key not configured.");
-        return;
+     const apiKey = import.meta.env.VITE_API_KEY as string;
+    if (!apiKey) {
+      alert("API Key not configured.");
+      return;
     }
     
     setIsGenerating(true);
     setAiError('');
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

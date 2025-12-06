@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { redirectToCheckout, isStripeConfigured } from '../lib/stripe';
 
 // Types
 export type UserRole = 'user' | 'admin';
@@ -206,14 +207,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     if (!supabase) {
         setUser(null);
+        window.location.reload();
         return;
     }
     try {
       await supabase.auth.signOut();
       setUser(null);
+      window.location.reload();
     } catch (error) {
       console.error("Logout failed", error);
       setUser(null);
+      window.location.reload();
     }
   };
 
@@ -258,18 +262,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const upgradeSubscription = async (priceId: string) => {
-    if (!user) return;
+  const upgradeSubscription = async (priceId: string, quantity: number = 1) => {
+    if (!user) {
+        throw new Error('User not logged in');
+    }
 
+    // Demo user simulation
     if (user.id === 'demo-user') {
-        // Mock success for demo user
         await new Promise(resolve => setTimeout(resolve, 1500));
         const tier = priceId.includes('monthly') ? 'monthly' : priceId.includes('annual') ? 'annual' : 'lifetime';
         const updates = {
             subscription: {
                 tier,
                 status: 'active' as const,
-                expiryDate: tier === 'monthly' ? new Date(Date.now() + 30*24*60*60*1000).toISOString() : new Date(Date.now() + 365*24*60*60*1000).toISOString()
+                expiryDate: tier === 'monthly' 
+                    ? new Date(Date.now() + 30*24*60*60*1000).toISOString() 
+                    : new Date(Date.now() + 365*24*60*60*1000).toISOString()
             },
             credits: { ...user.credits, current: 999999, limit: 999999 }
         };
@@ -278,48 +286,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
     }
 
-    try {
-        // Attempt to call Supabase Edge Function to create Stripe Checkout Session
-        const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-            body: { 
-                priceId, 
-                userId: user.id, 
-                email: user.email,
-                returnUrl: window.location.origin 
-            }
-        });
-
-        if (error) {
-            // Function likely not deployed in this demo environment
-            console.error("Backend Error:", error);
-            // Fallback to simulation for user experience
-            alert("Note: Payment backend not detected (Supabase Edge Function 'create-checkout-session' missing). Falling back to simulation.");
-            
-            const tier = priceId.includes('monthly') ? 'monthly' : priceId.includes('annual') ? 'annual' : 'lifetime';
-            const updates = {
-                subscription: {
-                    tier,
-                    status: 'active' as const,
-                    expiryDate: tier === 'monthly' ? new Date(Date.now() + 30*24*60*60*1000).toISOString() : new Date(Date.now() + 365*24*60*60*1000).toISOString()
-                },
-                credits: { ...user.credits, current: 999999, limit: 999999 }
-            };
-            // @ts-ignore
-            setUser(prev => prev ? ({ ...prev, ...updates }) : null);
+    // Check if Stripe is configured
+    if (!isStripeConfigured()) {
+        console.warn("Stripe not fully configured. Falling back to simulation.");
+        // Fallback simulation for demo purposes
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const tier = priceId.includes('monthly') ? 'monthly' : priceId.includes('annual') ? 'annual' : 'lifetime';
+        const updates = {
+            subscription: {
+                tier,
+                status: 'active' as const,
+                expiryDate: tier === 'monthly' 
+                    ? new Date(Date.now() + 30*24*60*60*1000).toISOString() 
+                    : new Date(Date.now() + 365*24*60*60*1000).toISOString()
+            },
+            credits: { ...user.credits, current: 999999, limit: 999999 }
+        };
+        // @ts-ignore
+        setUser(prev => prev ? ({ ...prev, ...updates }) : null);
+        if (supabase) {
             await supabase.from('users').update(updates).eq('id', user.id);
-            return;
         }
-
-        if (data?.url) {
-            window.location.href = data.url;
-        } else {
-            throw new Error("No checkout URL returned");
-        }
-
-    } catch (error: any) {
-        console.error("Subscription upgrade failed", error);
-        setAuthError("Payment initialization failed: " + error.message);
+        return;
     }
+
+    // Use redirectToCheckout which handles Edge Functions and fallbacks
+    const result = await redirectToCheckout({
+        priceId,
+        userId: user.id,
+        email: user.email,
+        quantity,
+        successUrl: `${window.location.origin}?payment=success`,
+        cancelUrl: `${window.location.origin}?payment=cancelled`,
+    });
+
+    if (result.error) {
+        console.error("Subscription upgrade failed:", result.error);
+        throw new Error(result.error);
+    }
+    
+    // If we get here without redirect, something went wrong
+    // The redirect should have happened in redirectToCheckout
   };
 
   const cancelSubscription = async () => {

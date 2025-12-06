@@ -4,7 +4,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perf X Ads - Social Media Specs</title>
+    <title>Perfxads - The Ultimate Ad Specs Library | Social Media Specifications 2025</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Perfxads - The Ultimate Ad Specs Library | Social Media Specifications 2025" />
+    <meta name="description" content="Instantly find the latest social media specifications. No more outdated spreadsheets or endless searching. Updated for 2025 with 177+ specs across 17+ platforms." />
+    <meta name="keywords" content="social media specs, ad specifications, Facebook ads, Instagram ads, TikTok ads, YouTube ads, LinkedIn ads, ad dimensions, social media marketing, digital advertising" />
+    <meta name="author" content="Perfxads" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://perfxads.com/" />
+    <meta property="og:title" content="Perfxads - The Ultimate Ad Specs Library" />
+    <meta property="og:description" content="Instantly find the latest social media specifications. No more outdated spreadsheets or endless searching. Updated for 2025." />
+    <meta property="og:image" content="https://perfxads.com/og-image.png" />
+    <meta property="og:image:alt" content="Perfxads - The Ultimate Ad Specs Library with 177+ specs across 17+ platforms" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Perfxads" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://perfxads.com/" />
+    <meta name="twitter:title" content="Perfxads - The Ultimate Ad Specs Library" />
+    <meta name="twitter:description" content="Instantly find the latest social media specifications. No more outdated spreadsheets or endless searching. Updated for 2025." />
+    <meta name="twitter:image" content="https://perfxads.com/og-image.png" />
+    <meta name="twitter:image:alt" content="Perfxads - The Ultimate Ad Specs Library with 177+ specs across 17+ platforms" />
+    <meta name="twitter:creator" content="@perfxads" />
+    <meta name="twitter:site" content="@perfxads" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563EB" />
+    <meta name="msapplication-TileColor" content="#2563EB" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://perfxads.com/" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -62,7 +104,6 @@
         font-family: 'Source Sans 3', 'Inter', sans-serif;
         background-color: var(--color-brand-light);
         color: var(--color-brand-dark);
-        transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         -webkit-font-smoothing: antialiased;
       }
 
@@ -71,14 +112,15 @@
         letter-spacing: -0.01em;
       }
       
-      /* Smooth transitions */
-      *, *::before, *::after {
-        transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 500ms;
+      /* Theme transition - only on root level for performance */
+      html.theme-transition,
+      html.theme-transition *,
+      html.theme-transition *::before,
+      html.theme-transition *::after {
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
       }
 
-      /* Icon Glow in Dark Mode */
+      /* Icon Glow in Dark Mode - no transition for performance */
       .dark svg {
         filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.6));
       }

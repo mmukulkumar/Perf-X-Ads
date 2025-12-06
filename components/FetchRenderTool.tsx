@@ -52,16 +52,17 @@ const FetchRenderTool = () => {
     // CREDIT CHECK: Medium Cost Tool (10 Credits)
     if (!consumeCredits(10)) return;
 
-    if (!process.env.API_KEY) {
-        alert("API Key not configured.");
-        return;
+     const apiKey = import.meta.env.VITE_API_KEY as string;
+    if (!apiKey) {
+      alert("API Key not configured.");
+      return;
     }
 
     setIsFetching(true);
     setResult(null);
 
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey });
         const model = 'gemini-2.5-flash';
         
         const prompt = `

@@ -93,6 +93,7 @@ const AppContent = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isSubmitToolOpen, setIsSubmitToolOpen] = useState(false);
+  const [paymentNotification, setPaymentNotification] = useState<{ type: 'success' | 'cancelled' | null; message: string }>({ type: null, message: '' });
   
   // Global State
   const [theme, setTheme] = useState(() => {
@@ -175,7 +176,19 @@ const AppContent = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const toggleTheme = () => {
+    // Add transition class for smooth theme change
+    const root = document.documentElement;
+    root.classList.add('theme-transition');
+    
+    // Toggle the theme
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      root.classList.remove('theme-transition');
+    }, 300);
+  };
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -203,6 +216,34 @@ const AppContent = () => {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Handle payment success/cancel URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    
+    if (paymentStatus === 'success') {
+      setPaymentNotification({
+        type: 'success',
+        message: 'Payment successful! Your subscription is now active. Welcome to Pro!'
+      });
+      // Navigate to dashboard to show updated subscription
+      setCurrentView('dashboard');
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Auto-dismiss after 8 seconds
+      setTimeout(() => setPaymentNotification({ type: null, message: '' }), 8000);
+    } else if (paymentStatus === 'cancelled') {
+      setPaymentNotification({
+        type: 'cancelled',
+        message: 'Payment was cancelled. No charges were made. Feel free to try again when ready.'
+      });
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Auto-dismiss after 6 seconds
+      setTimeout(() => setPaymentNotification({ type: null, message: '' }), 6000);
+    }
   }, []);
 
   // Derived unique values (Memoized)
@@ -787,6 +828,33 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-brand-light text-brand-dark font-inter transition-colors duration-300 select-none">
+      {/* Payment Success/Cancel Notification */}
+      {paymentNotification.type && (
+        <div className={`fixed top-24 right-8 z-[300] px-6 py-4 rounded-xl shadow-2xl flex items-start gap-3 animate-in slide-in-from-right-4 fade-in duration-300 max-w-sm border ${
+          paymentNotification.type === 'success' 
+            ? 'bg-green-600 text-white border-green-500' 
+            : 'bg-yellow-500 text-white border-yellow-400'
+        }`}>
+            {paymentNotification.type === 'success' ? (
+              <Check className="w-5 h-5 mt-0.5 shrink-0" />
+            ) : (
+              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+            )}
+            <div className="flex-1">
+                <h4 className="font-bold text-sm mb-1">
+                  {paymentNotification.type === 'success' ? 'Payment Successful!' : 'Payment Cancelled'}
+                </h4>
+                <p className="text-xs opacity-90 leading-relaxed">{paymentNotification.message}</p>
+            </div>
+            <button 
+              onClick={() => setPaymentNotification({ type: null, message: '' })} 
+              className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+        </div>
+      )}
+
       {authError && (
         <div className="fixed top-24 right-8 z-[300] px-6 py-4 bg-red-600 text-white rounded-xl shadow-2xl flex items-start gap-3 animate-in slide-in-from-right-4 fade-in duration-300 max-w-sm border border-red-500">
             <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
@@ -821,9 +889,11 @@ const AppContent = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-serif text-xl font-black tracking-tighter text-brand-dark">
-                Perfxads
-              </span>
+              <img 
+                src={theme === 'dark' ? '/perfxads-dark-bg.png' : '/perfxads-light-bg.png'} 
+                alt="Perfxads" 
+                className="h-7 w-auto object-contain"
+              />
             </div>
             <span className="hidden md:inline text-brand-medium/50">|</span>
             <span className="text-xs font-bold text-brand-dark/40 uppercase tracking-wider">Powered by DMSPrism</span>

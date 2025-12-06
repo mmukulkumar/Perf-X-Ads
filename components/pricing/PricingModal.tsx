@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { X, Check, Zap, Star, Loader2, Minus, Plus, ArrowLeft, CreditCard, Lock, ShieldCheck } from 'lucide-react';
+import { X, Check, Zap, Star, Loader2, Minus, Plus, ArrowLeft, CreditCard, Lock, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAuth, SubscriptionTier } from '../../contexts/AuthContext';
+import { STRIPE_PRICES, isStripeConfigured } from '../../lib/stripe';
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -9,15 +9,19 @@ interface PricingModalProps {
 }
 
 const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
-  const { upgradeSubscription } = useAuth();
+  const { upgradeSubscription, user } = useAuth();
   const [step, setStep] = useState<'select' | 'payment'>('select');
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionTier | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   // User Seat State
   const [seatCount, setSeatCount] = useState(1);
   const [lifetimeOption, setLifetimeOption] = useState<'solo' | 'team5'>('solo');
+
+  // Check if Stripe is configured
+  const stripeReady = isStripeConfigured();
 
   // Reset state when opening/closing
   useEffect(() => {
@@ -25,6 +29,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
         setStep('select');
         setIsProcessing(false);
         setSeatCount(1);
+        setError(null);
     }
   }, [isOpen]);
 
@@ -52,31 +57,52 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
   const handlePlanSelect = (tier: SubscriptionTier) => {
     setSelectedPlan(tier);
     setStep('payment');
+    setError(null);
   };
 
   const handleCheckout = async () => {
       if (!selectedPlan) return;
       setIsProcessing(true);
+      setError(null);
       
-      // Determine Stripe Price ID based on selection
-      // Note: In a real app, these IDs come from your Stripe Dashboard
-      let priceId = '';
-      if (selectedPlan === 'lifetime') priceId = 'price_lifetime_id_placeholder';
-      else if (billingCycle === 'annual') priceId = 'price_annual_id_placeholder';
-      else priceId = 'price_monthly_id_placeholder';
+      try {
+          // Get the correct Stripe Price ID based on selection
+          let priceId: string | null = null;
+          
+          if (selectedPlan === 'lifetime') {
+              priceId = lifetimeOption === 'team5' 
+                  ? STRIPE_PRICES.lifetimeTeam 
+                  : STRIPE_PRICES.lifetime;
+          } else if (billingCycle === 'annual') {
+              priceId = STRIPE_PRICES.annual;
+          } else {
+              priceId = STRIPE_PRICES.monthly;
+          }
 
-      await upgradeSubscription(priceId);
-      
-      // If the function falls back to simulation (in AuthContext), we close the modal
-      setIsProcessing(false);
-      onClose();
+          if (!priceId) {
+              throw new Error('Price ID not configured. Please check environment variables.');
+          }
+
+          // Call upgrade subscription with price ID and quantity
+          await upgradeSubscription(priceId, seatCount);
+          
+          // If we reach here without redirect, it means simulation mode completed
+          // Close the modal and show success
+          setIsProcessing(false);
+          onClose();
+          
+      } catch (err: any) {
+          console.error('Checkout error:', err);
+          setError(err.message || 'Failed to process checkout. Please try again.');
+          setIsProcessing(false);
+      }
   };
 
   // --- Render Helpers ---
   const currentTotal = selectedPlan ? calculateTotal(selectedPlan) : 0;
   const planName = selectedPlan === 'lifetime' 
     ? `Lifetime Access (${lifetimeOption === 'solo' ? 'Solo' : 'Team'})` 
-    : `Pro ${billingCycle === 'annual' ? 'Annual' : 'Monthly'} (${seatCount} Seats)`;
+    : `Pro ${billingCycle === 'annual' ? 'Annual' : 'Monthly'} (${seatCount} Seat${seatCount > 1 ? 's' : ''})`;
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-brand-dark/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -123,6 +149,11 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                     <CreditCard className="w-6 h-6 text-white" />
                     <span className="text-xs text-white/80 self-center">Powered by Stripe</span>
                 </div>
+                {!stripeReady && (
+                    <div className="mt-2 text-[10px] text-yellow-400/80">
+                        ⚠️ Demo Mode - Stripe not configured
+                    </div>
+                )}
             </div>
          </div>
 
@@ -209,11 +240,21 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
 
              {step === 'payment' && (
                  <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                     <button onClick={() => setStep('select')} className="flex items-center gap-1 text-sm font-medium text-brand-dark/50 hover:text-brand-dark mb-6">
+                     <button onClick={() => { setStep('select'); setError(null); }} className="flex items-center gap-1 text-sm font-medium text-brand-dark/50 hover:text-brand-dark mb-6">
                          <ArrowLeft className="w-4 h-4" /> Back
                      </button>
 
                      <h3 className="text-xl font-bold text-brand-dark mb-6">Summary</h3>
+
+                     {/* Error Display */}
+                     {error && (
+                         <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-3">
+                             <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                             <div>
+                                 <p className="text-sm font-medium text-red-700 dark:text-red-300">{error}</p>
+                             </div>
+                         </div>
+                     )}
 
                      <div className="bg-brand-light/30 rounded-xl p-6 mb-6 border border-brand-medium/20">
                          <div className="flex justify-between items-center mb-2">
@@ -231,10 +272,55 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                                  <div className="flex items-center gap-3">
                                      <span className="text-sm font-medium text-brand-dark">Seats</span>
                                      <div className="flex items-center gap-2">
-                                         <button onClick={() => setSeatCount(Math.max(1, seatCount - 1))} className="p-1 rounded bg-brand-surface border hover:bg-brand-light"><Minus className="w-3 h-3" /></button>
-                                         <span className="text-sm font-bold w-4 text-center">{seatCount}</span>
-                                         <button onClick={() => setSeatCount(seatCount + 1)} className="p-1 rounded bg-brand-surface border hover:bg-brand-light"><Plus className="w-3 h-3" /></button>
+                                         <button 
+                                             onClick={() => setSeatCount(Math.max(1, seatCount - 1))} 
+                                             className="p-1 rounded bg-brand-surface border hover:bg-brand-light disabled:opacity-50"
+                                             disabled={seatCount <= 1}
+                                         >
+                                             <Minus className="w-3 h-3" />
+                                         </button>
+                                         <span className="text-sm font-bold w-6 text-center">{seatCount}</span>
+                                         <button 
+                                             onClick={() => setSeatCount(seatCount + 1)} 
+                                             className="p-1 rounded bg-brand-surface border hover:bg-brand-light"
+                                         >
+                                             <Plus className="w-3 h-3" />
+                                         </button>
                                      </div>
+                                 </div>
+                                 {seatCount >= 10 && (
+                                     <span className="text-xs text-green-600 font-medium">20% bulk discount applied!</span>
+                                 )}
+                             </div>
+                         )}
+                         
+                         {/* Lifetime Team Option */}
+                         {selectedPlan === 'lifetime' && (
+                             <div className="mt-4 pt-4 border-t border-brand-medium/10">
+                                 <span className="text-sm font-medium text-brand-dark block mb-3">License Type</span>
+                                 <div className="grid grid-cols-2 gap-3">
+                                     <button
+                                         onClick={() => setLifetimeOption('solo')}
+                                         className={`p-3 rounded-lg border-2 text-left transition-all ${
+                                             lifetimeOption === 'solo' 
+                                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+                                                 : 'border-brand-medium/20 hover:border-brand-medium/40'
+                                         }`}
+                                     >
+                                         <div className="font-bold text-brand-dark">Solo</div>
+                                         <div className="text-xs text-brand-dark/60">1 user • $249</div>
+                                     </button>
+                                     <button
+                                         onClick={() => setLifetimeOption('team5')}
+                                         className={`p-3 rounded-lg border-2 text-left transition-all ${
+                                             lifetimeOption === 'team5' 
+                                                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+                                                 : 'border-brand-medium/20 hover:border-brand-medium/40'
+                                         }`}
+                                     >
+                                         <div className="font-bold text-brand-dark">Team</div>
+                                         <div className="text-xs text-brand-dark/60">Up to 5 users • $1,890</div>
+                                     </button>
                                  </div>
                              </div>
                          )}
@@ -260,9 +346,17 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                                     <span>Redirecting to Stripe...</span>
                                 </>
                             ) : (
-                                <>Proceed to Checkout</>
+                                <>
+                                    <CreditCard className="w-5 h-5" />
+                                    <span>Proceed to Checkout • ${currentTotal.toFixed(2)}</span>
+                                </>
                             )}
                         </button>
+                        
+                        <p className="text-center text-xs text-brand-dark/40">
+                            By proceeding, you agree to our Terms of Service and Privacy Policy.
+                            {!stripeReady && <span className="block mt-1 text-yellow-600">Demo mode: Payment will be simulated.</span>}
+                        </p>
                      </div>
                  </div>
              )}
