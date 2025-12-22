@@ -367,6 +367,22 @@ const Header: React.FC<HeaderProps> = ({
               
               <div className="my-2 border-t border-brand-border/50"></div>
               
+              <a 
+                href="https://dmsprism.com/blog/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full text-left px-3 py-2.5 rounded-lg bg-brand-surface hover:bg-brand-light transition-colors text-sm font-medium text-brand-dark flex items-center gap-3"
+              >
+                <div className="p-1.5 rounded-md bg-brand-light">
+                  <FileText className="w-4 h-4 text-brand-primary" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold">Blog</span>
+                  <span className="text-[10px] text-brand-dark/50">Latest insights & tips</span>
+                </div>
+              </a>
+              
               <button 
                 onClick={() => { onOpenSubmitTool(); setIsMobileMenuOpen(false); }}
                 className="w-full text-left px-3 py-2.5 rounded-lg bg-brand-surface hover:bg-brand-light transition-colors text-sm font-medium text-brand-dark flex items-center gap-3"
@@ -470,21 +486,60 @@ const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center cursor-pointer group shrink-0 select-none relative" onClick={() => onNavigate('home')}>
                 {/* Logo - switches based on theme */}
                 <img 
-                  src={theme === 'dark' ? '/perfxads-dark-bg.png' : '/perfxads-light-bg.png'} 
-                  alt="Perfxads" 
-                  className="h-8 w-auto object-contain transition-opacity duration-300 hover:opacity-80"
+                  src={theme === 'dark' ? '/perfxads-logo-dark.svg' : '/perfxads-logo-light.svg'} 
+                  alt="Perfxads - The Ultimate Ad Specs Library" 
+                  className="h-10 w-auto object-contain transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
                 />
-                {/* Santa Hat - Christmas decoration */}
-                <div className="absolute -top-2 -right-1 transform rotate-[-15deg] pointer-events-none">
+                {/* Santa Hat - Christmas decoration - centered on P icon */}
+                <div className="absolute" style={{ top: '-8px', left: '14px', transform: 'rotate(-15deg)', pointerEvents: 'none', zIndex: 10 }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Hat body */}
-                    <path d="M8 12C8 12 9 8 12 8C15 8 16 12 16 12L18 18C18 18 16 20 12 20C8 20 6 18 6 18L8 12Z" fill="#DC2626" />
-                    {/* Hat rim */}
-                    <ellipse cx="12" cy="18" rx="6" ry="2" fill="#FEFEFE" />
-                    {/* Pom-pom */}
-                    <circle cx="12" cy="8" r="2.5" fill="#FEFEFE" />
-                    {/* Shadow */}
-                    <path d="M8 12C8 12 9 8 12 8C15 8 16 12 16 12" fill="#B91C1C" opacity="0.3" />
+                    <defs>
+                      <linearGradient id="hatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#DC2626" />
+                        <stop offset="50%" stopColor="#B91C1C" />
+                        <stop offset="100%" stopColor="#991B1B" />
+                      </linearGradient>
+                      <filter id="hatShadow">
+                        <feDropShadow dx="0" dy="1" stdDeviation="1" floodOpacity="0.4"/>
+                      </filter>
+                      <filter id="pompomGlow">
+                        <feDropShadow dx="0" dy="0" stdDeviation="1" floodColor="#FFFFFF" floodOpacity="0.6"/>
+                      </filter>
+                    </defs>
+                    
+                    {/* Hat cone body */}
+                    <path 
+                      d="M 8 11 L 9 7 Q 10 4 12 3.5 Q 14 4 15 7 L 16 11 L 17.5 17 Q 17.5 18.5 12 18.5 Q 6.5 18.5 6.5 17 Z" 
+                      fill="url(#hatGrad)" 
+                      filter="url(#hatShadow)" 
+                    />
+                    
+                    {/* Shading for depth */}
+                    <path 
+                      d="M 8 11 L 9 7 Q 10 4 12 3.5 L 12 18.5 Q 6.5 18.5 6.5 17 Z" 
+                      fill="#991B1B" 
+                      opacity="0.25"
+                    />
+                    
+                    {/* White fur trim - triple layer */}
+                    <ellipse cx="12" cy="17" rx="6" ry="1.8" fill="#FFFFFF"/>
+                    <ellipse cx="12" cy="16.7" rx="5.5" ry="1.4" fill="#F8FAFC" />
+                    <ellipse cx="12" cy="16.5" rx="5" ry="1.2" fill="#FEFEFE" />
+                    
+                    {/* Pom-pom with glow */}
+                    <circle cx="12" cy="3.5" r="2.5" fill="#FFFFFF" filter="url(#pompomGlow)"/>
+                    <circle cx="12" cy="3.5" r="2" fill="#FEFEFE" />
+                    <circle cx="12" cy="3.5" r="1.3" fill="#FFFFFF" opacity="0.9"/>
+                    
+                    {/* Highlight */}
+                    <path 
+                      d="M 10 8.5 Q 11 5.5 12 4.5 Q 13 5.5 14 8.5" 
+                      stroke="#EF4444" 
+                      strokeWidth="0.4" 
+                      fill="none" 
+                      opacity="0.5" 
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </div>
               </div>
@@ -653,6 +708,22 @@ const Header: React.FC<HeaderProps> = ({
                               </button>
                               
                               <div className="my-1 border-t border-brand-border/50"></div>
+                              
+                              <a 
+                                  href="https://dmsprism.com/blog/" 
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => setActiveMenu(null)}
+                                  className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-brand-light transition-colors text-sm font-medium text-brand-dark flex items-center gap-3 group"
+                              >
+                                  <div className="p-1.5 rounded-md bg-brand-light group-hover:bg-white dark:group-hover:bg-brand-dark/20 transition-colors text-brand-primary">
+                                      <FileText className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex flex-col">
+                                      <span className="leading-none mb-0.5 font-bold">Blog</span>
+                                      <span className="text-[10px] text-brand-dark/50">Latest insights & tips</span>
+                                  </div>
+                              </a>
                               
                               <button 
                                   onClick={() => { onOpenSubmitTool(); setActiveMenu(null); }}

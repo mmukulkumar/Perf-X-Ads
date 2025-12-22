@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="appleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="letterGradApple" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0E7FF;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadowApple">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="180" height="180" fill="url(#appleGrad)"/>
+  
+  <!-- Modern "P" Letter -->
+  <g filter="url(#shadowApple)">
+    <path d="M 56 49 L 84 49 Q 126 49 126 77 Q 126 105 84 105 L 70 105 L 70 131 L 56 131 Z M 70 63 L 70 91 L 84 91 Q 112 91 112 77 Q 112 63 84 63 Z" 
+          fill="url(#letterGradApple)" 
+          stroke="#FFFFFF" 
+          stroke-width="1"/>
+  </g>
+  
+  <!-- Accent Circle -->
+  <circle cx="133" cy="63" r="10" fill="#F97316" opacity="0.9"/>
+  <circle cx="133" cy="63" r="6" fill="#FFFFFF" opacity="0.9"/>
+  
+  <!-- Bottom accent line -->
+  <rect x="56" y="137" width="67" height="3" rx="1.5" fill="#F97316" opacity="0.8"/>
+</svg>

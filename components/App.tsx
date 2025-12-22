@@ -897,13 +897,20 @@ const AppContent = () => {
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex items-center gap-2">
               <img 
-                src={theme === 'dark' ? '/perfxads-dark-bg.png' : '/perfxads-light-bg.png'} 
+                src={theme === 'dark' ? '/perfxads-logo-dark.svg' : '/perfxads-logo-light.svg'} 
                 alt="Perfxads" 
-                className="h-7 w-auto object-contain"
+                className="h-8 w-auto object-contain"
               />
             </div>
             <span className="hidden md:inline text-brand-medium/50">|</span>
-            <span className="text-xs font-bold text-brand-dark/40 uppercase tracking-wider">Powered by DMSPrism</span>
+            <a 
+              href="https://dmsprism.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs font-bold text-brand-dark/40 uppercase tracking-wider hover:text-brand-primary transition-colors"
+            >
+              Powered by DMSPrism
+            </a>
           </div>
           <div className="flex items-center gap-8 text-sm font-medium text-brand-dark/50">
              <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors">About Us</button>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="logoGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+    </linearGradient>
+    <filter id="textShadowDark">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Logo Icon (Square with P) -->
+  <g>
+    <rect x="20" y="40" width="120" height="120" rx="24" fill="url(#logoGradDark)"/>
+    <path d="M 55 75 L 80 75 Q 110 75 110 95 Q 110 115 80 115 L 65 115 L 65 135 L 55 135 Z M 65 85 L 65 105 L 80 105 Q 100 105 100 95 Q 100 85 80 85 Z" 
+          fill="#FFFFFF" 
+          stroke="#FFFFFF" 
+          stroke-width="1"/>
+    <circle cx="115" cy="80" r="8" fill="#F97316"/>
+    <circle cx="115" cy="80" r="5" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Text Logo -->
+  <g filter="url(#textShadowDark)">
+    <text x="160" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
+          font-size="72" font-weight="800" fill="#F8FAFC" letter-spacing="-2">
+      Perf<tspan fill="#60A5FA">X</tspan>ads
+    </text>
+  </g>
+  
+  <!-- Tagline -->
+  <text x="162" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-size="18" font-weight="500" fill="#94A3B8" letter-spacing="1">
+    THE ULTIMATE AD SPECS LIBRARY
+  </text>
+</svg>
