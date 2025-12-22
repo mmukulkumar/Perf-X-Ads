@@ -467,13 +467,26 @@ const Header: React.FC<HeaderProps> = ({
           
           {/* Left: Logo & Nav */}
           <div className="flex items-center gap-8">
-              <div className="flex items-center cursor-pointer group shrink-0 select-none" onClick={() => onNavigate('home')}>
+              <div className="flex items-center cursor-pointer group shrink-0 select-none relative" onClick={() => onNavigate('home')}>
                 {/* Logo - switches based on theme */}
                 <img 
                   src={theme === 'dark' ? '/perfxads-dark-bg.png' : '/perfxads-light-bg.png'} 
                   alt="Perfxads" 
                   className="h-8 w-auto object-contain transition-opacity duration-300 hover:opacity-80"
                 />
+                {/* Santa Hat - Christmas decoration */}
+                <div className="absolute -top-2 -right-1 transform rotate-[-15deg] pointer-events-none">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Hat body */}
+                    <path d="M8 12C8 12 9 8 12 8C15 8 16 12 16 12L18 18C18 18 16 20 12 20C8 20 6 18 6 18L8 12Z" fill="#DC2626" />
+                    {/* Hat rim */}
+                    <ellipse cx="12" cy="18" rx="6" ry="2" fill="#FEFEFE" />
+                    {/* Pom-pom */}
+                    <circle cx="12" cy="8" r="2.5" fill="#FEFEFE" />
+                    {/* Shadow */}
+                    <path d="M8 12C8 12 9 8 12 8C15 8 16 12 16 12" fill="#B91C1C" opacity="0.3" />
+                  </svg>
+                </div>
               </div>
 
               <nav className="hidden lg:flex items-center gap-1 h-16">

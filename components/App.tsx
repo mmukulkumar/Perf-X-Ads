@@ -54,6 +54,10 @@ import AusSimpleTaxCalculator from './AusSimpleTaxCalculator';
 import AiKeywordResearch from './AiKeywordResearch';
 import AiSearchVisibility from './AiSearchVisibility';
 
+// Christmas Components
+import ChristmasCountdown from './ChristmasCountdown';
+import SnowAnimation from './SnowAnimation';
+
 // Mapping IDs to Components
 const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
   'utm': UTMGenerator,
@@ -881,6 +885,9 @@ const AppContent = () => {
         onOpenSubmitTool={() => setIsSubmitToolOpen(true)}
       />
 
+      {/* Christmas Countdown Banner */}
+      <ChristmasCountdown onClaimOffer={() => setPricingModalOpen(true)} />
+
       <main className="transition-opacity duration-300">
         {renderView()}
       </main>
@@ -916,6 +923,9 @@ const AppContent = () => {
       {/* Legal & Consent */}
       <PrivacyPolicyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
       <CookieConsent onOpenPrivacy={() => setIsPrivacyOpen(true)} />
+      
+      {/* Christmas Snow Animation */}
+      <SnowAnimation />
     </div>
   );
 };
