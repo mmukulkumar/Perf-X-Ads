@@ -38,9 +38,11 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
   // --- Pricing Logic ---
   const getPrice = (tier: SubscriptionTier) => {
       if (tier === 'lifetime') {
-          return lifetimeOption === 'solo' ? 249 : 1890;
+          // 30% off Christmas & New Year offer
+          return lifetimeOption === 'solo' ? 174.30 : 1323;
       }
-      const base = billingCycle === 'annual' ? 15 : 29;
+      // 30% off monthly for Christmas & New Year
+      const base = billingCycle === 'annual' ? 15 : 20.30;
       return base;
   };
 
@@ -149,11 +151,6 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                     <CreditCard className="w-6 h-6 text-white" />
                     <span className="text-xs text-white/80 self-center">Powered by Stripe</span>
                 </div>
-                {!stripeReady && (
-                    <div className="mt-2 text-[10px] text-yellow-400/80">
-                        ⚠️ Demo Mode - Stripe not configured
-                    </div>
-                )}
             </div>
          </div>
 
@@ -193,15 +190,23 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                             onClick={() => handlePlanSelect(billingCycle === 'monthly' ? 'monthly' : 'annual')}
                             className="border-2 border-brand-primary/20 bg-brand-primary/5 hover:border-brand-primary hover:bg-brand-primary/10 rounded-xl p-5 cursor-pointer transition-all group relative overflow-hidden"
                          >
-                             <div className="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wide">Most Popular</div>
+                             {billingCycle === 'monthly' ? (
+                                 <div className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wide">🎄 30% Off</div>
+                             ) : (
+                                 <div className="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wide">Most Popular</div>
+                             )}
                              <div className="flex justify-between items-center mb-2">
                                  <div>
                                      <h4 className="font-bold text-brand-dark text-lg group-hover:text-brand-primary transition-colors">Pro</h4>
                                      <p className="text-sm text-brand-dark/60">For freelancers & marketers</p>
                                  </div>
                                  <div className="text-right">
-                                     <div className="text-2xl font-extrabold text-brand-dark">${billingCycle === 'annual' ? '15' : '29'}<span className="text-sm font-normal text-brand-dark/50">/mo</span></div>
+                                     <div className="flex items-center gap-2 justify-end">
+                                         {billingCycle === 'monthly' && <span className="text-sm text-brand-dark/40 line-through">$29</span>}
+                                         <div className="text-2xl font-extrabold text-brand-dark">${billingCycle === 'annual' ? '15' : '20.30'}<span className="text-sm font-normal text-brand-dark/50">/mo</span></div>
+                                     </div>
                                      {billingCycle === 'annual' && <div className="text-xs text-green-600 font-medium">Billed $180 yearly</div>}
+                                     {billingCycle === 'monthly' && <div className="text-xs text-red-600 font-medium">Christmas & New Year Special</div>}
                                  </div>
                              </div>
                              <ul className="space-y-1 text-sm text-brand-dark/70">
@@ -213,16 +218,20 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                          {/* Lifetime Plan */}
                          <div 
                             onClick={() => handlePlanSelect('lifetime')}
-                            className="border border-brand-medium/30 bg-brand-surface hover:border-purple-500 hover:bg-purple-50/50 rounded-xl p-5 cursor-pointer transition-all group"
+                            className="border border-brand-medium/30 bg-brand-surface hover:border-purple-500 hover:bg-purple-50/50 rounded-xl p-5 cursor-pointer transition-all group relative overflow-hidden"
                          >
+                             <div className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wide">🎄 30% Off</div>
                              <div className="flex justify-between items-center mb-2">
                                  <div>
                                      <h4 className="font-bold text-brand-dark text-lg group-hover:text-purple-600 transition-colors flex items-center gap-2">Lifetime <Star className="w-4 h-4 text-yellow-400 fill-current" /></h4>
                                      <p className="text-sm text-brand-dark/60">Pay once, own forever</p>
                                  </div>
                                  <div className="text-right">
-                                     <div className="text-2xl font-extrabold text-brand-dark">$249</div>
-                                     <div className="text-xs text-brand-dark/50">One-time payment</div>
+                                     <div className="flex items-center gap-2 justify-end">
+                                         <span className="text-sm text-brand-dark/40 line-through">$249</span>
+                                         <div className="text-2xl font-extrabold text-brand-dark">$174.30</div>
+                                     </div>
+                                     <div className="text-xs text-red-600 font-medium">Christmas & New Year Special</div>
                                  </div>
                              </div>
                              <ul className="space-y-1 text-sm text-brand-dark/70">
@@ -308,7 +317,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                                          }`}
                                      >
                                          <div className="font-bold text-brand-dark">Solo</div>
-                                         <div className="text-xs text-brand-dark/60">1 user • $249</div>
+                                         <div className="text-xs text-brand-dark/60">1 user • <span className="line-through">$249</span> $174.30</div>
                                      </button>
                                      <button
                                          onClick={() => setLifetimeOption('team5')}
@@ -319,7 +328,7 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                                          }`}
                                      >
                                          <div className="font-bold text-brand-dark">Team</div>
-                                         <div className="text-xs text-brand-dark/60">Up to 5 users • $1,890</div>
+                                         <div className="text-xs text-brand-dark/60">Up to 5 users • <span className="line-through">$1,890</span> $1,323</div>
                                      </button>
                                  </div>
                              </div>
@@ -355,7 +364,6 @@ const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) => {
                         
                         <p className="text-center text-xs text-brand-dark/40">
                             By proceeding, you agree to our Terms of Service and Privacy Policy.
-                            {!stripeReady && <span className="block mt-1 text-yellow-600">Demo mode: Payment will be simulated.</span>}
                         </p>
                      </div>
                  </div>
