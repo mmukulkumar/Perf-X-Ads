@@ -8,14 +8,22 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string || '';
 // Create a mock client if credentials are not available (for development)
 let supabase: SupabaseClient;
 
-if (supabaseUrl && supabaseAnonKey) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (supabaseUrl && supabaseAnonKey && supabaseUrl.includes('supabase.co')) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+    // Fall back to mock client
+    supabase = createMockSupabaseClient();
+  }
 } else {
   // Create a mock/placeholder client for development without credentials
   console.warn('Supabase credentials not found. Running in demo mode without backend.');
-  
-  // Create a minimal mock that won't crash the app
-  const mockClient = {
+  supabase = createMockSupabaseClient();
+}
+
+function createMockSupabaseClient(): SupabaseClient {
+  return {
     auth: {
       getSession: async () => ({ data: { session: null }, error: null }),
       getUser: async () => ({ data: { user: null }, error: null }),
@@ -43,8 +51,6 @@ if (supabaseUrl && supabaseAnonKey) {
       invoke: async () => ({ data: null, error: { message: 'Demo mode - Supabase not configured' } }),
     },
   } as unknown as SupabaseClient;
-  
-  supabase = mockClient;
 }
 
 export { supabase };

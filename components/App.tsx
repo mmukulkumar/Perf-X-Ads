@@ -57,7 +57,7 @@ import URLInspectionTool from './URLInspectionTool';
 import SitemapGenerator from './SitemapGenerator';
 import NotFoundPage from './NotFoundPage';
 import ServerErrorPage from './ServerErrorPage';
-import ThankYouPage from './ThankYouPage';
+import { ThankYouPage } from './ThankYouPage';
 import { SitemapPage } from './SitemapPage';
 
 // Christmas Components
