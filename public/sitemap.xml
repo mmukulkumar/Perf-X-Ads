@@ -30,6 +30,13 @@
     <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://perfxads.com/sitemap</loc>
+    <lastmod>2025-12-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- AI & Trends Tools -->
   <url>
     <loc>https://perfxads.com/tools/keyword-research</loc>

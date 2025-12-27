@@ -97,7 +97,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 
 const AppContent = () => {
   const { isPricingModalOpen, setPricingModalOpen, authError, clearError } = useAuth(); // Use Global State
-  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings' | '404' | '500' | 'thank-you'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings' | '404' | '500' | 'thank-you' | 'sitemap'>('home');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [toolSearchQuery, setToolSearchQuery] = useState('');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -451,6 +451,19 @@ const AppContent = () => {
         <ThankYouPage 
           onNavigateHome={() => setCurrentView('home')} 
           onNavigateToDashboard={() => setCurrentView('dashboard')}
+        />
+      );
+    }
+
+    // Sitemap page
+    if (currentView === 'sitemap') {
+      return (
+        <SitemapPage 
+          onNavigateHome={() => setCurrentView('home')}
+          onNavigateTo={(view, toolId) => {
+            setCurrentView(view as any);
+            if (toolId) setActiveToolId(toolId);
+          }}
         />
       );
     }
@@ -960,7 +973,7 @@ const AppContent = () => {
              <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors whitespace-nowrap">About Us</button>
              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-brand-dark transition-colors whitespace-nowrap">Privacy Policy</button>
              <button onClick={() => {}} className="hover:text-brand-dark transition-colors whitespace-nowrap">Terms of Service</button>
-             <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-brand-dark transition-colors whitespace-nowrap">Sitemap</a>
+             <button onClick={() => setCurrentView('sitemap')} className="hover:text-brand-dark transition-colors whitespace-nowrap">Sitemap</button>
              <span className="w-full md:w-auto text-center mt-2 md:mt-0">© 2025 Perf X Ads</span>
           </div>
         </div>
