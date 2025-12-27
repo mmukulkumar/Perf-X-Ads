@@ -408,10 +408,6 @@ const AppContent = () => {
       tool.description.toLowerCase().includes(toolSearchQuery.toLowerCase())
     );
 
-    console.log('TOOLS_CONFIG length:', TOOLS_CONFIG.length);
-    console.log('Filtered tools:', filtered.length);
-    console.log('Search query:', toolSearchQuery);
-
     const preferredOrder = ['AI & Trends', 'Ad Mockups', 'Technical SEO', 'Marketing Calculators', 'SaaS & Business', 'Tax & Finance'];
     const groups: Record<string, typeof TOOLS_CONFIG[number][]> = {};
     
@@ -451,8 +447,6 @@ const AppContent = () => {
 
   // View Routing Logic
   const renderView = () => {
-    console.log('Current view:', currentView, 'Active tool:', activeToolId);
-    
     // Thank You page
     if (currentView === 'thank-you') {
       return (
