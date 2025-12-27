@@ -58,7 +58,7 @@ import SitemapGenerator from './SitemapGenerator';
 import NotFoundPage from './NotFoundPage';
 import ServerErrorPage from './ServerErrorPage';
 import ThankYouPage from './ThankYouPage';
-import SitemapPage from './SitemapPage';
+import { SitemapPage } from './SitemapPage';
 
 // Christmas Components
 import ChristmasCountdown from './ChristmasCountdown';
