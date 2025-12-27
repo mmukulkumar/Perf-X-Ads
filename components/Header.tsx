@@ -488,7 +488,7 @@ const Header: React.FC<HeaderProps> = ({
                 <img 
                   src={theme === 'dark' ? '/perfxads-logo-dark.svg' : '/perfxads-logo-light.svg'} 
                   alt="Perfxads - The Ultimate Ad Specs Library" 
-                  className="h-10 w-auto object-contain transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
+                  className="h-7 sm:h-8 md:h-10 w-auto object-contain transition-all duration-300 hover:opacity-90 hover:scale-[1.02]"
                 />
                 {/* Santa Hat - Christmas decoration - centered on P icon */}
                 <div className="absolute" style={{ top: '-8px', left: '14px', transform: 'rotate(-15deg)', pointerEvents: 'none', zIndex: 10 }}>

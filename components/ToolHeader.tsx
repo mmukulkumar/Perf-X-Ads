@@ -37,7 +37,7 @@ const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon,
          <Icon className="w-64 h-64 text-brand-dark" />
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
         {onBack && (
           <button
             onClick={onBack}
@@ -57,10 +57,10 @@ const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon,
                   {category}
                 </div>
               )}
-              <h1 className="text-3xl md:text-5xl font-extrabold text-brand-dark tracking-tight mb-4 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark tracking-tight mb-3 sm:mb-4 leading-tight">
                 {title}
               </h1>
-              <p className="text-lg text-brand-dark/70 leading-relaxed mb-6">
+              <p className="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed mb-4 sm:mb-6">
                 {description}
               </p>
               

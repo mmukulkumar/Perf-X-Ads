@@ -585,7 +585,7 @@ const AppContent = () => {
                                 </div>
                                 <input 
                                   type="text" 
-                                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-brand-light border border-brand-medium/20 text-brand-dark placeholder-brand-dark/40 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all shadow-sm" 
+                                  className="w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-brand-light border border-brand-medium/20 text-brand-dark placeholder-brand-dark/40 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all shadow-sm" 
                                   placeholder="Search tools (e.g. ROI, UTM, Tax)..." 
                                   value={toolSearchQuery} 
                                   onChange={(e) => setToolSearchQuery(e.target.value)} 
@@ -595,8 +595,8 @@ const AppContent = () => {
                     </div>
                 )}
 
-                <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1">
-                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                <div className="max-w-[1600px] mx-auto w-full px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 flex-1">
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 items-start">
                         <Sidebar />
                         
                         <div className="flex-1 min-w-0 w-full">
@@ -904,14 +904,14 @@ const AppContent = () => {
         {renderView()}
       </main>
 
-      <footer className="bg-brand-surface border-t border-brand-border py-12 mt-12 transition-colors duration-300">
+      <footer className="bg-brand-surface border-t border-brand-border py-8 sm:py-12 mt-12 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-2">
               <img 
                 src={theme === 'dark' ? '/perfxads-logo-dark.svg' : '/perfxads-logo-light.svg'} 
                 alt="Perfxads" 
-                className="h-8 w-auto object-contain"
+                className="h-6 sm:h-7 md:h-8 w-auto object-contain"
               />
             </div>
             <span className="hidden md:inline text-brand-medium/50">|</span>
@@ -919,16 +919,16 @@ const AppContent = () => {
               href="https://dmsprism.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-xs font-bold text-brand-dark/40 uppercase tracking-wider hover:text-brand-primary transition-colors"
+              className="text-[10px] sm:text-xs font-bold text-brand-dark/40 uppercase tracking-wider hover:text-brand-primary transition-colors"
             >
               Powered by DMSPrism
             </a>
           </div>
-          <div className="flex items-center gap-8 text-sm font-medium text-brand-dark/50">
-             <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors">About Us</button>
-             <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-brand-dark transition-colors">Privacy Policy</button>
-             <button onClick={() => {}} className="hover:text-brand-dark transition-colors">Terms of Service</button>
-             <span>© 2025 Perf X Ads</span>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-8 text-xs sm:text-sm font-medium text-brand-dark/50">
+             <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors whitespace-nowrap">About Us</button>
+             <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-brand-dark transition-colors whitespace-nowrap">Privacy Policy</button>
+             <button onClick={() => {}} className="hover:text-brand-dark transition-colors whitespace-nowrap">Terms of Service</button>
+             <span className="w-full md:w-auto text-center mt-2 md:mt-0">© 2025 Perf X Ads</span>
           </div>
         </div>
       </footer>
