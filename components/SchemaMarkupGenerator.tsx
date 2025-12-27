@@ -1895,12 +1895,14 @@ const SchemaMarkupGenerator = () => {
                             </button>
                             <button 
                                 onClick={copyToClipboard} 
-                                className="magic-btn"
+                                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg transition-all duration-300 ${
+                                    copied 
+                                        ? 'bg-green-500 text-white shadow-lg shadow-green-500/50 scale-105' 
+                                        : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-lg hover:shadow-blue-500/50 hover:scale-105'
+                                }`}
                             >
-                                <div className="magic-btn-content px-3 py-1.5 text-xs">
-                                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                                    {copied ? 'Copied' : 'Copy'}
-                                </div>
+                                {copied ? <Check className="w-3.5 h-3.5 animate-in zoom-in duration-200" /> : <Copy className="w-3.5 h-3.5" />}
+                                <span className="font-medium">{copied ? 'Copied!' : 'Copy'}</span>
                             </button>
                         </div>
                     </div>
