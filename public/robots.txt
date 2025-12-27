@@ -1,0 +1,12 @@
+# Robots.txt for Perfxads.com
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Disallow admin and authentication pages
+Disallow: /dashboard
+Disallow: /admin
+
+# Sitemap location
+Sitemap: https://perfxads.com/sitemap.xml

@@ -55,6 +55,8 @@ import AiKeywordResearch from './AiKeywordResearch';
 import AiSearchVisibility from './AiSearchVisibility';
 import URLInspectionTool from './URLInspectionTool';
 import SitemapGenerator from './SitemapGenerator';
+import NotFoundPage from './NotFoundPage';
+import ServerErrorPage from './ServerErrorPage';
 
 // Christmas Components
 import ChristmasCountdown from './ChristmasCountdown';
@@ -95,7 +97,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 
 const AppContent = () => {
   const { isPricingModalOpen, setPricingModalOpen, authError, clearError } = useAuth(); // Use Global State
-  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings' | '404' | '500' | 'thank-you'>('home');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
   const [toolSearchQuery, setToolSearchQuery] = useState('');
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -118,6 +120,24 @@ const AppContent = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [activeToolId]);
+
+  // Detect invalid tool IDs and show 404
+  useEffect(() => {
+    if (activeToolId && !toolComponents[activeToolId as keyof typeof toolComponents]) {
+      setCurrentView('404');
+      setActiveToolId(null);
+    }
+  }, [activeToolId]);
+
+  // Error boundary - catch unhandled errors
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('Global error:', event.error);
+      setCurrentView('500');
+    };
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
 
   // --- SECURITY FEATURES ---
   useEffect(() => {
@@ -431,6 +451,24 @@ const AppContent = () => {
 
   // View Routing Logic
   const renderView = () => {
+    // Thank You page
+    if (currentView === 'thank-you') {
+      return (
+        <ThankYouPage 
+          onNavigateHome={() => setCurrentView('home')} 
+          onNavigateToDashboard={() => setCurrentView('dashboard')}
+        />
+      );
+    }
+
+    // Error pages
+    if (currentView === '404') {
+      return <NotFoundPage onNavigateHome={() => setCurrentView('home')} />;
+    }
+    if (currentView === '500') {
+      return <ServerErrorPage onNavigateHome={() => setCurrentView('home')} onRetry={() => window.location.reload()} />;
+    }
+
     if (currentView === 'dashboard') {
         return (
             <>
