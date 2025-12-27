@@ -28,6 +28,15 @@ export const TOOLS_CONFIG = [
 
   // Technical SEO
   {
+    id: 'url-inspection',
+    category: 'Technical SEO',
+    title: 'URL Inspection Tool',
+    description: 'Inspect any URL like Google Search Console. Check indexability, crawl status, Core Web Vitals, structured data, and get SEO recommendations.',
+    icon: Search,
+    color: 'blue',
+    features: ['Index status check', 'Core Web Vitals', 'Structured data analysis', 'SEO recommendations']
+  },
+  {
     id: 'fetch-render',
     category: 'Technical SEO',
     title: 'Fetch & Render',
@@ -71,6 +80,15 @@ export const TOOLS_CONFIG = [
     icon: Search,
     color: 'blue',
     features: ['Snippet preview', 'Keyword highlighting', 'Mobile & Desktop view']
+  },
+  {
+    id: 'sitemap-generator',
+    category: 'Technical SEO',
+    title: 'XML Sitemap Generator',
+    description: 'Create professional XML sitemaps for your website. Add URLs, set priorities, change frequencies, and export as sitemap.xml.',
+    icon: Code,
+    color: 'green',
+    features: ['XML generation', 'Bulk URL import', 'Priority & frequency settings', 'Instant export']
   },
   {
     id: 'mobile-index',

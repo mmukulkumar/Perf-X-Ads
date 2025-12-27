@@ -109,11 +109,23 @@
         background-color: var(--color-brand-light);
         color: var(--color-brand-dark);
         -webkit-font-smoothing: antialiased;
+        scroll-behavior: smooth;
       }
 
       h1, h2, h3, h4 {
         font-family: 'Merriweather', serif;
         letter-spacing: -0.01em;
+      }
+      
+      /* Smooth transitions for interactive elements */
+      button, a, input, select, textarea {
+        transition: all 0.2s ease-in-out;
+      }
+      
+      /* Focus styles for accessibility */
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+        outline: 2px solid var(--color-brand-primary);
+        outline-offset: 2px;
       }
       
       /* Theme transition - only on root level for performance */

@@ -53,6 +53,8 @@ import AusCompanyTaxCalculator from './AusCompanyTaxCalculator';
 import AusSimpleTaxCalculator from './AusSimpleTaxCalculator';
 import AiKeywordResearch from './AiKeywordResearch';
 import AiSearchVisibility from './AiSearchVisibility';
+import URLInspectionTool from './URLInspectionTool';
+import SitemapGenerator from './SitemapGenerator';
 
 // Christmas Components
 import ChristmasCountdown from './ChristmasCountdown';
@@ -75,6 +77,8 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
   'tiktok-mockup': TikTokAdMockup,
   'schema-generator': SchemaMarkupGenerator,
   'serp-simulator': GoogleSerpSimulator,
+  'sitemap-generator': SitemapGenerator,
+  'url-inspection': URLInspectionTool,
   'mobile-index': MobileFirstIndexTool,
   'mobile-friendly': MobileFriendlyTest,
   'amp-validator': AmpValidator,
@@ -107,6 +111,13 @@ const AppContent = () => {
     return 'light';
   });
   const [currency, setCurrency] = useState('USD');
+
+  // Scroll to top when tool changes
+  useEffect(() => {
+    if (activeToolId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeToolId]);
 
   // --- SECURITY FEATURES ---
   useEffect(() => {
@@ -590,14 +601,15 @@ const AppContent = () => {
                         
                         <div className="flex-1 min-w-0 w-full">
                             {activeToolId && activeToolConfig && ActiveToolComponent ? (
-                                <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-                                    <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px]">
+                                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px] hover:shadow-xl transition-shadow duration-300">
                                         <ToolHeader 
                                             title={activeToolConfig.title}
                                             description={activeToolConfig.description}
                                             icon={activeToolConfig.icon}
                                             category={activeToolConfig.category}
                                             features={activeToolConfig.features}
+                                            onBack={() => setActiveToolId(null)}
                                         />
                                         <div className="p-0">
                                             <ActiveToolComponent currency={currency} />
@@ -622,7 +634,7 @@ const AppContent = () => {
                                                             <div 
                                                                 key={tool.id} 
                                                                 onClick={() => setActiveToolId(tool.id)} 
-                                                                className="bg-brand-surface border border-brand-medium/20 rounded-xl p-5 hover:shadow-lg hover:border-brand-primary/30 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
+                                                                className="bg-brand-surface border border-brand-medium/20 rounded-xl p-5 hover:shadow-xl hover:border-brand-primary/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
                                                             >
                                                                 <div className={`absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
                                                                     <tool.icon className={`w-24 h-24 ${style.text}`} />

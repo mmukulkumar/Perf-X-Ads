@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CheckCircle, LucideIcon, Link as LinkIcon, Check } from 'lucide-react';
+import { CheckCircle, LucideIcon, Link as LinkIcon, Check, ArrowLeft } from 'lucide-react';
 
 interface ToolHeaderProps {
   title: string;
@@ -8,6 +8,7 @@ interface ToolHeaderProps {
   icon: LucideIcon;
   category?: string;
   features?: readonly string[];
+  onBack?: () => void;
 }
 
 const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon, category, features }) => {
@@ -37,6 +38,17 @@ const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon,
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-brand-dark/60 hover:text-brand-dark font-medium mb-6 transition-all hover:gap-3 group"
+          >
+            <div className="p-2 rounded-lg bg-brand-surface border border-brand-medium/20 group-hover:border-brand-primary/40 group-hover:bg-brand-primary/5 transition-all">
+              <ArrowLeft className="w-4 h-4" />
+            </div>
+            <span>Back to Tools</span>
+          </button>
+        )}
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-between animate-in fade-in slide-in-from-bottom-4 duration-700">
            <div className="max-w-3xl">
               {category && (
