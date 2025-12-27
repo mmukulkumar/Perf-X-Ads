@@ -57,6 +57,8 @@ import URLInspectionTool from './URLInspectionTool';
 import SitemapGenerator from './SitemapGenerator';
 import NotFoundPage from './NotFoundPage';
 import ServerErrorPage from './ServerErrorPage';
+import ThankYouPage from './ThankYouPage';
+import SitemapPage from './SitemapPage';
 
 // Christmas Components
 import ChristmasCountdown from './ChristmasCountdown';
@@ -123,7 +125,7 @@ const AppContent = () => {
 
   // Detect invalid tool IDs and show 404
   useEffect(() => {
-    if (activeToolId && !toolComponents[activeToolId as keyof typeof toolComponents]) {
+    if (activeToolId && !TOOL_COMPONENTS[activeToolId as keyof typeof TOOL_COMPONENTS]) {
       setCurrentView('404');
       setActiveToolId(null);
     }
