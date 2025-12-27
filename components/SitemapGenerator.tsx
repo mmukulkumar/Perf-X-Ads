@@ -92,11 +92,11 @@ ${urls.map(url => `  <url>
   };
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto">
+    <div className="p-6 space-y-8 max-w-7xl mx-auto animate-in fade-in duration-700">
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="flex justify-center">
-          <div className="p-4 bg-green-100 dark:bg-green-900/30 rounded-2xl">
+          <div className="p-4 bg-green-100 dark:bg-green-900/30 rounded-2xl shadow-lg">
             <FileCode className="w-12 h-12 text-green-600 dark:text-green-400" />
           </div>
         </div>
@@ -109,7 +109,7 @@ ${urls.map(url => `  <url>
 
       {/* Info Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-2">
             <Link2 className="w-5 h-5 text-blue-600" />
             <h3 className="font-semibold text-blue-900 dark:text-blue-300">What is a Sitemap?</h3>
@@ -119,7 +119,7 @@ ${urls.map(url => `  <url>
           </p>
         </div>
 
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800">
+        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-5 h-5 text-purple-600" />
             <h3 className="font-semibold text-purple-900 dark:text-purple-300">Priority Values</h3>
@@ -129,7 +129,7 @@ ${urls.map(url => `  <url>
           </p>
         </div>
 
-        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-200 dark:border-green-800">
+        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-200 dark:border-green-800 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center gap-2 mb-2">
             <Calendar className="w-5 h-5 text-green-600" />
             <h3 className="font-semibold text-green-900 dark:text-green-300">Change Frequency</h3>
@@ -141,7 +141,7 @@ ${urls.map(url => `  <url>
       </div>
 
       {/* Base URL */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-brand-medium/20">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-brand-medium/20 hover:shadow-xl transition-all duration-300">
         <label className="block text-sm font-semibold text-brand-dark dark:text-white mb-2">
           Base URL (Domain)
         </label>
@@ -150,7 +150,7 @@ ${urls.map(url => `  <url>
           value={baseUrl}
           onChange={(e) => setBaseUrl(e.target.value)}
           placeholder="https://example.com"
-          className="w-full px-4 py-3 border border-brand-medium/30 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          className="w-full px-4 py-3 border border-brand-medium/30 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white transition-all hover:border-brand-medium/50"
         />
       </div>
 
@@ -158,14 +158,14 @@ ${urls.map(url => `  <url>
       <div className="flex flex-wrap gap-3">
         <button
           onClick={addUrl}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
         >
           <Plus className="w-4 h-4" />
           Add URL
         </button>
         <button
           onClick={addBulkUrls}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
         >
           <Plus className="w-4 h-4" />
           Bulk Add URLs
@@ -173,7 +173,7 @@ ${urls.map(url => `  <url>
         <button
           onClick={handleExport}
           disabled={urls.length === 0}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         >
           <Download className="w-4 h-4" />
           Export sitemap.xml
@@ -181,7 +181,7 @@ ${urls.map(url => `  <url>
         <button
           onClick={copyToClipboard}
           disabled={urls.length === 0}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         >
           <FileCode className="w-4 h-4" />
           Copy XML

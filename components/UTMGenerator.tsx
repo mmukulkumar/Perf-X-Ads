@@ -44,37 +44,37 @@ const UTMGenerator = () => {
   };
 
   return (
-    <div className="w-full font-inter animate-in fade-in duration-500">
+    <div className="w-full font-inter animate-in fade-in duration-700">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div className="bg-brand-surface rounded-2xl p-8 md:p-12 shadow-sm border border-brand-medium/20">
+        <div className="bg-brand-surface rounded-2xl p-8 md:p-12 shadow-lg border border-brand-medium/20 hover:shadow-xl transition-shadow duration-300">
           <p className="text-brand-dark/80 mb-10 leading-relaxed text-lg">
             Easily create UTM links to track and analyze your online marketing efforts. Customize URLs with UTM parameters to monitor traffic sources and optimize your campaigns.
           </p>
 
           <div className="space-y-8">
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">Website URL *</label>
-              <input type="text" name="url" value={formData.url} onChange={handleChange} placeholder="https://example.com" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">Website URL *</label>
+              <input type="text" name="url" value={formData.url} onChange={handleChange} placeholder="https://example.com" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">UTM Source *</label>
-              <input type="text" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. newsletter, facebook, twitter" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">UTM Source *</label>
+              <input type="text" name="source" value={formData.source} onChange={handleChange} placeholder="e.g. newsletter, facebook, twitter" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">UTM Medium</label>
-              <input type="text" name="medium" value={formData.medium} onChange={handleChange} placeholder="e.g. banner, email, social" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">UTM Medium</label>
+              <input type="text" name="medium" value={formData.medium} onChange={handleChange} placeholder="e.g. banner, email, social" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">UTM Campaign</label>
-              <input type="text" name="campaign" value={formData.campaign} onChange={handleChange} placeholder="e.g. promotion, sale" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">UTM Campaign</label>
+              <input type="text" name="campaign" value={formData.campaign} onChange={handleChange} placeholder="e.g. promotion, sale" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">UTM Term</label>
-              <input type="text" name="term" value={formData.term} onChange={handleChange} placeholder="keywords for paid search" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">UTM Term</label>
+              <input type="text" name="term" value={formData.term} onChange={handleChange} placeholder="keywords for paid search" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-brand-dark mb-2">UTM Content</label>
-              <input type="text" name="content" value={formData.content} onChange={handleChange} placeholder="e.g. buy-now, v1" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:border-brand-dark outline-none transition-all placeholder-brand-dark/30" />
+            <div className="group">
+              <label className="block text-sm font-medium text-brand-dark mb-2 transition-colors group-focus-within:text-brand-primary">UTM Content</label>
+              <input type="text" name="content" value={formData.content} onChange={handleChange} placeholder="e.g. buy-now, v1" className="w-full px-4 py-3 bg-brand-light/30 dark:bg-brand-surface/50 border border-brand-medium/40 rounded-lg text-brand-dark focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary outline-none transition-all placeholder-brand-dark/30 hover:border-brand-medium/60" />
             </div>
 
             <div className="pt-4">

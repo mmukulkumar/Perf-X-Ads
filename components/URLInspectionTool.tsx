@@ -136,11 +136,11 @@ const URLInspectionTool = () => {
   };
 
   return (
-    <div className="p-6 space-y-8 max-w-6xl mx-auto">
+    <div className="p-6 space-y-8 max-w-6xl mx-auto animate-in fade-in duration-700">
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="flex justify-center">
-          <div className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-2xl">
+          <div className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-2xl shadow-lg">
             <Search className="w-12 h-12 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
@@ -152,10 +152,10 @@ const URLInspectionTool = () => {
       </div>
 
       {/* Input Section */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-brand-medium/20">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-brand-medium/20 hover:shadow-xl transition-all duration-300">
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-brand-dark dark:text-white mb-2">
+          <div className="group">
+            <label className="block text-sm font-semibold text-brand-dark dark:text-white mb-2 transition-colors group-focus-within:text-blue-500">
               <Globe className="w-4 h-4 inline mr-2" />
               Enter URL to Inspect
             </label>
@@ -164,7 +164,7 @@ const URLInspectionTool = () => {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/page"
-              className="w-full px-4 py-3 border border-brand-medium/30 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+              className="w-full px-4 py-3 border border-brand-medium/30 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white transition-all hover:border-brand-medium/50"
               onKeyDown={(e) => e.key === 'Enter' && handleInspect()}
             />
           </div>
@@ -172,7 +172,7 @@ const URLInspectionTool = () => {
           <button
             onClick={handleInspect}
             disabled={isInspecting}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
           >
             {isInspecting ? (
               <>

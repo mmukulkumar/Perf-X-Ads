@@ -11,7 +11,7 @@ interface ToolHeaderProps {
   onBack?: () => void;
 }
 
-const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon, category, features }) => {
+const ToolHeader: React.FC<ToolHeaderProps> = ({ title, description, icon: Icon, category, features, onBack }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isWeChatCopied, setIsWeChatCopied] = useState(false);
 
