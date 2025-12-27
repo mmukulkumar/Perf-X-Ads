@@ -259,16 +259,10 @@ const AppContent = () => {
     const paymentStatus = urlParams.get('payment');
     
     if (paymentStatus === 'success') {
-      setPaymentNotification({
-        type: 'success',
-        message: 'Payment successful! Your subscription is now active. Welcome to Pro!'
-      });
-      // Navigate to dashboard to show updated subscription
-      setCurrentView('dashboard');
+      // Navigate to thank you page
+      setCurrentView('thank-you');
       // Clean up URL
       window.history.replaceState({}, '', window.location.pathname);
-      // Auto-dismiss after 8 seconds
-      setTimeout(() => setPaymentNotification({ type: null, message: '' }), 8000);
     } else if (paymentStatus === 'cancelled') {
       setPaymentNotification({
         type: 'cancelled',

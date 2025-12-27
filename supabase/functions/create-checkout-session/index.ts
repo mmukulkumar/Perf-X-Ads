@@ -63,8 +63,9 @@ serve(async (req) => {
     console.log('Price type:', price.type, 'isSubscription:', isSubscription);
 
     // Build success URL with session ID placeholder
-    const finalSuccessUrl = successUrl || `${req.headers.get('origin')}?payment=success`;
-    const finalCancelUrl = cancelUrl || `${req.headers.get('origin')}?payment=cancelled`;
+    const baseUrl = req.headers.get('origin') || 'https://perfxads.com';
+    const finalSuccessUrl = successUrl || `${baseUrl}/thank-you`;
+    const finalCancelUrl = cancelUrl || `${baseUrl}?payment=cancelled`;
 
     // Create checkout session
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
