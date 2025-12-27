@@ -960,6 +960,7 @@ const AppContent = () => {
              <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors whitespace-nowrap">About Us</button>
              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-brand-dark transition-colors whitespace-nowrap">Privacy Policy</button>
              <button onClick={() => {}} className="hover:text-brand-dark transition-colors whitespace-nowrap">Terms of Service</button>
+             <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-brand-dark transition-colors whitespace-nowrap">Sitemap</a>
              <span className="w-full md:w-auto text-center mt-2 md:mt-0">© 2025 Perf X Ads</span>
           </div>
         </div>
