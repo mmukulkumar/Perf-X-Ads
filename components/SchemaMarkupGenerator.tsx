@@ -5,7 +5,12 @@ import { GoogleGenAI } from "@google/genai";
 
 type SchemaType = 'Article' | 'Breadcrumb' | 'Event' | 'FAQ Page' | 'How-to' | 'Local Business' | 'Organization' | 'Product' | 'Video' | 'Website';
 
-const SchemaMarkupGenerator = () => {
+interface SchemaMarkupGeneratorProps {
+  currency?: string;
+  onNavigate?: (toolId: string) => void;
+}
+
+const SchemaMarkupGenerator: React.FC<SchemaMarkupGeneratorProps> = ({ onNavigate }) => {
   const [selectedType, setSelectedType] = useState<SchemaType>('Video');
   const [jsonLd, setJsonLd] = useState('');
   const [copied, setCopied] = useState(false);
@@ -521,7 +526,11 @@ const SchemaMarkupGenerator = () => {
   };
 
   const testInGoogle = () => {
-    window.open('https://search.google.com/test/rich-results?user_agent=1', '_blank');
+    if (onNavigate) {
+      onNavigate('rich-results');
+    } else {
+      window.open('https://search.google.com/test/rich-results?user_agent=1', '_blank');
+    }
   };
 
   // Helper for input styling

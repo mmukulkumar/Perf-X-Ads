@@ -659,7 +659,10 @@ const AppContent = () => {
                                             onBack={() => setActiveToolId(null)}
                                         />
                                         <div className="p-0">
-                                            <ActiveToolComponent currency={currency} />
+                                            <ActiveToolComponent 
+                                                currency={currency} 
+                                                onNavigate={(toolId: string) => setActiveToolId(toolId)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
