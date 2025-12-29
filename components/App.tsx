@@ -12,6 +12,7 @@ import Header from './Header';
 import RocketCursor from './RocketCursor';
 import AboutUs from './AboutUs';
 import SEO from './SEO';
+import FAQ from './FAQ';
 
 // Auth & Dashboard
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
@@ -888,6 +889,9 @@ const AppContent = () => {
             </div>
           )}
         </div>
+
+        {/* FAQ Section */}
+        <FAQ />
       </>
     );
   };
