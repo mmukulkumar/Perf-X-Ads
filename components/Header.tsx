@@ -286,11 +286,11 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
               
-              {/* Featured Tools */}
+              {/* All Tools */}
               <div>
-                <h4 className="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider mb-2 px-1">Featured Tools</h4>
-                <div className="space-y-1">
-                  {TOOLS_CONFIG.slice(0, 6).map(tool => (
+                <h4 className="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider mb-2 px-1">All Tools ({TOOLS_CONFIG.length})</h4>
+                <div className="space-y-1 max-h-[400px] overflow-y-auto custom-scrollbar">
+                  {TOOLS_CONFIG.map(tool => (
                     <button 
                       key={tool.id}
                       onClick={() => { onToolSelect(tool.id); setIsMobileMenuOpen(false); }}
@@ -624,10 +624,10 @@ const Header: React.FC<HeaderProps> = ({
                                       ))}
                                   </div>
                               </div>
-                              <div className="col-span-3 p-6">
-                                  <h3 className="text-xs font-bold text-brand-dark/50 uppercase tracking-wider mb-4">Featured Tools</h3>
+                              <div className="col-span-3 p-6 max-h-[500px] overflow-y-auto custom-scrollbar">
+                                  <h3 className="text-xs font-bold text-brand-dark/50 uppercase tracking-wider mb-4">All Tools</h3>
                                   <div className="space-y-1">
-                                      {TOOLS_CONFIG.slice(0, 6).map(tool => (
+                                      {TOOLS_CONFIG.map(tool => (
                                           <button 
                                               key={tool.id}
                                               onClick={() => { onToolSelect(tool.id); setActiveMenu(null); }}
@@ -648,7 +648,7 @@ const Header: React.FC<HeaderProps> = ({
                                           onClick={() => { onNavigate('tools'); setActiveMenu(null); }}
                                           className="text-xs font-bold text-brand-primary hover:text-brand-dark transition-colors flex items-center gap-1"
                                       >
-                                          View All Tools <ChevronDown className="w-3 h-3 -rotate-90" />
+                                          View All Tools Grid <ChevronDown className="w-3 h-3 -rotate-90" />
                                       </button>
                                   </div>
                               </div>
