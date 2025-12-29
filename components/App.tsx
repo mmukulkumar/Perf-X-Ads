@@ -56,6 +56,11 @@ import AiKeywordResearch from './AiKeywordResearch';
 import AiSearchVisibility from './AiSearchVisibility';
 import URLInspectionTool from './URLInspectionTool';
 import SitemapGenerator from './SitemapGenerator';
+import BulkUrlOpener from './BulkUrlOpener';
+import UrlToMarkdown from './UrlToMarkdown';
+import UrlToQRCode from './UrlToQRCode';
+import UrlEncodeDecode from './UrlEncodeDecode';
+import UrlExtractor from './UrlExtractor';
 import NotFoundPage from './NotFoundPage';
 import ServerErrorPage from './ServerErrorPage';
 import { ThankYouPage } from './ThankYouPage';
@@ -83,6 +88,11 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
   'schema-generator': SchemaMarkupGenerator,
   'serp-simulator': GoogleSerpSimulator,
   'sitemap-generator': SitemapGenerator,
+  'bulk-url-opener': BulkUrlOpener,
+  'url-to-markdown': UrlToMarkdown,
+  'url-to-qrcode': UrlToQRCode,
+  'url-encode-decode': UrlEncodeDecode,
+  'url-extractor': UrlExtractor,
   'url-inspection': URLInspectionTool,
   'mobile-index': MobileFirstIndexTool,
   'mobile-friendly': MobileFriendlyTest,
@@ -650,22 +660,10 @@ const AppContent = () => {
                         <div className="flex-1 min-w-0 w-full">
                             {activeToolId && activeToolConfig && ActiveToolComponent ? (
                                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                    <div className="bg-brand-surface border border-brand-medium/20 rounded-2xl shadow-sm overflow-hidden min-h-[800px] hover:shadow-xl transition-shadow duration-300">
-                                        <ToolHeader 
-                                            title={activeToolConfig.title}
-                                            description={activeToolConfig.description}
-                                            icon={activeToolConfig.icon}
-                                            category={activeToolConfig.category}
-                                            features={activeToolConfig.features}
-                                            onBack={() => setActiveToolId(null)}
-                                        />
-                                        <div className="p-0">
-                                            <ActiveToolComponent 
-                                                currency={currency} 
-                                                onNavigate={(toolId: string) => setActiveToolId(toolId)}
-                                            />
-                                        </div>
-                                    </div>
+                                    <ActiveToolComponent 
+                                        currency={currency} 
+                                        onNavigate={(toolId: string) => setActiveToolId(toolId)}
+                                    />
                                 </div>
                             ) : (
                                 <div className="space-y-12">

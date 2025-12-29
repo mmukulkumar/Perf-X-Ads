@@ -2,7 +2,7 @@
 import { 
   Layout, Smartphone, Video, TrendingUp, BarChart3, 
   MousePointer, Link, LineChart, Users, Zap, Activity, 
-  Monitor, PieChart, Code, Search, Table, Split, CheckCircle, Calculator, Building2, Landmark, User, Bot, Sparkles, Eye
+  Monitor, PieChart, Code, Search, Table, Split, CheckCircle, Calculator, Building2, Landmark, User, Bot, Sparkles, Eye, ExternalLink, FileText, QrCode, Link2
 } from 'lucide-react';
 
 export const TOOLS_CONFIG = [
@@ -89,6 +89,51 @@ export const TOOLS_CONFIG = [
     icon: Code,
     color: 'green',
     features: ['XML generation', 'Bulk URL import', 'Priority & frequency settings', 'Instant export']
+  },
+  {
+    id: 'bulk-url-opener',
+    category: 'Technical SEO',
+    title: 'Bulk URL Opener',
+    description: 'Open multiple URLs at once in separate tabs for SEO audits, link verification, and batch checking.',
+    icon: ExternalLink,
+    color: 'teal',
+    features: ['Bulk URL opening', 'Configurable delays', 'File upload support', 'URL validation']
+  },
+  {
+    id: 'url-to-markdown',
+    category: 'URL Converters',
+    title: 'URL to Markdown',
+    description: 'Convert webpages to clean Markdown format for documentation, notes, and content archiving.',
+    icon: FileText,
+    color: 'blue',
+    features: ['Clean formatting', 'One-click download', 'Copy to clipboard']
+  },
+  {
+    id: 'url-to-qrcode',
+    category: 'URL Converters',
+    title: 'URL to QR Code',
+    description: 'Generate QR codes from URLs for easy sharing on marketing materials, business cards, and events.',
+    icon: QrCode,
+    color: 'purple',
+    features: ['Customizable size', 'Instant generation', 'Download as PNG']
+  },
+  {
+    id: 'url-encode-decode',
+    category: 'URL Converters',
+    title: 'URL Encode / Decode',
+    description: 'Encode and decode text using URL, Base64, HTML entities, Unicode, Hex, Binary, and ROT13.',
+    icon: Link2,
+    color: 'indigo',
+    features: ['8+ encoding formats', 'Batch processing', 'Copy & download']
+  },
+  {
+    id: 'url-extractor',
+    category: 'URL Converters',
+    title: 'URL Extractor',
+    description: 'Extract all URLs from websites instantly. Export as TXT or CSV for SEO audits and analysis.',
+    icon: Link,
+    color: 'green',
+    features: ['Internal/External filtering', 'Export to TXT/CSV', 'Duplicate removal']
   },
   {
     id: 'mobile-index',

@@ -84,6 +84,33 @@ const FAQ_DATA: FAQItem[] = [
     answer: 'Yes, our Rich Results Test tool validates your structured data markup and shows which rich result types (recipes, products, FAQs, reviews, etc.) your page qualifies for. It identifies errors and warnings that need fixing for proper rich snippet display in search results.'
   },
 
+  // URL Converters
+  {
+    category: 'URL Converters',
+    question: 'How can I open multiple URLs at once for testing?',
+    answer: 'Our Bulk URL Opener tool allows you to open multiple URLs simultaneously in separate browser tabs. Simply paste your URLs (one per line or comma-separated), set a delay between openings to prevent browser blocking, and click open. Perfect for SEO audits, link verification, manual page checks, and competitive research. Supports up to 50 URLs at once with file upload capabilities.'
+  },
+  {
+    category: 'URL Converters',
+    question: 'How do I convert a webpage to Markdown format?',
+    answer: 'Use our URL to Markdown converter to transform any webpage into clean Markdown format. Simply paste the URL and click convert. The tool extracts content and formats it as Markdown, perfect for documentation, notes, and content archiving. Download as .md file or copy to clipboard.'
+  },
+  {
+    category: 'URL Converters',
+    question: 'Can I generate QR codes from URLs?',
+    answer: 'Yes! Our URL to QR Code generator creates scannable QR codes from any URL instantly. Customize the size, generate, and download as PNG. Perfect for marketing materials, business cards, event registrations, and contactless sharing. Works with any valid URL including websites, social media profiles, and file downloads.'
+  },
+  {
+    category: 'URL Converters',
+    question: 'What encoding formats are supported for URL encoding?',
+    answer: 'Our URL Encode/Decode tool supports 8+ formats: URL encoding, Base64, HTML entities, Unicode, Hexadecimal, Binary, and ROT13. Switch between encode and decode modes, select your format, and process text instantly. Useful for web development, data transmission, and text obfuscation.'
+  },
+  {
+    category: 'URL Converters',
+    question: 'How can I extract all URLs from a website?',
+    answer: 'The URL Extractor tool crawls any website and extracts all URLs found on the page. Filter by internal or external links, view unique URLs only, and export the complete list as TXT or CSV. Perfect for SEO audits, competitor analysis, sitemap generation, and link building research.'
+  },
+
   // Ad Mockup Tools
   {
     category: 'Ad Mockups',
