@@ -367,7 +367,7 @@ const FAQ: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="mailto:support@perfxads.com"
+              href="mailto:info@dmsprism.com"
               className="inline-flex items-center justify-center px-6 py-3 bg-brand-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg shadow-brand-primary/25"
             >
               Contact Support
