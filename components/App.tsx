@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Search, Grid, TrendingUp, ArrowLeft, Monitor, PieChart, RotateCcw, Copy, ChevronDown, Globe, Briefcase, Sparkles, Landmark, Check, AlertCircle, X, Share2, Facebook, Linkedin, Mail } from 'lucide-react';
 import { platforms } from '../data';
 import { AdSpec } from '../types';
@@ -61,6 +62,16 @@ import UrlToMarkdown from './UrlToMarkdown';
 import UrlToQRCode from './UrlToQRCode';
 import UrlEncodeDecode from './UrlEncodeDecode';
 import UrlExtractor from './UrlExtractor';
+import SitemapChecker from './SitemapChecker';
+import SitemapSplitMerger from './SitemapSplitMerger';
+import SitemapUrlsComparison from './SitemapUrlsComparison';
+import SitemapAnalytics from './SitemapAnalytics';
+import SitemapRobotsGenerator from './SitemapRobotsGenerator';
+import SitemapFrequencyAnalyzer from './SitemapFrequencyAnalyzer';
+import WebsiteUrlExtractor from './WebsiteUrlExtractor';
+import AiPromptGenerator from './AiPromptGenerator';
+import AiWorkflowGenerator from './AiWorkflowGenerator';
+import PasswordGenerator from './PasswordGenerator';
 import NotFoundPage from './NotFoundPage';
 import ServerErrorPage from './ServerErrorPage';
 import { ThankYouPage } from './ThankYouPage';
@@ -93,6 +104,16 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
   'url-to-qrcode': UrlToQRCode,
   'url-encode-decode': UrlEncodeDecode,
   'url-extractor': UrlExtractor,
+  'sitemap-checker': SitemapChecker,
+  'sitemap-split-merger': SitemapSplitMerger,
+  'sitemap-urls-comparison': SitemapUrlsComparison,
+  'sitemap-analytics': SitemapAnalytics,
+  'sitemap-robots-generator': SitemapRobotsGenerator,
+  'sitemap-frequency-analyzer': SitemapFrequencyAnalyzer,
+  'website-url-extractor': WebsiteUrlExtractor,
+  'ai-prompt-generator': AiPromptGenerator,
+  'ai-workflow-generator': AiWorkflowGenerator,
+  'password-generator': PasswordGenerator,
   'url-inspection': URLInspectionTool,
   'mobile-index': MobileFirstIndexTool,
   'mobile-friendly': MobileFriendlyTest,
@@ -109,6 +130,8 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
 };
 
 const AppContent = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { isPricingModalOpen, setPricingModalOpen, authError, clearError } = useAuth(); // Use Global State
   const [currentView, setCurrentView] = useState<'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings' | '404' | '500' | 'thank-you' | 'sitemap'>('home');
   const [activeToolId, setActiveToolId] = useState<string | null>(null);
@@ -126,6 +149,44 @@ const AppContent = () => {
     return 'light';
   });
   const [currency, setCurrency] = useState('USD');
+
+  // Sync location with state
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setCurrentView('home');
+      setActiveToolId(null);
+    } else if (location.pathname === '/about') {
+      setCurrentView('about');
+      setActiveToolId(null);
+    } else if (location.pathname === '/dashboard') {
+      setCurrentView('dashboard');
+      setActiveToolId(null);
+    } else if (location.pathname === '/admin') {
+      setCurrentView('admin');
+      setActiveToolId(null);
+    } else if (location.pathname === '/thank-you') {
+      setCurrentView('thank-you');
+      setActiveToolId(null);
+    } else if (location.pathname === '/sitemap') {
+      setCurrentView('sitemap');
+      setActiveToolId(null);
+    } else if (location.pathname.startsWith('/tools/')) {
+      const toolId = location.pathname.split('/tools/')[1];
+      if (toolId && TOOL_COMPONENTS[toolId as keyof typeof TOOL_COMPONENTS]) {
+        setCurrentView('tools');
+        setActiveToolId(toolId);
+      } else {
+        setCurrentView('404');
+        setActiveToolId(null);
+      }
+    } else if (location.pathname === '/tools') {
+      setCurrentView('tools');
+      setActiveToolId(null);
+    } else {
+      setCurrentView('404');
+      setActiveToolId(null);
+    }
+  }, [location.pathname]);
 
   // Scroll to top when tool changes
   useEffect(() => {
@@ -146,11 +207,11 @@ const AppContent = () => {
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
       console.error('Global error:', event.error);
-      setCurrentView('500');
+      navigate('/500');
     };
     window.addEventListener('error', handleError);
     return () => window.removeEventListener('error', handleError);
-  }, []);
+  }, [navigate]);
 
   // --- SECURITY FEATURES ---
   useEffect(() => {
@@ -273,7 +334,7 @@ const AppContent = () => {
     
     if (paymentStatus === 'success') {
       // Navigate to thank you page
-      setCurrentView('thank-you');
+      navigate('/thank-you');
       // Clean up URL
       window.history.replaceState({}, '', window.location.pathname);
     } else if (paymentStatus === 'cancelled') {
@@ -369,9 +430,19 @@ const AppContent = () => {
   };
 
   const navigateTo = (view: 'home' | 'tools' | 'dashboard' | 'admin' | 'about' | 'settings' | 'sitemap' | 'thank-you' | '404' | '500') => {
-    setCurrentView(view);
-    if (view === 'tools') setActiveToolId(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const pathMap = {
+      'home': '/',
+      'tools': '/tools',
+      'dashboard': '/dashboard',
+      'admin': '/admin',
+      'about': '/about',
+      'settings': '/settings',
+      'sitemap': '/sitemap',
+      'thank-you': '/thank-you',
+      '404': '/404',
+      '500': '/500'
+    };
+    navigate(pathMap[view]);
   };
 
   const handlePlatformSelect = (platformId: string) => {
@@ -391,9 +462,7 @@ const AppContent = () => {
   };
 
   const handleToolSelect = (toolId: string) => {
-    setActiveToolId(toolId);
-    setCurrentView('tools');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate('/tools/' + toolId);
   };
 
   // Static Grouping for Sidebar (Persistent Order)
@@ -438,6 +507,9 @@ const AppContent = () => {
     return groups;
   }, [toolSearchQuery]);
 
+  const activeToolConfig = activeToolId ? TOOLS_CONFIG.find(t => t.id === activeToolId) : null;
+  const ActiveToolComponent = activeToolId ? TOOL_COMPONENTS[activeToolId] : null;
+
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string, text: string, border: string }> = {
       blue: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400', border: 'dark:hover:border-blue-500/50' },
@@ -453,17 +525,14 @@ const AppContent = () => {
     return colors[color] || colors.blue;
   };
 
-  const activeToolConfig = activeToolId ? TOOLS_CONFIG.find(t => t.id === activeToolId) : null;
-  const ActiveToolComponent = activeToolId ? TOOL_COMPONENTS[activeToolId] : null;
-
   // View Routing Logic
   const renderView = () => {
     // Thank You page
     if (currentView === 'thank-you') {
       return (
         <ThankYouPage 
-          onNavigateHome={() => setCurrentView('home')} 
-          onNavigateToDashboard={() => setCurrentView('dashboard')}
+          onNavigateHome={() => navigate('/')} 
+          onNavigateToDashboard={() => navigate('/dashboard')}
         />
       );
     }
@@ -472,10 +541,25 @@ const AppContent = () => {
     if (currentView === 'sitemap') {
       return (
         <SitemapPage 
-          onNavigateHome={() => setCurrentView('home')}
+          onNavigateHome={() => navigate('/')}
           onNavigateTo={(view, toolId) => {
-            setCurrentView(view as any);
-            if (toolId) setActiveToolId(toolId);
+            if (toolId) {
+              navigate('/tools/' + toolId);
+            } else {
+              const pathMap = {
+                'home': '/',
+                'tools': '/tools',
+                'dashboard': '/dashboard',
+                'admin': '/admin',
+                'about': '/about',
+                'settings': '/settings',
+                'sitemap': '/sitemap',
+                'thank-you': '/thank-you',
+                '404': '/404',
+                '500': '/500'
+              };
+              navigate(pathMap[view as keyof typeof pathMap] || '/');
+            }
           }}
         />
       );
@@ -483,10 +567,10 @@ const AppContent = () => {
 
     // Error pages
     if (currentView === '404') {
-      return <NotFoundPage onNavigateHome={() => setCurrentView('home')} />;
+      return <NotFoundPage onNavigateHome={() => navigate('/')} />;
     }
     if (currentView === '500') {
-      return <ServerErrorPage onNavigateHome={() => setCurrentView('home')} onRetry={() => window.location.reload()} />;
+      return <ServerErrorPage onNavigateHome={() => navigate('/')} onRetry={() => window.location.reload()} />;
     }
 
     if (currentView === 'dashboard') {
@@ -543,7 +627,7 @@ const AppContent = () => {
             <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pr-2 custom-scrollbar">
                 <div className="mb-6">
                     <button 
-                        onClick={() => setActiveToolId(null)}
+                        onClick={() => navigate('/tools')}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold transition-all text-left mb-4 ${!activeToolId ? 'bg-brand-dark text-brand-light shadow-md' : 'bg-brand-surface border border-brand-medium/20 text-brand-dark hover:bg-brand-light'}`}
                     >
                         <Grid className="w-4 h-4" /> All Tools
@@ -682,7 +766,7 @@ const AppContent = () => {
                                                         return (
                                                             <div 
                                                                 key={tool.id} 
-                                                                onClick={() => setActiveToolId(tool.id)} 
+                                                                onClick={() => navigate('/tools/' + tool.id)} 
                                                                 className="bg-brand-surface border border-brand-medium/20 rounded-xl p-5 hover:shadow-xl hover:border-brand-primary/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
                                                             >
                                                                 <div className={`absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
@@ -980,7 +1064,7 @@ const AppContent = () => {
              <button onClick={() => navigateTo('about')} className="hover:text-brand-dark transition-colors whitespace-nowrap">About Us</button>
              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-brand-dark transition-colors whitespace-nowrap">Privacy Policy</button>
              <button onClick={() => {}} className="hover:text-brand-dark transition-colors whitespace-nowrap">Terms of Service</button>
-             <button onClick={() => setCurrentView('sitemap')} className="hover:text-brand-dark transition-colors whitespace-nowrap">Sitemap</button>
+             <button onClick={() => navigate('/sitemap')} className="hover:text-brand-dark transition-colors whitespace-nowrap">Sitemap</button>
              <span className="w-full md:w-auto text-center mt-2 md:mt-0">© 2025 Perf X Ads</span>
           </div>
         </div>

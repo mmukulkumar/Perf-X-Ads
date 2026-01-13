@@ -2,7 +2,7 @@
 import { 
   Layout, Smartphone, Video, TrendingUp, BarChart3, 
   MousePointer, Link, LineChart, Users, Zap, Activity, 
-  Monitor, PieChart, Code, Search, Table, Split, CheckCircle, Calculator, Building2, Landmark, User, Bot, Sparkles, Eye, ExternalLink, FileText, QrCode, Link2
+  Monitor, PieChart, Code, Search, Table, Split, CheckCircle, Calculator, Building2, Landmark, User, Bot, Sparkles, Eye, ExternalLink, FileText, QrCode, Link2, Shield
 } from 'lucide-react';
 
 export const TOOLS_CONFIG = [
@@ -24,6 +24,24 @@ export const TOOLS_CONFIG = [
     icon: Eye,
     color: 'purple',
     features: ['Share of Voice', 'Competitor Benchmarking', 'Prompt Analysis']
+  },
+  {
+    id: 'ai-prompt-generator',
+    category: 'AI & Trends',
+    title: 'AI Prompt Generator',
+    description: 'Create high-quality AI prompts with proven frameworks like APE, RACE, CREATE, and SPARK. Generate professional prompts that deliver better results from ChatGPT, Claude, and other AI models.',
+    icon: Bot,
+    color: 'purple',
+    features: ['APE Framework', 'RACE Framework', 'CREATE Framework', 'SPARK Framework', 'Multiple AI Types']
+  },
+  {
+    id: 'ai-workflow-generator',
+    category: 'AI & Trends',
+    title: 'AI Workflow Generator',
+    description: 'Generate AI workflows in JSON format for n8n, Make.com and other no-code platforms. Create perfect node connections with workflow diagrams.',
+    icon: Zap,
+    color: 'blue',
+    features: ['n8n JSON Export', 'Make.com Integration', 'Node Connections', 'Workflow Diagrams', 'Copy & Paste Ready']
   },
 
   // Technical SEO
@@ -161,6 +179,80 @@ export const TOOLS_CONFIG = [
     icon: Zap,
     color: 'orange',
     features: ['Bulk AMP validation', 'Linked AMP detection', 'User agent selection']
+  },
+  {
+    id: 'sitemap-checker',
+    category: 'Technical SEO',
+    title: 'Sitemap Checker',
+    description: 'Validate and analyze XML sitemaps for errors, broken links, and SEO issues.',
+    icon: CheckCircle,
+    color: 'green',
+    features: ['XML validation', 'Broken link detection', 'SEO analysis']
+  },
+  {
+    id: 'sitemap-split-merger',
+    category: 'Technical SEO',
+    title: 'Sitemap Split & Merger',
+    description: 'Split large sitemaps into smaller ones or merge multiple sitemaps into a single file.',
+    icon: Split,
+    color: 'blue',
+    features: ['Split large sitemaps', 'Merge multiple sitemaps', 'File size optimization']
+  },
+  {
+    id: 'sitemap-urls-comparison',
+    category: 'Technical SEO',
+    title: 'Sitemap URLs Comparison',
+    description: 'Compare two sitemaps to find added, removed, or changed URLs.',
+    icon: BarChart3,
+    color: 'purple',
+    features: ['URL comparison', 'Change detection', 'Difference reports']
+  },
+  {
+    id: 'sitemap-analytics',
+    category: 'Technical SEO',
+    title: 'Sitemap Analytics',
+    description: 'Analyze sitemap data for insights on URL distribution, update frequencies, and optimization opportunities.',
+    icon: BarChart3,
+    color: 'indigo',
+    features: ['URL distribution analysis', 'Update frequency tracking', 'Optimization recommendations']
+  },
+  {
+    id: 'sitemap-robots-generator',
+    category: 'Technical SEO',
+    title: 'Sitemap Robots.txt Generator',
+    description: 'Generate robots.txt files with sitemap references for proper crawler guidance.',
+    icon: Code,
+    color: 'teal',
+    features: ['Robots.txt generation', 'Sitemap integration', 'Crawler directives']
+  },
+  {
+    id: 'sitemap-frequency-analyzer',
+    category: 'Technical SEO',
+    title: 'Sitemap Frequency Analyzer',
+    description: 'Analyze how often URLs in your sitemap are updated and suggest optimal change frequencies.',
+    icon: Activity,
+    color: 'orange',
+    features: ['Update frequency analysis', 'Change detection', 'Optimization suggestions']
+  },
+  {
+    id: 'website-url-extractor',
+    category: 'Technical SEO',
+    title: 'Website URL Extractor',
+    description: 'Extract all URLs from a website for comprehensive link analysis and SEO audits.',
+    icon: Link,
+    color: 'green',
+    features: ['Comprehensive URL extraction', 'Link analysis', 'SEO audit support']
+  },
+
+  // AI & Trends (continued)
+  {
+    id: 'ai-prompt-generator',
+    category: 'AI & Trends',
+    title: 'AI Prompt Generator',
+    description: 'Generate effective prompts for AI tools and language models to get better results.',
+    icon: Bot,
+    color: 'purple',
+    features: ['Prompt optimization', 'AI tool compatibility', 'Result improvement']
   },
 
   // Marketing Calculators
@@ -322,5 +414,16 @@ export const TOOLS_CONFIG = [
     icon: PieChart,
     color: 'blue',
     features: ['Net Income & Revenue methods', 'Multi-period trending', 'Margin benchmarking']
+  },
+
+  // Security & Utilities
+  {
+    id: 'password-generator',
+    category: 'Security & Utilities',
+    title: 'Password Generator',
+    description: 'Generate cryptographically secure passwords with customizable options. Create strong, random passwords for enhanced security.',
+    icon: Shield,
+    color: 'green',
+    features: ['Cryptographically secure', 'Customizable length', 'Character type options', 'Password strength meter', 'Copy & save']
   },
 ] as const;
